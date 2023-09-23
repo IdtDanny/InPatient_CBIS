@@ -11,10 +11,10 @@
     require_once '../public/config/connection.php';
 
     # Getting Information of Signed in User
-    $business_username = $_SESSION['sessionToken']->business_username;
+    $pharmacy_username = $_SESSION['sessionToken']->pharmacy_username;
     $bID = $_SESSION['sessionToken']->bID;
-    $business_name = $_SESSION['sessionToken']->business_name;
-    $business_tin = $_SESSION['sessionToken']->business_tin;
+    $pharmacy_name = $_SESSION['sessionToken']->pharmacy_name;
+    $pharmacy_tin = $_SESSION['sessionToken']->pharmacy_tin;
 
     # notification variables ...
     $key_errorMessage = "";
@@ -24,12 +24,12 @@
     $photo_errorMessage = "";    
     $photo_successMessage = "";
 
-    # Calculating Each Number of Users, Cards, business, agents and so on...
+    # Calculating Each Number of Users, Cards, pharmacy, agents and so on...
     $sql_agent = 'SELECT * FROM agent';
     $sql_client = 'SELECT * FROM client';
-    $sql_business = 'SELECT * FROM business';
-    $sql_business_notify = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :business_tin OR `sender_id` = :nbusiness_tin';
-    $sql_business_record = 'SELECT * FROM `records` WHERE `rID` = :business_tin';
+    $sql_pharmacy = 'SELECT * FROM pharmacy';
+    $sql_pharmacy_notify = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :pharmacy_tin OR `sender_id` = :npharmacy_tin';
+    $sql_pharmacy_record = 'SELECT * FROM `records` WHERE `rID` = :pharmacy_tin';
     // $usedCardsSql = 'SELECT * FROM `client` WHERE `Approve` = :approve';
 
     $statement = $pdo->prepare($sql_agent);
@@ -38,52 +38,52 @@
     $statement_client = $pdo->prepare($sql_client);
     $statement_client -> execute();
 
-    $statement_business = $pdo->prepare($sql_business);
-    $statement_business -> execute();
+    $statement_pharmacy = $pdo->prepare($sql_pharmacy);
+    $statement_pharmacy -> execute();
 
-    $statement_business_notify = $pdo->prepare($sql_business_notify);
-    $statement_business_notify -> execute([
-        'business_tin'  => $business_tin,
-        'nbusiness_tin' => $business_tin
+    $statement_pharmacy_notify = $pdo->prepare($sql_pharmacy_notify);
+    $statement_pharmacy_notify -> execute([
+        'pharmacy_tin'  => $pharmacy_tin,
+        'npharmacy_tin' => $pharmacy_tin
     ]);
 
-    $statement_business_record = $pdo->prepare($sql_business_record);
-    $statement_business_record -> execute([
-        'business_tin'  => $business_tin
+    $statement_pharmacy_record = $pdo->prepare($sql_pharmacy_record);
+    $statement_pharmacy_record -> execute([
+        'pharmacy_tin'  => $pharmacy_tin
     ]);
 
-    # Getting The number of Agents, Cards, Business...
+    # Getting The number of Agents, Cards, pharmacy...
     $agentsCount = $statement->rowCount();
     $registered_client = $statement_client->rowCount();
-    $registered_business = $statement_business -> rowCount();
-    $business_notifyCount = $statement_business_notify -> rowCount();
-    $business_recordCount = $statement_business_record -> rowCount();
+    $registered_pharmacy = $statement_pharmacy -> rowCount();
+    $pharmacy_notifyCount = $statement_pharmacy_notify -> rowCount();
+    $pharmacy_recordCount = $statement_pharmacy_record -> rowCount();
 
-    # Fetching business info ...
+    # Fetching pharmacy info ...
 
-    $business_FetchQuery = 'SELECT * FROM `business` ORDER BY `Date` DESC';
-    $business_FetchStatement = $pdo->prepare($business_FetchQuery);
-    $business_FetchStatement->execute();
-    $business_Result = $business_FetchStatement->fetchAll();
+    $pharmacy_FetchQuery = 'SELECT * FROM `pharmacy` ORDER BY `Date` DESC';
+    $pharmacy_FetchStatement = $pdo->prepare($pharmacy_FetchQuery);
+    $pharmacy_FetchStatement->execute();
+    $pharmacy_Result = $pharmacy_FetchStatement->fetchAll();
 
-    # Getting business Info. for update form...
+    # Getting pharmacy Info. for update form...
 
-    $businessFetchQuery = 'SELECT * FROM `business` WHERE `bID` = :businessid';
-    $businessFetchStatement = $pdo->prepare($businessFetchQuery);
-    $businessFetchStatement->execute([
-        'businessid' => $bID
+    $pharmacyFetchQuery = 'SELECT * FROM `pharmacy` WHERE `bID` = :pharmacyid';
+    $pharmacyFetchStatement = $pdo->prepare($pharmacyFetchQuery);
+    $pharmacyFetchStatement->execute([
+        'pharmacyid' => $bID
     ]);
-    $businessResults = $businessFetchStatement->fetch();
+    $pharmacyResults = $pharmacyFetchStatement->fetch();
 
     # Getting user notifications
 
-    $business_notifyFetchQuery = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :business_tin OR `sender_id` = :sbusiness_tin ORDER BY `date_sent` AND `time_sent` DESC';
-    $business_notifyFetchStatement = $pdo->prepare($business_notifyFetchQuery);
-    $business_notifyFetchStatement->execute([
-        'business_tin'     => $business_tin,
-        'sbusiness_tin'    => $business_tin
+    $pharmacy_notifyFetchQuery = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :pharmacy_tin OR `sender_id` = :spharmacy_tin ORDER BY `date_sent` AND `time_sent` DESC';
+    $pharmacy_notifyFetchStatement = $pdo->prepare($pharmacy_notifyFetchQuery);
+    $pharmacy_notifyFetchStatement->execute([
+        'pharmacy_tin'     => $pharmacy_tin,
+        'spharmacy_tin'    => $pharmacy_tin
     ]);
-    $business_notifyResults = $business_notifyFetchStatement->fetchAll();
+    $pharmacy_notifyResults = $pharmacy_notifyFetchStatement->fetchAll();
 
     # refreshing message
     $errorRefreshMessage = "<span class='d-md-inline-block d-none'>&nbsp; Refresh to continue </span><a href='index.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
@@ -91,29 +91,29 @@
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>&nbsp; Refresh to see the change </span><a href='index.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
  
 
-    # Updating business Information...
+    # Updating pharmacy Information...
 
     if (isset($_POST['editinfo'])) {
-        $new_business_Name = $_POST['business-name'];
-        $business_Old_Password = $_POST['old-password'];
-        $business_New_Password = $_POST['new-password'];
-        $business_Confirm_password = $_POST['confirm-password'];
+        $new_pharmacy_Name = $_POST['pharmacy-name'];
+        $pharmacy_Old_Password = $_POST['old-password'];
+        $pharmacy_New_Password = $_POST['new-password'];
+        $pharmacy_Confirm_password = $_POST['confirm-password'];
 
         # Checking for Password fields(if they are empty, It will only update the username or name only)...
 
-        if (empty($business_Old_Password)) {
+        if (empty($pharmacy_Old_Password)) {
 
             # Updating Query...
 
-            $business_Update_Query = 'UPDATE `business`
-                                    SET `business_name` = :businessname
-                                    WHERE `bID` = :businessid
+            $pharmacy_Update_Query = 'UPDATE `pharmacy`
+                                    SET `pharmacy_name` = :pharmacyname
+                                    WHERE `bID` = :pharmacyid
             ';
 
-            $business_Update_stmt = $pdo->prepare($business_Update_Query);
-            $business_Update_stmt->execute([
-                'businessname'     =>  $new_business_Name,
-                'businessid'       =>  $bID
+            $pharmacy_Update_stmt = $pdo->prepare($pharmacy_Update_Query);
+            $pharmacy_Update_stmt->execute([
+                'pharmacyname'     =>  $new_pharmacy_Name,
+                'pharmacyid'       =>  $bID
             ]);
             $successMessage = " Username Edited Successfully";
         }
@@ -121,27 +121,27 @@
 
             # Checking if the old password match...
 
-            $hashedpass = md5($business_Old_Password);
+            $hashedpass = md5($pharmacy_Old_Password);
             
-            // $hashedpass = $business_Old_Password;
+            // $hashedpass = $pharmacy_Old_Password;
 
-            if ($businessResults->business_password == $hashedpass || $businessResults->business_password == $business_Old_Password ) {
+            if ($pharmacyResults->pharmacy_password == $hashedpass || $pharmacyResults->pharmacy_password == $pharmacy_Old_Password ) {
 
-                if ($business_New_Password == $business_Confirm_password) {
+                if ($pharmacy_New_Password == $pharmacy_Confirm_password) {
 
                     # Update Query Including Passwords...
 
-                    $business_Update_Query = 'UPDATE `business`
-                                            SET `business_name` = :businessname,
-                                                `business_password` = :businesspassword
-                                            WHERE `bID` = :businessid
+                    $pharmacy_Update_Query = 'UPDATE `pharmacy`
+                                            SET `pharmacy_name` = :pharmacyname,
+                                                `pharmacy_password` = :pharmacypassword
+                                            WHERE `bID` = :pharmacyid
                     ';
 
-                    $business_Update_stmt = $pdo->prepare($business_Update_Query);
-                    $business_Update_stmt->execute([
-                        'businessname'     =>  $new_business_Name,
-                        'businesspassword' =>  md5($business_New_Password),
-                        'businessid'       =>  $bID
+                    $pharmacy_Update_stmt = $pdo->prepare($pharmacy_Update_Query);
+                    $pharmacy_Update_stmt->execute([
+                        'pharmacyname'     =>  $new_pharmacy_Name,
+                        'pharmacypassword' =>  md5($pharmacy_New_Password),
+                        'pharmacyid'       =>  $bID
                     ]);
                     $successMessage = " Data Edited Successfully";
                 }
@@ -159,13 +159,13 @@
 
     if(isset($_POST["submit-profile"])) {
         $target_dir = "../public/profile/";
-        $target_file = $target_dir . basename($_FILES["business-profile"]["name"]);
-        $photo = $_FILES['business-profile']['name'];
+        $target_file = $target_dir . basename($_FILES["pharmacy-profile"]["name"]);
+        $photo = $_FILES['pharmacy-profile']['name'];
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
         # Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["business-profile"]["tmp_name"]);
+        $check = getimagesize($_FILES["pharmacy-profile"]["tmp_name"]);
         if($check !== false) {
             $uploadOk = 1;
         }
@@ -181,7 +181,7 @@
         // }
         
         # Check file size
-        if ($_FILES["business-profile"]["size"] > 4000000) {
+        if ($_FILES["pharmacy-profile"]["size"] > 4000000) {
             $photo_errorMessage = " Sorry, your file is too large.";
             $uploadOk = 0;
         }
@@ -199,18 +199,18 @@
             # if everything is ok, try to upload file 
         } 
         else {
-            if (move_uploaded_file($_FILES["business-profile"]["tmp_name"], $target_file)) {        
+            if (move_uploaded_file($_FILES["pharmacy-profile"]["tmp_name"], $target_file)) {        
                 
-                # Updating business profile...
-                $profile_update = 'UPDATE `business` 
+                # Updating pharmacy profile...
+                $profile_update = 'UPDATE `pharmacy` 
                                     SET `photo` = :photo 
-                                    WHERE `bID` = :businessid
+                                    WHERE `bID` = :pharmacyid
                                 ';
         
-                $business_updateStatement = $pdo->prepare($profile_update);
-                $business_updateStatement->execute([
+                $pharmacy_updateStatement = $pdo->prepare($profile_update);
+                $pharmacy_updateStatement->execute([
                                     'photo'     =>  $photo,
-                                    'businessid'   =>  $businessResults->bID
+                                    'pharmacyid'   =>  $pharmacyResults->bID
                                 ]);
             
                 if ($profile_update) {
@@ -231,14 +231,14 @@
 
         # check if agent pin are same ... 
 
-        if ($businessResults->business_pin == $cpin) {
+        if ($pharmacyResults->pharmacy_pin == $cpin) {
 
             # checking if agent has enough balance to withdraw ...
 
-            $business_balance = $businessResults->balance;
-            $business_tin = $businessResults->business_tin;
+            $pharmacy_balance = $pharmacyResults->balance;
+            $pharmacy_tin = $pharmacyResults->pharmacy_tin;
 
-            if ($business_balance <= 0 || $business_balance < $amount) {
+            if ($pharmacy_balance <= 0 || $pharmacy_balance < $amount) {
                 $key_errorMessage = " Not enough balance, ". $errorRefreshMessage;
             }
 
@@ -251,7 +251,7 @@
                 $request_date = date('Y-m-d');
                 $request_time = date('h:i:s');
                 $request_type = 'withdraw';
-                $user_id = $business_tin;
+                $user_id = $pharmacy_tin;
                 $amount;
                 $activation_key = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&?", 5)),0 , 10);
                 $status = 'waiting';

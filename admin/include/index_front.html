@@ -77,16 +77,16 @@
                             </div>
                         </div>
 
-                        <!-- Business info -->
+                        <!-- pharmacy info -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading2">
-                                <button class="accordion-button text-dark bi-building-fill collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-2" aria-expanded="false" aria-controls="chapter-2">&nbsp;Business Info</button>
+                                <button class="accordion-button text-dark bi-building-fill collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-2" aria-expanded="false" aria-controls="chapter-2">&nbsp;pharmacy Info</button>
                             </h2>
                             <div id="chapter-2" class="accordion-collapse collapse collapse" aria-labelledby="heading2" data-bs-parent="#chapters">
                                 <div class="accordion-body">
                                     <p class="text-muted fst-italic">
                                         Apparently there are
-                                        <?php echo number_format($registered_business) ?> Registered Business
+                                        <?php echo number_format($registered_pharmacy) ?> Registered pharmacy
                                         <span class="badge bg-gold float-end">
                                         <i class="bi bi-building"></i>
                                     </span>
@@ -95,25 +95,25 @@
                                         <li class="list-group-item fw-medium">
                                             Gas Stations:
                                             <span class="fw-light float-end">
-                                            <?php echo $gas_business ?> Stations
+                                            <?php echo $gas_pharmacy ?> Stations
                                         </span>
                                         </li>
                                         <li class="list-group-item fw-medium">
                                             Other Type:
                                             <span class="fw-light float-end">
-                                            <?php echo number_format($others_business) ?> Businesses
+                                            <?php echo number_format($others_pharmacy) ?> pharmacyes
                                         </span>
                                         </li>
                                     </ul>
-                                    <a href="#business" class="btn btn-gold bi-view-list mt-2"><small> View Details</small></a>
+                                    <a href="#pharmacy" class="btn btn-gold bi-view-list mt-2"><small> View Details</small></a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Agents info -->
+                        <!-- cashiers info -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading3">
-                                <button class="accordion-button collapsed bi-journal-bookmark-fill" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-3" aria-expanded="false" aria-controls="chapter-3">&nbsp;Agents Info</button>
+                                <button class="accordion-button collapsed bi-journal-bookmark-fill" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-3" aria-expanded="false" aria-controls="chapter-3">&nbsp;cashiers Info</button>
                             </h2>
                             <div id="chapter-3" class="accordion-collapse collapse collapse" aria-labelledby="heading3" data-bs-parent="#chapters">
                                 <div class="accordion-body">
@@ -123,18 +123,18 @@
                                     </p>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item fw-medium">
-                                            Agents:
-                                            <span class="fw-light float-end"><?php echo $agentsCount ?> Agents</span>
+                                            cashiers:
+                                            <span class="fw-light float-end"><?php echo $cashiersCount ?> cashiers</span>
                                         </li>
                                     </ul>
-                                    <a href="#agent" class="btn btn-altprimary bi-view-list mt-2"><small> View more</small></a>
+                                    <a href="#cashier" class="btn btn-altprimary bi-view-list mt-2"><small> View more</small></a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Clients info -->
+                        <!-- patients info -->
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading4 client">
+                            <h2 class="accordion-header" id="heading4 patient">
                                 <button class="accordion-button collapsed bi-credit-card-fill" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-4" aria-expanded="false" aria-controls="chapter-4">&nbsp;Card Info</button>
                             </h2>
                             <div id="chapter-4" class="accordion-collapse collapse collapse" aria-labelledby="heading3" data-bs-parent="#chapters">
@@ -145,11 +145,11 @@
                                     </p>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item fw-medium">
-                                            Clients:
-                                            <span class="fw-light float-end"><?php echo $registered_client ?> Registered cards</span>
+                                            patients:
+                                            <span class="fw-light float-end"><?php echo $registered_patient ?> Registered cards</span>
                                         </li>
                                     </ul>
-                                    <a href="client.php" class="btn btn-info bi-view-list mt-2"><small> View more</small></a>
+                                    <a href="patient.php" class="btn btn-info bi-view-list mt-2"><small> View more</small></a>
                                 </div>
                             </div>
                         </div>
@@ -160,20 +160,20 @@
         </div>
     </section>
 
-    <!-- Business review -->
-    <section id="business" class="bg-light">
+    <!-- pharmacy review -->
+    <section id="pharmacy" class="bg-light">
         <div class="container-lg">
             <div class="text-center text-gold">
-                <h2><i class="bi bi-stars"></i> Business Reviews</h2>
-                <p class="lead text-muted">Different business and their current progress</p>
+                <h2><i class="bi bi-stars"></i> pharmacy Reviews</h2>
+                <p class="lead text-muted">Different pharmacy and their current progress</p>
             </div>
 
             <div class="row justify-content-center my-5">
                 <div class="col-lg-8">
                     <div class="list-group">
-                        <?php foreach ($business_Result as $busy_count => $business){ ?>
+                        <?php foreach ($pharmacy_Result as $busy_count => $pharmacy){ ?>
                         <?php 
-                        # To list few of agents. 
+                        # To list few of cashiers. 
                             if ($busy_count == 3) {
                                 break;
                             }
@@ -182,23 +182,23 @@
                         <div class="list-group-item py-3">
                             <h5 class="mb-1 text-uppercase">
                                 <?php 
-                                    if ($business->status == "Active") { 
-                                        if ($business->business_type == "gas") {
-                                            echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                    if ($pharmacy->status == "Active") { 
+                                        if ($pharmacy->pharmacy_type == "gas") {
+                                            echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                         } 
                                         else { 
-                                            echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                            echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                         }
-                                        echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                        echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                     } 
                                     else {
-                                        if ($business->business_type == "gas") {
-                                            echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                        if ($pharmacy->pharmacy_type == "gas") {
+                                            echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                         } 
                                         else { 
-                                            echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                            echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                         }
-                                        echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                        echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                     }
                                     ?>
                             </h5>
@@ -206,14 +206,14 @@
                             <p class="mb-1 fw-medium small">Location:
                                 <span class="fw-light">
                             <?php
-                                # Fetching business location info ...
+                                # Fetching pharmacy location info ...
 
-                                $business_tin = $business->business_tin;
+                                $pharmacy_tin = $pharmacy->pharmacy_tin;
 
-                                $buslocation_FetchQuery = 'SELECT * FROM `business_location` WHERE `business_tin` = :btin';
+                                $buslocation_FetchQuery = 'SELECT * FROM `pharmacy_location` WHERE `pharmacy_tin` = :btin';
                                 $buslocation_FetchStatement = $pdo->prepare($buslocation_FetchQuery);
                                 $buslocation_FetchStatement->execute([
-                                            'btin'  =>  $business_tin
+                                            'btin'  =>  $pharmacy_tin
                                         ]);
                                 $buslocation_Result = $buslocation_FetchStatement->fetch(); 
 
@@ -224,25 +224,25 @@
                             </p>
 
                             <p class="mb-1 fw-medium small">TIN:
-                                <span class="fw-light"><?php echo $business->business_tin ?></span>
+                                <span class="fw-light"><?php echo $pharmacy->pharmacy_tin ?></span>
                             </p>
                             <small class="text-muted">Approved by <?php echo $admin_username ?></small>
                         </div>
                         <?php } ?>
                         <?php } ?>
                     </div>
-                    <a href="../admin/business.php" class="btn btn-gold float-end mt-3 bi-database" title="View More Details"> View More</a>
+                    <a href="../admin/pharmacy.php" class="btn btn-gold float-end mt-3 bi-database" title="View More Details"> View More</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Agent info -->
-    <section id="agent">
+    <!-- cashier info -->
+    <section id="cashier">
         <div class="container-lg">
             <div class="text-center">
-                <h2>Your current agents</h2>
-                <p class="lead text-muted">Interact and reach out to agents.</p>
+                <h2>Your current cashiers</h2>
+                <p class="lead text-muted">Interact and reach out to cashiers.</p>
             </div>
 
             <div class="row justify-content-center">
@@ -251,27 +251,27 @@
                         <div class="card-header text-center text-dark">Most Recent</div>
                         <div class="card-body">
 
-                            <!-- Listing user agents -->
+                            <!-- Listing user cashiers -->
                             <div class="list-group list-group-flush">
-                                <?php foreach($agent_Result as $list_count => $agent){ ?>
+                                <?php foreach($cashier_Result as $list_count => $cashier){ ?>
                                 <?php 
-                            # To list few of agents. 
+                            # To list few of cashiers. 
                                 if ($list_count == 4) {
                                     break;
                                 }
                                 else {
                             ?>
-                                <a href="#?<?php echo $agent->aID ?>" class="list-group-item list-group-item-action">
+                                <a href="#?<?php echo $cashier->caID ?>" class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1 fw-bold">
-                                            <img src="../public/profile/<?php echo $agent->photo ?>" class="img-fluid rounded-1" style="width: 30px;">&nbsp;
-                                            <?php echo $agent->agent_name ?>
+                                            <img src="../public/profile/<?php echo $cashier->photo ?>" class="img-fluid rounded-1" style="width: 30px;">&nbsp;
+                                            <?php echo $cashier->cashier_name ?>
                                         </h6>
                                         <small class="text-success">
                                         <?php
-                                            # Calculating date differences for agents from database
+                                            # Calculating date differences for cashiers from database
                                             $now = strtotime(date('Y-m-d h:i:s'));
-                                            $cdate = strtotime($agent->created_at);
+                                            $cdate = strtotime($cashier->created_at);
                                             $day_diff = $now - $cdate;
                                             $hours = floor($day_diff / 3600);
                                             $minutes = ceil($day_diff / 60 % 60);
@@ -308,14 +308,14 @@
                                             ?>
                                         </small>
                                     </div>
-                                    <p class="mb-1 small">Holds accountable using <em class="fw-light"><?php echo $agent->agent_username ?></em> as username.</p>
-                                    <small class="text-muted">User_ID: <?php echo $agent->aID ?></small>
+                                    <p class="mb-1 small">Holds accountable using <em class="fw-light"><?php echo $cashier->cashier_username ?></em> as username.</p>
+                                    <small class="text-muted">User_ID: <?php echo $cashier->caID ?></small>
                                 </a>
                                 <?php }?>
                                 <?php }?>
                             </div>
 
-                            <a href="agent.php" class="btn btn-altprimary bi-view-list float-end mt-3"> View More</a>
+                            <a href="cashier.php" class="btn btn-altprimary bi-view-list float-end mt-3"> View More</a>
                         </div>
                     </div>
                 </div>

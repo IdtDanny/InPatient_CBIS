@@ -55,7 +55,7 @@
 
                     <!-- <a href="#" class="btn btn-police-dark bi-people d-lg-inline-block d-none" data-bs-toggle="modal" data-bs-target="#aregisterModal" data-bs-whatever="@aregister"><span class="d-lg-inline-block">&nbsp;Land a Job</span></a> -->
 
-                    <!-- <a href="#" class="btn btn-gold bi-buildings d-lg-inline-block d-none" data-bs-toggle="modal" data-bs-target="#bregisterModal" data-bs-whatever="@register"><span class="d-lg-inline-block">&nbsp;Become our client</span></a> -->
+                    <!-- <a href="#" class="btn btn-gold bi-buildings d-lg-inline-block d-none" data-bs-toggle="modal" data-bs-target="#bregisterModal" data-bs-whatever="@register"><span class="d-lg-inline-block">&nbsp;Become our patient</span></a> -->
 
                     <a href="#check" class="btn btn-police-dark bi-eye"> View ID</a>
 
@@ -63,17 +63,17 @@
 
 
                     <!-- Printing alerts -->
-                    <?php if($agent_errorMessage || $agent_deleteErrorMessage || $update_errorMessage || $busy_errorMessage) { ?>
+                    <?php if($cashier_errorMessage || $cashier_deleteErrorMessage || $update_errorMessage || $busy_errorMessage) { ?>
                     <div class="alert alert-warning alert-dismissible fade show alert-danger mt-2" role="alert">
-                        <strong class="bi bi-exclamation-triangle"><?php echo $agent_errorMessage; echo $agent_deleteErrorMessage; echo $update_errorMessage; echo $busy_errorMessage; ?></strong>
+                        <strong class="bi bi-exclamation-triangle"><?php echo $cashier_errorMessage; echo $cashier_deleteErrorMessage; echo $update_errorMessage; echo $busy_errorMessage; ?></strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
                     <?php } ?>
 
-                    <?php if($agent_successMessage || $agent_deleteSuccessMessage || $update_successMessage || $busy_successMessage) { ?>
+                    <?php if($cashier_successMessage || $cashier_deleteSuccessMessage || $update_successMessage || $busy_successMessage) { ?>
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                        <strong class="bi bi-check2-all"><?php echo $agent_successMessage; echo $agent_deleteSuccessMessage; echo $update_successMessage; echo $busy_successMessage; ?></strong>
+                        <strong class="bi bi-check2-all"><?php echo $cashier_successMessage; echo $cashier_deleteSuccessMessage; echo $update_successMessage; echo $busy_successMessage; ?></strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <?php } ?>
@@ -187,7 +187,7 @@
 
                             <!-- checking user balance input -->
                             <div class="form-floating">
-                                <input type="text" name="client_id" id="balance" class="form-control" placeholder="Username" id="floatingInputGroup1">
+                                <input type="text" name="patient_id" id="balance" class="form-control" placeholder="Username" id="floatingInputGroup1">
                                 <label for="floatingInputGroup1" class="text-body-tertiary">Card ID</label>
                             </div>
 
@@ -249,12 +249,12 @@
 
     <!-- Modal Lists -->
     <div>
-        <!-- business register modal -->
+        <!-- pharmacy register modal -->
         <div class="modal fade" id="bregisterModal" tabindex="-1" aria-labelledby="bregisterModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-altprimary text-altlight">
-                        <h1 class="modal-title fs-5 text-uppercase bi-building-add fw-bold" id="exampleModalLabel"> Apply for business</h1>
+                        <h1 class="modal-title fs-5 text-uppercase bi-building-add fw-bold" id="exampleModalLabel"> Apply for pharmacy</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -269,24 +269,24 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="business_name" class="form-control" placeholder="Business Name" id="floatingInputGroup1">
-                                    <label for="floatingInputGroup1">Business Name</label>
+                                    <input type="text" name="pharmacy_name" class="form-control" placeholder="pharmacy Name" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">pharmacy Name</label>
                                 </div>
 
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Add your business name">
+                                    <span class="tt" data-bs-placement="bottom" title="Add your pharmacy name">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
                             </div>
 
-                            <!-- post business_type -->
+                            <!-- post pharmacy_type -->
                             <div class="input-group mb-4">
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
                                 <div class="form-floating">
-                                    <select class="form-select" name="business_type" id="floatingSelectGrid" id="inputGroupSelect01">
+                                    <select class="form-select" name="pharmacy_type" id="floatingSelectGrid" id="inputGroupSelect01">
                                         <option selected>Choose ...</option>
                                         <option value="gas">Gas station</option>
                                         <option value="others">Other</option>
@@ -302,8 +302,8 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="email" name="business_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
-                                    <label for="floatingInputGroup1">Business Email</label>
+                                    <input type="email" name="pharmacy_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">pharmacy Email</label>
                                 </div>
 
                                 <!-- tooltips -->
@@ -314,15 +314,15 @@
                                 </span>
                             </div>
 
-                            <!-- business tin -->
+                            <!-- pharmacy tin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="business_tin" id="name" class="form-control" placeholder="Business TIN" id="floatingInputGroup1" required>
-                                    <label for="floatingInputGroup1">Business TIN</label>
+                                    <input type="text" name="pharmacy_tin" id="name" class="form-control" placeholder="pharmacy TIN" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">pharmacy TIN</label>
                                 </div>
 
                                 <!-- tooltips -->
@@ -333,10 +333,10 @@
                                 </span>
                             </div>
 
-                            <!-- business profile -->
+                            <!-- pharmacy profile -->
                             <div class="input-group mb-3">
                                 <label class="input-group-text bi-upload" for="inputGroupFile01"></label>
-                                <input type="file" name="business_profile" class="form-control" id="inputGroupFile01">
+                                <input type="file" name="pharmacy_profile" class="form-control" id="inputGroupFile01">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -355,11 +355,11 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="business_district" class="form-control" placeholder="District" id="floatingInputGroup1" required>
+                                    <input type="text" name="pharmacy_district" class="form-control" placeholder="District" id="floatingInputGroup1" required>
                                     <label for="floatingInputGroup1">District</label>
                                 </div>
                                 <div class="form-floating">
-                                    <input type="text" name="business_sector" class="form-control" placeholder="Sector" id="floatingInputGroup1" required>
+                                    <input type="text" name="pharmacy_sector" class="form-control" placeholder="Sector" id="floatingInputGroup1" required>
                                     <label for="floatingInputGroup1">Sector</label>
                                 </div>
 
@@ -375,19 +375,19 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Close</button>
-                            <button type="submit" name="businessApply" class="btn btn-altprimary bi-send-check float-end"> Submit</button>
+                            <button type="submit" name="pharmacyApply" class="btn btn-altprimary bi-send-check float-end"> Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- agent register modal -->
+        <!-- cashier register modal -->
         <div class="modal fade" id="aregisterModal" tabindex="-1" aria-labelledby="aregisterModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-altprimary">
-                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold text-altlight" id="exampleModalLabel"> Apply for agent</h1>
+                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold text-altlight" id="exampleModalLabel"> Apply for cashier</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -402,12 +402,12 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="agent_name" class="form-control" placeholder="Agent Name" id="floatingInputGroup1">
+                                    <input type="text" name="cashier_name" class="form-control" placeholder="cashier Name" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your Name</label>
                                 </div>
 
                                 <div class="form-floating">
-                                    <input type="text" name="agent_uname" class="form-control" placeholder="Username" id="floatingInputGroup1">
+                                    <input type="text" name="cashier_uname" class="form-control" placeholder="Username" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Username</label>
                                 </div>
 
@@ -440,7 +440,7 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="tel" name="agent_tel" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
+                                    <input type="tel" name="cashier_tel" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your mobile number</label>
                                 </div>
 
@@ -459,7 +459,7 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="email" name="agent_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
+                                    <input type="email" name="cashier_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your e-mail address</label>
                                 </div>
 
@@ -471,14 +471,14 @@
                                 </span>
                             </div>
 
-                            <!-- agent profile -->
+                            <!-- cashier profile -->
                             <div class="input-group mb-3">
                                 <label class="input-group-text bi-upload" for="inputGroupFile01"></label>
-                                <input type="file" name="agent_profile" class="form-control" id="inputGroupFile01">
+                                <input type="file" name="cashier_profile" class="form-control" id="inputGroupFile01">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Add agent profile photo">
+                                    <span class="tt" data-bs-placement="bottom" title="Add cashier profile photo">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
@@ -493,11 +493,11 @@
                                 </span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="agent_district" class="form-control" placeholder="District" id="floatingInputGroup1" required>
+                                    <input type="text" name="cashier_district" class="form-control" placeholder="District" id="floatingInputGroup1" required>
                                     <label for="floatingInputGroup1">District</label>
                                 </div>
                                 <div class="form-floating">
-                                    <input type="text" name="agent_sector" class="form-control" placeholder="Sector" id="floatingInputGroup1" required>
+                                    <input type="text" name="cashier_sector" class="form-control" placeholder="Sector" id="floatingInputGroup1" required>
                                     <label for="floatingInputGroup1">Sector</label>
                                 </div>
 
@@ -513,14 +513,14 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="agentApply" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="cashierApply" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- client check modal -->
+        <!-- patient check modal -->
         <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -538,16 +538,16 @@
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
 
                                 <?php
-                                    # fetching current business tin from database
-                                    $tin = 'SELECT * FROM `business` ORDER BY `Date` DESC';
-                                    $business_FetchStatement = $pdo->prepare($tin);
-                                    $business_FetchStatement->execute();
-                                    // $business_listTin = $business_FetchStatement->fetch();
+                                    # fetching current pharmacy tin from database
+                                    $tin = 'SELECT * FROM `pharmacy` ORDER BY `Date` DESC';
+                                    $pharmacy_FetchStatement = $pdo->prepare($tin);
+                                    $pharmacy_FetchStatement->execute();
+                                    // $pharmacy_listTin = $pharmacy_FetchStatement->fetch();
                                 ?>
                                     <select class="form-select" name="old_btin" id="inputGroupSelect01" required>
                                     <option>Re-select TIN</option>
-                                    <?php while ($business_listTin = $business_FetchStatement->fetch()) { ?>
-                                    <option value="<?php echo $business_listTin->business_tin ?>"><?php echo $business_listTin->business_tin ?></option>
+                                    <?php while ($pharmacy_listTin = $pharmacy_FetchStatement->fetch()) { ?>
+                                    <option value="<?php echo $pharmacy_listTin->pharmacy_tin ?>"><?php echo $pharmacy_listTin->pharmacy_tin ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -557,32 +557,32 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-house-fill"></i>
                                 </span>
-                                <input type="text" name="nbusiness_name" class="form-control" placeholder="New Business Name" required>
+                                <input type="text" name="npharmacy_name" class="form-control" placeholder="New pharmacy Name" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Re-new business name">
+                                    <span class="tt" data-bs-placement="bottom" title="Re-new pharmacy name">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
                             </div>
 
-                            <!-- post new business_type -->
+                            <!-- post new pharmacy_type -->
                             <div class="input-group mb-4">
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
-                                <select class="form-select" name="nbusiness_type" id="inputGroupSelect01" required>
+                                <select class="form-select" name="npharmacy_type" id="inputGroupSelect01" required>
                                     <option selected>Choose ...</option>
                                     <option value="gas">Gas station</option>
                                     <option value="others">Other</option>
                                 </select>
                             </div>
 
-                            <!-- new business tin -->
+                            <!-- new pharmacy tin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
                                 </span>
-                                <input type="text" name="nbusiness_tin" id="name" class="form-control" placeholder="New Business TIN" required>
+                                <input type="text" name="npharmacy_tin" id="name" class="form-control" placeholder="New pharmacy TIN" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -599,8 +599,8 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-globe"></i>
                                 </span>
-                                <input type="text" name="nbusiness_district" class="form-control" placeholder="Re-new District" required>
-                                <input type="text" name="nbusiness_sector" class="form-control" placeholder="Re-new Sector" required>
+                                <input type="text" name="npharmacy_district" class="form-control" placeholder="Re-new District" required>
+                                <input type="text" name="npharmacy_sector" class="form-control" placeholder="Re-new Sector" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -613,7 +613,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="updatebusiness" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="updatepharmacy" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -639,12 +639,12 @@
         </div>
         <div class="offcanvas-body">
             <div>
-                <p class="text-muted">Become a business partner or land a job with us.</p>
+                <p class="text-muted">Become a pharmacy partner or land a job with us.</p>
                 <!-- <p class="text-muted">Use link below!</p> -->
             </div>
             <a href="#signin" class="btn btn-gold bi-people" data-bs-toggle="modal" data-bs-target="#aregisterModal" data-bs-whatever="@aregister"><span class="d-lg-inline-block">&nbsp;Land a Job</span></a>
 
-            <a href="#signin" class="btn btn-gold bi-buildings" data-bs-toggle="modal" data-bs-target="#bregisterModal" data-bs-whatever="@register"><span class="d-lg-inline-block">&nbsp;Become our client</span></a>
+            <a href="#signin" class="btn btn-gold bi-buildings" data-bs-toggle="modal" data-bs-target="#bregisterModal" data-bs-whatever="@register"><span class="d-lg-inline-block">&nbsp;Become our patient</span></a>
         </div>
     </div>
 

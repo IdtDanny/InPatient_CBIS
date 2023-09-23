@@ -15,53 +15,53 @@
     $admin_ID = $_SESSION['sessionToken']->admin_ID;
     $admin_name = $_SESSION['sessionToken']->admin_name;
 
-    # Calculating Each Number of Users, Cards, business, agents and so on...
-    $sql_agent = 'SELECT * FROM agent';
-    $sql_client = 'SELECT * FROM client';
-    $sql_business = 'SELECT * FROM business';
-    $sql_business_gas = 'SELECT * FROM `business` WHERE `business_type` = :btype';
-    $sql_business_others = 'SELECT * FROM `business` WHERE `business_type` = :otype';
-    // $usedCardsSql = 'SELECT * FROM `client` WHERE `Approve` = :approve';
+    # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
+    $sql_cashier = 'SELECT * FROM cashier';
+    $sql_patient = 'SELECT * FROM patient';
+    $sql_pharmacy = 'SELECT * FROM pharmacy';
+    $sql_pharmacy_gas = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :btype';
+    $sql_pharmacy_others = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :otype';
+    // $usedCardsSql = 'SELECT * FROM `patient` WHERE `Approve` = :approve';
 
-    $statement = $pdo->prepare($sql_agent);
+    $statement = $pdo->prepare($sql_cashier);
     $statement->execute();
 
-    $statement_client = $pdo->prepare($sql_client);
-    $statement_client -> execute();
+    $statement_patient = $pdo->prepare($sql_patient);
+    $statement_patient -> execute();
 
-    $statement_business = $pdo->prepare($sql_business);
-    $statement_business -> execute();
+    $statement_pharmacy = $pdo->prepare($sql_pharmacy);
+    $statement_pharmacy -> execute();
 
-    $statement_business_gas = $pdo->prepare($sql_business_gas);
-    $statement_business_gas -> execute([
+    $statement_pharmacy_gas = $pdo->prepare($sql_pharmacy_gas);
+    $statement_pharmacy_gas -> execute([
         'btype' => 'gas'
     ]);
 
-    $statement_business_others = $pdo->prepare($sql_business_others);
-    $statement_business_others -> execute([
+    $statement_pharmacy_others = $pdo->prepare($sql_pharmacy_others);
+    $statement_pharmacy_others -> execute([
         'otype' => 'others'
     ]);
 
-    # Getting The number of Agents, Cards, Business...
-    $agentsCount = $statement->rowCount();
-    $registered_client = $statement_client->rowCount();
-    $registered_business = $statement_business -> rowCount();
-    $gas_business = $statement_business_gas -> rowCount();
-    $others_business = $statement_business_others -> rowCount();
+    # Getting The number of cashiers, Cards, pharmacy...
+    $cashiersCount = $statement->rowCount();
+    $registered_patient = $statement_patient->rowCount();
+    $registered_pharmacy = $statement_pharmacy -> rowCount();
+    $gas_pharmacy = $statement_pharmacy_gas -> rowCount();
+    $others_pharmacy = $statement_pharmacy_others -> rowCount();
 
-    # Fetching business info ...
+    # Fetching pharmacy info ...
 
-    $business_FetchQuery = 'SELECT * FROM `business` ORDER BY `Date` DESC';
-    $business_FetchStatement = $pdo->prepare($business_FetchQuery);
-    $business_FetchStatement->execute();
-    $business_Result = $business_FetchStatement->fetchAll();
+    $pharmacy_FetchQuery = 'SELECT * FROM `pharmacy` ORDER BY `Date` DESC';
+    $pharmacy_FetchStatement = $pdo->prepare($pharmacy_FetchQuery);
+    $pharmacy_FetchStatement->execute();
+    $pharmacy_Result = $pharmacy_FetchStatement->fetchAll();
 
-    # Fetching agents info ...
+    # Fetching cashiers info ...
 
-    $agent_FetchQuery = 'SELECT * FROM `agent` ORDER BY `created_at` DESC';
-    $agent_FetchStatement = $pdo->prepare($agent_FetchQuery);
-    $agent_FetchStatement->execute();
-    $agent_Result = $agent_FetchStatement->fetchAll();
+    $cashier_FetchQuery = 'SELECT * FROM `cashier` ORDER BY `created_at` DESC';
+    $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
+    $cashier_FetchStatement->execute();
+    $cashier_Result = $cashier_FetchStatement->fetchAll();
 
 
     # Getting Admin Info. for update form...

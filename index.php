@@ -47,33 +47,33 @@
             }
         }
 
-        # when not found, check in agents ...
+        # when not found, check in cashiers ...
 
         else if ($usersCount == 0) {
 
-            # Checking for Agent Account Existence...
+            # Checking for cashier Account Existence...
 
-            $query_2 = 'SELECT * FROM `agent` WHERE `agent_username` = :username';
+            $query_2 = 'SELECT * FROM `cashier` WHERE `cashier_username` = :username';
 
             # PDO Prepare & Execution of the query...
             $statement = $pdo->prepare($query_2);
             $statement->execute([
                 'username' => $username
             ]);
-            $agentCount = $statement->rowCount();
+            $cashierCount = $statement->rowCount();
 
-            # agent is found 
+            # cashier is found 
 
-            if ($agentCount > 0) {
-                $agent = $statement->fetch();
+            if ($cashierCount > 0) {
+                $cashier = $statement->fetch();
 
-                # check if agent account is activated
+                # check if cashier account is activated
 
-                if ($agent->status == 'active') {
+                if ($cashier->status == 'active') {
 
-                    if ($username == $agent->agent_username && ($password == $agent->agent_password || $hashedPassword == $agent->agent_password)) {
-                        $page = 'agent/#dashboard';
-                        $_SESSION['sessionToken'] = $agent;
+                    if ($username == $cashier->cashier_username && ($password == $cashier->cashier_password || $hashedPassword == $cashier->cashier_password)) {
+                        $page = 'cashier/#dashboard';
+                        $_SESSION['sessionToken'] = $cashier;
                         header('location:'.$page);
                     }
                     else {
@@ -88,40 +88,40 @@
                 }
             }
 
-            # if agent is not found, look in business
+            # if cashier is not found, look in pharmacy
 
             else {
 
-                # Checking for Business Account Existence...
+                # Checking for pharmacy Account Existence...
 
-                $query_3 = 'SELECT * FROM `business` WHERE `business_tin` = :businesstin';
+                $query_3 = 'SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacytin';
                 
-                $businessname = $username; 
+                $pharmacyname = $username; 
 
                 # PDO Prepare & Execution of the query...
                 $statement = $pdo->prepare($query_3);
                 $statement->execute([
-                    'businesstin' => $businessname
+                    'pharmacytin' => $pharmacyname
                 ]);
-                $businessCount = $statement->rowCount();
+                $pharmacyCount = $statement->rowCount();
             
-                if ($businessCount > 0) {
+                if ($pharmacyCount > 0) {
 
-                    $business = $statement->fetch();
+                    $pharmacy = $statement->fetch();
 
-                    # check if business is approved ...
+                    # check if pharmacy is approved ...
 
-                    if ($business->approved_by == 'N/A') {
-                        $error_message=" Request for Business Approval";
+                    if ($pharmacy->approved_by == 'N/A') {
+                        $error_message=" Request for pharmacy Approval";
                     }
 
-                    # otherwise proceed with business login ...
+                    # otherwise proceed with pharmacy login ...
 
                     else {
 
-                        if ($username == $business -> business_tin && ($password == $business -> business_password || $hashedPassword == $business -> business_password)) {
-                            $page = 'business/#dashboard';
-                            $_SESSION['sessionToken'] = $business;
+                        if ($username == $pharmacy -> pharmacy_tin && ($password == $pharmacy -> pharmacy_password || $hashedPassword == $pharmacy -> pharmacy_password)) {
+                            $page = 'pharmacy/#dashboard';
+                            $_SESSION['sessionToken'] = $pharmacy;
                             header('location:'.$page);
                         }
                         else {
@@ -141,166 +141,166 @@
 
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='index.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # new agent application form ...
+    # new cashier application form ...
 
-    if (isset($_POST['agentApply'])) {
+    if (isset($_POST['cashierApply'])) {
 
-        $agent_name = $_POST['agent_name'];
-        $agent_uname = $_POST['agent_uname'];
-        $agent_mail = $_POST['agent_mail'];
-        $agent_tel = $_POST['agent_tel'];
-        $agent_gender = $_POST['agender'];
-        $agent_district = $_POST['agent_district'];
-        $agent_sector = $_POST['agent_sector'];
+        $cashier_name = $_POST['cashier_name'];
+        $cashier_uname = $_POST['cashier_uname'];
+        $cashier_mail = $_POST['cashier_mail'];
+        $cashier_tel = $_POST['cashier_tel'];
+        $cashier_gender = $_POST['agender'];
+        $cashier_district = $_POST['cashier_district'];
+        $cashier_sector = $_POST['cashier_sector'];
         $date_Sent = date('Y-m-d h:i:s');
-        $agent_pin = rand(1000,9999);
-        $password= $agent_uname.'-'.$agent_pin;
+        $cashier_pin = rand(1000,9999);
+        $password= $cashier_uname.'-'.$cashier_pin;
         $hashed_Password = md5($password);
 
-        # checking if agent exists
-        $agent_existFetchQuery = 'SELECT * FROM `agent` WHERE `agent_name` = :agent_name';
-        $agent_existFetchStatement = $pdo->prepare($agent_existFetchQuery);
-        $agent_existFetchStatement->execute([
-            'agent_name' => $agent_name
+        # checking if cashier exists
+        $cashier_existFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_name` = :cashier_name';
+        $cashier_existFetchStatement = $pdo->prepare($cashier_existFetchQuery);
+        $cashier_existFetchStatement->execute([
+            'cashier_name' => $cashier_name
         ]);
-        $agent_existResults = $agent_existFetchStatement->fetch();
+        $cashier_existResults = $cashier_existFetchStatement->fetch();
 
         # if exist, pop some message
-        if ($agent_existResults) {
-            $agent_errorMessage = " Already registered" . $errorRefreshMessage;
+        if ($cashier_existResults) {
+            $cashier_errorMessage = " Already registered" . $errorRefreshMessage;
         }
 
         # otherwise proceed with registration process
 
         else {
             $target_dir = "public/profile/";
-            $target_file = $target_dir . basename($_FILES['agent_profile']['name']);
-            $agent_profile = $_FILES['agent_profile']['name'];
+            $target_file = $target_dir . basename($_FILES['cashier_profile']['name']);
+            $cashier_profile = $_FILES['cashier_profile']['name'];
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
             
             # Check if image file is a actual image or fake image
-            $check = getimagesize($_FILES["agent_profile"]["tmp_name"]);
+            $check = getimagesize($_FILES["cashier_profile"]["tmp_name"]);
             if($check !== false) {
                 $uploadOk = 1;
             }
             else {
-                $agent_errorMessage = " File is not an image.";
+                $cashier_errorMessage = " File is not an image.";
                 $uploadOk = 0;
             }
             
             # Check file size
-            if ($_FILES["agent_profile"]["size"] > 400000) {
-                $agent_errorMessage = " Sorry, your file is too large." . $errorRefreshMessage;
+            if ($_FILES["cashier_profile"]["size"] > 400000) {
+                $cashier_errorMessage = " Sorry, your file is too large." . $errorRefreshMessage;
                 $uploadOk = 0;
             }
             
             # Allow certain file formats
             else if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif" ) {
-                $agent_errorMessage = " Sorry, only JPG, JPEG, PNG & GIF files are allowed." . $errorRefreshMessage;
+                $cashier_errorMessage = " Sorry, only JPG, JPEG, PNG & GIF files are allowed." . $errorRefreshMessage;
                 $uploadOk = 0;
             }
             
             # Check if $uploadOk is set to 0 by an error
             else if ($uploadOk == 0) {
-                $agent_errorMessage = " Sorry, your file was not uploaded." . $errorRefreshMessage;
+                $cashier_errorMessage = " Sorry, your file was not uploaded." . $errorRefreshMessage;
             } 
             else {
-                if (move_uploaded_file($_FILES["agent_profile"]["tmp_name"], $target_file)) {
+                if (move_uploaded_file($_FILES["cashier_profile"]["tmp_name"], $target_file)) {
                     
-                    # Inserting Business...
+                    # Inserting pharmacy...
 
-                    $sql_insert_agent = " INSERT INTO `agent`(`created_at`, `agent_name`, `agent_gender`, `agent_username`, `agent_tel`, `agent_mail`, `agent_password`, `agent_pin`, `photo`, `agent_balance`, `status`) VALUES(:adate, :agent_name, :agent_gender, :agent_uname, :agent_tel, :agent_mail, :agent_password, :agent_pin, :photo, :balance, :bstatus)";
+                    $sql_insert_cashier = " INSERT INTO `cashier`(`created_at`, `cashier_name`, `cashier_gender`, `cashier_username`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`) VALUES(:adate, :cashier_name, :cashier_gender, :cashier_uname, :cashier_tel, :cashier_mail, :cashier_password, :cashier_pin, :photo, :balance, :bstatus)";
 
-                    $agent_InsertStatement = $pdo->prepare($sql_insert_agent);
-                    $agent_InsertStatement->execute([
+                    $cashier_InsertStatement = $pdo->prepare($sql_insert_cashier);
+                    $cashier_InsertStatement->execute([
                         'adate'             =>  $date_Sent,
-                        'agent_name'        =>  $agent_name,
-                        'agent_gender'      =>  $agent_gender,
-                        'agent_uname'       =>  $agent_uname,
-                        'agent_tel'         =>  $agent_tel,  
-                        'agent_mail'        =>  $agent_mail,
-                        'agent_password'    =>  $hashed_Password,
-                        'agent_pin'         =>  $agent_pin,
-                        'photo'             =>  $agent_profile,
+                        'cashier_name'        =>  $cashier_name,
+                        'cashier_gender'      =>  $cashier_gender,
+                        'cashier_uname'       =>  $cashier_uname,
+                        'cashier_tel'         =>  $cashier_tel,  
+                        'cashier_mail'        =>  $cashier_mail,
+                        'cashier_password'    =>  $hashed_Password,
+                        'cashier_pin'         =>  $cashier_pin,
+                        'photo'             =>  $cashier_profile,
                         'balance'           =>  '0',
                         'bstatus'           =>  'inactive'
                     ]);
 
-                    if ($sql_insert_agent) {
+                    if ($sql_insert_cashier) {
 
                         # Getting Admin Info. for update form...
 
-                        $agent_locationFetchQuery = 'SELECT * FROM `agent` WHERE `agent_pin` = :apin';
-                        $agent_locationFetchStatement = $pdo->prepare($agent_locationFetchQuery);
-                        $agent_locationFetchStatement->execute([
-                            'apin' => $agent_pin
+                        $cashier_locationFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_pin` = :apin';
+                        $cashier_locationFetchStatement = $pdo->prepare($cashier_locationFetchQuery);
+                        $cashier_locationFetchStatement->execute([
+                            'apin' => $cashier_pin
                         ]);
-                        $agent_locationResults = $agent_locationFetchStatement->fetch();
-                        $aID = $agent_locationResults->aID;
+                        $cashier_locationResults = $cashier_locationFetchStatement->fetch();
+                        $caID = $cashier_locationResults->caID;
 
-                        $sql_insert_location = "  INSERT INTO `agent_location`(`aID`, `agent_name`, `district`, `sector`) VALUES(:aid, :agent_name, :district, :sector) ";
+                        $sql_insert_location = "  INSERT INTO `cashier_location`(`caID`, `cashier_name`, `district`, `sector`) VALUES(:caID, :cashier_name, :district, :sector) ";
                         $location_InsertStatement = $pdo->prepare($sql_insert_location);
                         $location_InsertStatement->execute([
-                                'aid'           =>  $aID,
-                                'agent_name'    =>  $agent_name,
-                                'district'      =>  $agent_district,
-                                'sector'        =>  $agent_sector
+                                'caID'           =>  $caID,
+                                'cashier_name'    =>  $cashier_name,
+                                'district'      =>  $cashier_district,
+                                'sector'        =>  $cashier_sector
                         ]);
-                        if ($sql_insert_agent && $sql_insert_location) {
-                                $agent_successMessage = " Registered Pin: ". $agent_pin . $successRefreshMessage;
+                        if ($sql_insert_cashier && $sql_insert_location) {
+                                $cashier_successMessage = " Registered Pin: ". $cashier_pin . $successRefreshMessage;
                         }
                     }
                     else {
-                        $agent_errorMessage = " Could not register" . $errorRefreshMessage;
+                        $cashier_errorMessage = " Could not register" . $errorRefreshMessage;
                     }
                 } 
                 else {
-                    $agent_errorMessage = " Something went wrong" . $errorRefreshMessage;
+                    $cashier_errorMessage = " Something went wrong" . $errorRefreshMessage;
                 }
             }
         }
     }
 
-    # Registering new business ...
+    # Registering new pharmacy ...
 
-    if (isset($_POST['businessApply'])) {
-        $business_name = $_POST['business_name'];
-        $business_mail = $_POST['business_mail'];
-        $business_type = $_POST['business_type'];
-        $business_tin = $_POST['business_tin'];
-        $business_district = $_POST['business_district'];
-        $business_sector = $_POST['business_sector'];
-        $password = $business_tin;
+    if (isset($_POST['pharmacyApply'])) {
+        $pharmacy_name = $_POST['pharmacy_name'];
+        $pharmacy_mail = $_POST['pharmacy_mail'];
+        $pharmacy_type = $_POST['pharmacy_type'];
+        $pharmacy_tin = $_POST['pharmacy_tin'];
+        $pharmacy_district = $_POST['pharmacy_district'];
+        $pharmacy_sector = $_POST['pharmacy_sector'];
+        $password = $pharmacy_tin;
         $hashed_Password = md5($password);
         $date_Sent = date('Y-m-d h:i:s');
-        $business_pin = rand(1000,9999);
+        $pharmacy_pin = rand(1000,9999);
 
-        # checking if business exists
-        $business_existFetchQuery = 'SELECT * FROM `business` WHERE `business_name` = :business_name';
-        $business_existFetchStatement = $pdo->prepare($business_existFetchQuery);
-        $business_existFetchStatement->execute([
-            'business_name' => $business_name
+        # checking if pharmacy exists
+        $pharmacy_existFetchQuery = 'SELECT * FROM `pharmacy` WHERE `pharmacy_name` = :pharmacy_name';
+        $pharmacy_existFetchStatement = $pdo->prepare($pharmacy_existFetchQuery);
+        $pharmacy_existFetchStatement->execute([
+            'pharmacy_name' => $pharmacy_name
         ]);
-        $business_existResults = $business_existFetchStatement->fetch();
+        $pharmacy_existResults = $pharmacy_existFetchStatement->fetch();
 
         # if exist, pop some message
-        if ($business_existResults) {
+        if ($pharmacy_existResults) {
             $busy_errorMessage = " Already registered" . $errorRefreshMessage;
         }
 
-        # if not, proceed with application business
+        # if not, proceed with application pharmacy
         else {
 
             $target_dir = "public/profile/";
-            $target_file = $target_dir . basename($_FILES['business_profile']['name']);
-            $business_profile = $_FILES['business_profile']['name'];
+            $target_file = $target_dir . basename($_FILES['pharmacy_profile']['name']);
+            $pharmacy_profile = $_FILES['pharmacy_profile']['name'];
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
             
             # Check if image file is a actual image or fake image
-            $check = getimagesize($_FILES["business_profile"]["tmp_name"]);
+            $check = getimagesize($_FILES["pharmacy_profile"]["tmp_name"]);
             if($check !== false) {
                 $uploadOk = 1;
             }
@@ -310,7 +310,7 @@
             }
             
             # Check file size
-            if ($_FILES["business_profile"]["size"] > 4000000) {
+            if ($_FILES["pharmacy_profile"]["size"] > 4000000) {
                 $busy_errorMessage = " Sorry, your file is too large." . $errorRefreshMessage;
                 $uploadOk = 0;
             }
@@ -327,49 +327,49 @@
                 $busy_errorMessage = " Sorry, your file was not uploaded." . $errorRefreshMessage;
             } 
             else {
-                if (move_uploaded_file($_FILES["business_profile"]["tmp_name"], $target_file)) {
+                if (move_uploaded_file($_FILES["pharmacy_profile"]["tmp_name"], $target_file)) {
 
-                    # Inserting Business...
+                    # Inserting pharmacy...
 
-                    $sql_insert_business = " INSERT INTO `business`(`Date`, `business_name`, `business_tin`, `business_mail`, `business_password`, `business_pin`, `business_type`, `balance`, `status`, `photo`, `approved_by`) VALUES(:bdate, :business_name, :business_tin, :business_mail, :business_password, :business_pin, :business_type, :balance, :bstatus, :photo, :approved_by)";
+                    $sql_insert_pharmacy = " INSERT INTO `pharmacy`(`Date`, `pharmacy_name`, `pharmacy_tin`, `pharmacy_mail`, `pharmacy_password`, `pharmacy_pin`, `pharmacy_type`, `balance`, `status`, `photo`, `approved_by`) VALUES(:bdate, :pharmacy_name, :pharmacy_tin, :pharmacy_mail, :pharmacy_password, :pharmacy_pin, :pharmacy_type, :balance, :bstatus, :photo, :approved_by)";
 
-                    $business_InsertStatement = $pdo->prepare($sql_insert_business);
-                    $business_InsertStatement->execute([
+                    $pharmacy_InsertStatement = $pdo->prepare($sql_insert_pharmacy);
+                    $pharmacy_InsertStatement->execute([
                         'bdate'             =>  $date_Sent,
-                        'business_name'     =>  $business_name,
-                        'business_tin'      =>  $business_tin,
-                        'business_mail'     =>  $business_mail,
-                        'business_password' =>  $hashed_Password,
-                        'business_pin'      =>  $business_pin,
-                        'business_type'     =>  $business_type,
+                        'pharmacy_name'     =>  $pharmacy_name,
+                        'pharmacy_tin'      =>  $pharmacy_tin,
+                        'pharmacy_mail'     =>  $pharmacy_mail,
+                        'pharmacy_password' =>  $hashed_Password,
+                        'pharmacy_pin'      =>  $pharmacy_pin,
+                        'pharmacy_type'     =>  $pharmacy_type,
                         'balance'           =>  '0',
                         'bstatus'           =>  'Inactive',
-                        'photo'             =>  $business_profile,
+                        'photo'             =>  $pharmacy_profile,
                         'approved_by'       =>  'N/A'
                     ]);
 
-                    if ($sql_insert_business) {
+                    if ($sql_insert_pharmacy) {
 
                         # Getting Admin Info. for update form...
 
-                        $busy_locationFetchQuery = 'SELECT * FROM `business` WHERE `business_tin` = :businesstin';
+                        $busy_locationFetchQuery = 'SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacytin';
                         $busy_locationFetchStatement = $pdo->prepare($busy_locationFetchQuery);
                         $busy_locationFetchStatement->execute([
-                            'businesstin' => $business_tin
+                            'pharmacytin' => $pharmacy_tin
                         ]);
                         $busy_locationResults = $busy_locationFetchStatement->fetch();
-                        $bID = $busy_locationResults->bID;
+                        $phID = $busy_locationResults->phID;
 
-                        $sql_insert_location = "  INSERT INTO `business_location`(`bID`, `business_tin`, `district`, `sector`) VALUES(:bid, :businesstin, :district, :sector) ";
+                        $sql_insert_location = "  INSERT INTO `pharmacy_location`(`phID`, `pharmacy_tin`, `district`, `sector`) VALUES(:phID, :pharmacytin, :district, :sector) ";
                         $location_InsertStatement = $pdo->prepare($sql_insert_location);
                         $location_InsertStatement->execute([
-                                'bid'           =>  $bID,
-                                'businesstin'   =>  $business_tin,
-                                'district'      =>  $business_district,
-                                'sector'        =>  $business_sector
+                                'phID'           =>  $phID,
+                                'pharmacytin'   =>  $pharmacy_tin,
+                                'district'      =>  $pharmacy_district,
+                                'sector'        =>  $pharmacy_sector
                         ]);
-                        if ($sql_insert_business && $sql_insert_location) {
-                                $busy_successMessage = " Registered, TIN: ". $business_tin . " Refresh!";
+                        if ($sql_insert_pharmacy && $sql_insert_location) {
+                                $busy_successMessage = " Registered, TIN: ". $pharmacy_tin . " Refresh!";
                         }
                     }
                     else {
@@ -385,22 +385,22 @@
 
     # Checking user_balance ...
 
-    if (isset($_POST['client_id'])){
-        $client_id = $_POST['client_id'];
+    if (isset($_POST['patient_id'])){
+        $patient_id = $_POST['patient_id'];
 
-        # checking if client exists ...
+        # checking if patient exists ...
 
-        $client_existFetchQuery = 'SELECT * FROM `client` WHERE `client_ID` = :client_id';
-        $client_existFetchStatement = $pdo->prepare($client_existFetchQuery);
-        $client_existFetchStatement->execute([
-            'client_id' => $client_id
+        $patient_existFetchQuery = 'SELECT * FROM `patient` WHERE `patient_ID` = :patient_id';
+        $patient_existFetchStatement = $pdo->prepare($patient_existFetchQuery);
+        $patient_existFetchStatement->execute([
+            'patient_id' => $patient_id
         ]);
-        $client_existResults = $client_existFetchStatement->fetch();
+        $patient_existResults = $patient_existFetchStatement->fetch();
 
         # if user is found then fetch the balance ...
 
-        if ($client_existResults) {
-            $user_balance = $client_existResults->client_balance;
+        if ($patient_existResults) {
+            $user_balance = $patient_existResults->patient_balance;
         }
         else {
             $busy_errorMessage = " Unknown ID" . $errorRefreshMessage;
