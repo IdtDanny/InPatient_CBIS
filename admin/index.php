@@ -73,6 +73,11 @@
     ]);
     $adminResults = $adminFetchStatement->fetch();
 
+    # refreshing message
+    $errorRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh </span><a href='index.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+
+    $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh</span><a href='index.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+
     # Updating Admin Information...
 
     if (isset($_POST['editinfo'])) {
@@ -136,14 +141,14 @@
                         'adminpassword' =>  md5($admin_New_Password),
                         'adminid'       =>  $admin_ID
                     ]);
-                    $successMessage = " Data Edited Successfully";
+                    $successMessage = " Data Edited Successfully".$successRefreshMessage;
                 }
                 else{
-                    $errorMessage = " New Password Does not Match";
+                    $errorMessage = " New Password Does not Match".$errorRefreshMessage;
                 }
             }
             else{
-                $errorMessage = " Current Password is Incorrect";
+                $errorMessage = " Current Password is Incorrect".$errorRefreshMessage;
             }
 
         }
@@ -151,15 +156,15 @@
 
     # Updating profile photo
 
-    if(isset($_POST["submit-profile"])) {
-        $target_dir = "../public/profile/";
-        $target_file = $target_dir . basename($_FILES["admin-profile"]["name"]);
+    if(isset($_POST["submit_profile"])) {
         $photo = $_FILES['admin-profile']['name'];
+        $target_dir = "../public/profile/";
+        $target_file = $target_dir . basename($photo);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
         # Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["admin-profile"]["tmp_name"]);
+        $check = getimagesize($_FILES['admin-profile']['tmp_name']);
         if($check !== false) {
             $uploadOk = 1;
         }
@@ -193,7 +198,7 @@
             # if everything is ok, try to upload file 
         } 
         else {
-            if (move_uploaded_file($_FILES["admin-profile"]["tmp_name"], $target_file)) {        
+            if (move_uploaded_file($_FILES['admin-profile']['tmp_name'], $target_file)) {        
                 
                 # Updating admin profile...
                 $profile_update = 'UPDATE `admin` 
@@ -208,16 +213,17 @@
                                 ]);
             
                 if ($profile_update) {
-                    $photo_successMessage = " Profile Edited";
+                    $photo_successMessage = " Profile Edited".$successRefreshMessage;
                 }
             } 
             else {
-                $photo_errorMessage = " Sorry, there was an error uploading your file.";
+                $photo_errorMessage = " Sorry, there was an error uploading your file.".$errorRefreshMessage;
             }
         }
     }
 ?>
 
-<?php 
-    include 'include/index_front.html';
+    <?php 
+    // include 'include/index_front.html';
+    include 'include/index_new.html';
 ?>

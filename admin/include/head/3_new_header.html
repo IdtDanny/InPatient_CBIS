@@ -1,0 +1,80 @@
+</header>
+
+<!-- everthing down here -->
+<div class="container-fluid">
+
+    <!-- after nav -->
+    <div class="row">
+
+        <!-- sidebar section -->
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-header">
+                    <p class="offcanvas-title lead fw-medium" id="sidebarMenuLabel">InPatient CBIS</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-5 pt-lg-3 overflow-y-auto position-fixed">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2 active bi-house-fill" aria-current="page" href="#dashboard"> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-file-earmark-fill" href="receptionist.php"> Receptionist
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-person-check-fill" href="inpatient.php"> InPatient
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-people-fill" href="cashier.php"> Cashier
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-hospital-fill" href="pharmacy.php"> Pharmacy
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-police-dark text-uppercase ">
+                        <span>Saved reports</span>
+                        <a class="link-police-dark bi-plus-circle-fill" href="# " aria-label="Add a new report"></a>
+                    </h6>
+                    <ul class="nav flex-column mb-auto">
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-file-earmark-text " href="# "> Current month
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-file-earmark-text " href="# "> Last quarter
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-file-earmark-text " href="# "> Social engagement
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-file-earmark-text " href="# "> Year-end sale
+                            </a>
+                        </li>
+                    </ul>
+
+                    <hr class="my-3 ">
+
+                    <ul class="nav flex-column mb-auto ">
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-gear-wide-connected " href="# "> Settings
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link d-flex align-items-center gap-2 bi-door-closed " href="logout.php "> Sign out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- other requirement section -->
+        <main class="col-md-9 col-lg-10" id="dashboard">
