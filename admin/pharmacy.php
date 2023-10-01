@@ -26,53 +26,53 @@
     $busy_updateErrorMessage = "";
     $busy_updateSuccessMessage = "";
 
-    # Calculating Each Number of Users, Cards, business, agents and so on...
-    $sql_agent = 'SELECT * FROM agent';
-    $sql_client = 'SELECT * FROM client';
-    $sql_business = 'SELECT * FROM business';
-    $sql_business_gas = 'SELECT * FROM `business` WHERE `business_type` = :btype';
-    $sql_business_others = 'SELECT * FROM `business` WHERE `business_type` = :otype';
-    // $usedCardsSql = 'SELECT * FROM `client` WHERE `Approve` = :approve';
+    # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
+    $sql_cashier = 'SELECT * FROM cashier';
+    $sql_patient = 'SELECT * FROM patient';
+    $sql_pharmacy = 'SELECT * FROM pharmacy';
+    $sql_pharmacy_gas = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :btype';
+    $sql_pharmacy_others = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :otype';
+    // $usedCardsSql = 'SELECT * FROM `patient` WHERE `Approve` = :approve';
 
-    $statement = $pdo->prepare($sql_agent);
+    $statement = $pdo->prepare($sql_cashier);
     $statement->execute();
 
-    $statement_client = $pdo->prepare($sql_client);
-    $statement_client -> execute();
+    $statement_patient = $pdo->prepare($sql_patient);
+    $statement_patient -> execute();
 
-    $statement_business = $pdo->prepare($sql_business);
-    $statement_business -> execute();
+    $statement_pharmacy = $pdo->prepare($sql_pharmacy);
+    $statement_pharmacy -> execute();
 
-    $statement_business_gas = $pdo->prepare($sql_business_gas);
-    $statement_business_gas -> execute([
+    $statement_pharmacy_gas = $pdo->prepare($sql_pharmacy_gas);
+    $statement_pharmacy_gas -> execute([
         'btype' => 'gas'
     ]);
 
-    $statement_business_others = $pdo->prepare($sql_business_others);
-    $statement_business_others -> execute([
+    $statement_pharmacy_others = $pdo->prepare($sql_pharmacy_others);
+    $statement_pharmacy_others -> execute([
         'otype' => 'others'
     ]);
 
-    # Getting The number of Agents, Cards, Business...
-    $agentsCount = $statement->rowCount();
-    $registered_client = $statement_client->rowCount();
-    $registered_business = $statement_business -> rowCount();
-    $gas_business = $statement_business_gas -> rowCount();
-    $others_business = $statement_business_others -> rowCount();
+    # Getting The number of cashiers, Cards, pharmacy...
+    $cashiersCount = $statement->rowCount();
+    $registered_patient = $statement_patient->rowCount();
+    $registered_pharmacy = $statement_pharmacy -> rowCount();
+    $gas_pharmacy = $statement_pharmacy_gas -> rowCount();
+    $others_pharmacy = $statement_pharmacy_others -> rowCount();
 
-    # Fetching business info ...
+    # Fetching pharmacy info ...
 
-    $business_FetchQuery = 'SELECT * FROM `business` ORDER BY `Date` DESC';
-    $business_FetchStatement = $pdo->prepare($business_FetchQuery);
-    $business_FetchStatement->execute();
-    $business_Result = $business_FetchStatement->fetchAll();
+    $pharmacy_FetchQuery = 'SELECT * FROM `pharmacy` ORDER BY `Date` DESC';
+    $pharmacy_FetchStatement = $pdo->prepare($pharmacy_FetchQuery);
+    $pharmacy_FetchStatement->execute();
+    $pharmacy_Result = $pharmacy_FetchStatement->fetchAll();
 
-    # Fetching agents info ...
+    # Fetching cashiers info ...
 
-    $agent_FetchQuery = 'SELECT * FROM `agent` ORDER BY `created_at` DESC';
-    $agent_FetchStatement = $pdo->prepare($agent_FetchQuery);
-    $agent_FetchStatement->execute();
-    $agent_Result = $agent_FetchStatement->fetchAll();
+    $cashier_FetchQuery = 'SELECT * FROM `cashier` ORDER BY `created_at` DESC';
+    $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
+    $cashier_FetchStatement->execute();
+    $cashier_Result = $cashier_FetchStatement->fetchAll();
 
 
     # Getting Admin Info. for update form...
@@ -85,32 +85,32 @@
     $adminResults = $adminFetchStatement->fetch();
 
     # refreshing message
-    $errorRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to continue </span><a href='business.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+    $errorRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to continue </span><a href='pharmacy.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='business.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+    $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='pharmacy.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # Registering new business
+    # Registering new pharmacy
 
-    if (isset($_POST['registerbusiness'])) {
-        $business_name = $_POST['business_name'];
-        $business_mail = $_POST['business_mail'];
-        $business_type = $_POST['business_type'];
-        $business_tin = $_POST['business_tin'];
-        $business_district = $_POST['business_district'];
-        $business_sector = $_POST['business_sector'];
-        $password = $business_tin;
+    if (isset($_POST['registerpharmacy'])) {
+        $pharmacy_name = $_POST['pharmacy_name'];
+        $pharmacy_mail = $_POST['pharmacy_mail'];
+        $pharmacy_type = $_POST['pharmacy_type'];
+        $pharmacy_tin = $_POST['pharmacy_tin'];
+        $pharmacy_district = $_POST['pharmacy_district'];
+        $pharmacy_sector = $_POST['pharmacy_sector'];
+        $password = $pharmacy_tin;
         $hashed_Password = md5($password);
         $date_Sent = date('Y-m-d h:i:s');
-        $business_pin = rand(1000,9999);
+        $pharmacy_pin = rand(1000,9999);
 
         $target_dir = "../public/profile/";
-        $target_file = $target_dir . basename($_FILES['business_profile']['name']);
-        $business_profile = $_FILES['business_profile']['name'];
+        $target_file = $target_dir . basename($_FILES['pharmacy_profile']['name']);
+        $pharmacy_profile = $_FILES['pharmacy_profile']['name'];
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
         # Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["business_profile"]["tmp_name"]);
+        $check = getimagesize($_FILES["pharmacy_profile"]["tmp_name"]);
         if($check !== false) {
             $uploadOk = 1;
         }
@@ -120,7 +120,7 @@
         }
         
         # Check file size
-        if ($_FILES["business_profile"]["size"] > 400000) {
+        if ($_FILES["pharmacy_profile"]["size"] > 400000) {
             $busy_errorMessage = " Sorry, your file is too large." . $errorRefreshMessage;
             $uploadOk = 0;
         }
@@ -137,48 +137,48 @@
             $busy_errorMessage = " Sorry, your file was not uploaded." . $errorRefreshMessage;
         } 
         else {
-            if (move_uploaded_file($_FILES["business_profile"]["tmp_name"], $target_file)) {
+            if (move_uploaded_file($_FILES["pharmacy_profile"]["tmp_name"], $target_file)) {
 
-                # Inserting Business...
+                # Inserting pharmacy...
 
-                $sql_insert_business = " INSERT INTO `business`(`Date`, `business_name`, `business_tin`, `business_mail`, `business_password`, `business_pin`, `business_type`, `balance`, `status`, `photo`) VALUES(:bdate, :businessname, :businesstin, :businessmail, :businesspass, :businesspin, :businesstype, :balance, :bstatus, :photo)";
+                $sql_insert_pharmacy = " INSERT INTO `pharmacy`(`Date`, `pharmacy_name`, `pharmacy_tin`, `pharmacy_mail`, `pharmacy_password`, `pharmacy_pin`, `pharmacy_type`, `balance`, `status`, `photo`) VALUES(:bdate, :pharmacyname, :pharmacytin, :pharmacymail, :pharmacypass, :pharmacypin, :pharmacytype, :balance, :bstatus, :photo)";
 
-                $business_InsertStatement = $pdo->prepare($sql_insert_business);
-                $business_InsertStatement->execute([
+                $pharmacy_InsertStatement = $pdo->prepare($sql_insert_pharmacy);
+                $pharmacy_InsertStatement->execute([
                     'bdate'          =>  $date_Sent,
-                    'businessname'   =>  $business_name,
-                    'businesstin'    =>  $business_tin,
-                    'businessmail'   =>  $business_mail,
-                    'businesspass'   =>  $hashed_Password,
-                    'businesspin'    =>  $business_pin,
-                    'businesstype'   =>  $business_type,
+                    'pharmacyname'   =>  $pharmacy_name,
+                    'pharmacytin'    =>  $pharmacy_tin,
+                    'pharmacymail'   =>  $pharmacy_mail,
+                    'pharmacypass'   =>  $hashed_Password,
+                    'pharmacypin'    =>  $pharmacy_pin,
+                    'pharmacytype'   =>  $pharmacy_type,
                     'balance'        =>  '0',
                     'bstatus'        =>  'Active',
-                    'photo'          =>  $business_profile
+                    'photo'          =>  $pharmacy_profile
                 ]);
 
-                if ($sql_insert_business) {
+                if ($sql_insert_pharmacy) {
 
                     # Getting Admin Info. for update form...
 
-                    $busy_locationFetchQuery = 'SELECT * FROM `business` WHERE `business_tin` = :businesstin';
+                    $busy_locationFetchQuery = 'SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacytin';
                     $busy_locationFetchStatement = $pdo->prepare($busy_locationFetchQuery);
                     $busy_locationFetchStatement->execute([
-                        'businesstin' => $business_tin
+                        'pharmacytin' => $pharmacy_tin
                     ]);
                     $busy_locationResults = $busy_locationFetchStatement->fetch();
-                    $bID = $busy_locationResults->bID;
+                    $phID = $busy_locationResults->phID;
 
-                    $sql_insert_location = "  INSERT INTO `business_location`(`bID`, `business_tin`, `district`, `sector`) VALUES(:bid, :businesstin, :district, :sector) ";
+                    $sql_insert_location = "  INSERT INTO `pharmacy_location`(`phID`, `pharmacy_tin`, `district`, `sector`) VALUES(:phID, :pharmacytin, :district, :sector) ";
                     $location_InsertStatement = $pdo->prepare($sql_insert_location);
                     $location_InsertStatement->execute([
-                            'bid'           =>  $bID,
-                            'businesstin'   =>  $business_tin,
-                            'district'      =>  $business_district,
-                            'sector'        =>  $business_sector
+                            'phID'           =>  $phID,
+                            'pharmacytin'   =>  $pharmacy_tin,
+                            'district'      =>  $pharmacy_district,
+                            'sector'        =>  $pharmacy_sector
                     ]);
-                    if ($sql_insert_business && $sql_insert_location) {
-                            $busy_successMessage = " Business Registered, TIN: ". $business_tin . $successRefreshMessage;
+                    if ($sql_insert_pharmacy && $sql_insert_location) {
+                            $busy_successMessage = " pharmacy Registered, TIN: ". $pharmacy_tin . $successRefreshMessage;
                     }
                 }
                 else {
@@ -191,113 +191,113 @@
         }
     }
 
-    # getting business delete response
+    # getting pharmacy delete response
 
-    if (isset($_GET['dbID'])) {
-        $dbID = $_GET['dbID'];
-        $sql_bdelete = 'DELETE FROM `business` WHERE bID = :bid';
-        $sql_ldelete = 'DELETE FROM `business_location` WHERE bID = :bid';
+    if (isset($_GET['dphID'])) {
+        $dphID = $_GET['dphID'];
+        $sql_bdelete = 'DELETE FROM `pharmacy` WHERE phID = :phID';
+        $sql_ldelete = 'DELETE FROM `pharmacy_location` WHERE phID = :phID';
 
         # PDO Prep & Exec..
-        $delete_BusinessR = $pdo->prepare($sql_bdelete);
-        $delete_BusinessR->execute([
-            'bid'  =>  $dbID
+        $delete_pharmacyR = $pdo->prepare($sql_bdelete);
+        $delete_pharmacyR->execute([
+            'phID'  =>  $dphID
         ]);
 
-        $delete_BusinessL = $pdo->prepare($sql_ldelete);
-        $delete_BusinessL->execute([
-            'bid'  =>  $dbID
+        $delete_pharmacyL = $pdo->prepare($sql_ldelete);
+        $delete_pharmacyL->execute([
+            'phID'  =>  $dphID
         ]);
 
         if ($sql_bdelete && $sql_ldelete) {
             $busy_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
         }
         else {
-            $busy_deleteErrorMessage = " Could not delete, check business id" . $errorRefreshMessage;
+            $busy_deleteErrorMessage = " Could not delete, check pharmacy id" . $errorRefreshMessage;
         }
 
     }
 
-    # getting business approve response
+    # getting pharmacy approve response
 
-    if (isset($_GET['AbID'])) {
-        $dbID = $_GET['AbID'];
-        $sql_update = 'UPDATE `business` SET `approved_by` = :approved_by WHERE `business`.`bID` = :bid';
+    if (isset($_GET['AphID'])) {
+        $dphID = $_GET['AphID'];
+        $sql_update = 'UPDATE `pharmacy` SET `approved_by` = :approved_by WHERE `pharmacy`.`phID` = :phID';
 
         # PDO Prep & Exec..
-        $update_Business = $pdo->prepare($sql_update);
-        $update_Business->execute([
+        $update_pharmacy = $pdo->prepare($sql_update);
+        $update_pharmacy->execute([
             'approved_by' => 'admin',
-            'bid'         =>  $dbID
+            'phID'         =>  $dphID
         ]);
 
         if ($sql_update) {
             $update_successMessage = " Approved Successful" . $successRefreshMessage;
         }
         else {
-            $update_errorMessage = " Could not update, check business id" . $errorRefreshMessage;
+            $update_errorMessage = " Could not update, check pharmacy id" . $errorRefreshMessage;
         }
 
     }
 
-    # Update Business Operation...
+    # Update pharmacy Operation...
 
-    if (isset($_POST['updatebusiness'])) {
+    if (isset($_POST['updatepharmacy'])) {
 
         $old_btin = $_POST['old_btin'];
-        $nbusiness_name = $_POST['nbusiness_name'];
-        $nbusiness_type = $_POST['nbusiness_type'];
-        $nbusiness_tin = $_POST['nbusiness_tin'];
-        $nbusiness_district = $_POST['nbusiness_district'];
-        $nbusiness_sector = $_POST['nbusiness_sector'];
+        $npharmacy_name = $_POST['npharmacy_name'];
+        $npharmacy_type = $_POST['npharmacy_type'];
+        $npharmacy_tin = $_POST['npharmacy_tin'];
+        $npharmacy_district = $_POST['npharmacy_district'];
+        $npharmacy_sector = $_POST['npharmacy_sector'];
 
-        # Checking for businessTin ...
+        # Checking for pharmacyTin ...
 
-        $fetch_UserQuery='SELECT * FROM `business` WHERE `business_tin` = :pin';
+        $fetch_UserQuery='SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pin';
         $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
         $fetch_UserStatement->execute([
             'pin'       => $old_btin
         ]);
 
-        $business_Info = $fetch_UserStatement -> fetch();
+        $pharmacy_Info = $fetch_UserStatement -> fetch();
 
-        $businessCount = $fetch_UserStatement->rowCount();
+        $pharmacyCount = $fetch_UserStatement->rowCount();
 
-        if ($businessCount > 0 ) {
+        if ($pharmacyCount > 0 ) {
 
-            # Modifying business ...
+            # Modifying pharmacy ...
 
-            $business_UpdateQuery = ' UPDATE `business`
-                                SET `business_name` = :business_NewName,
-                                    `business_tin` = :business_NewTin,
-                                    `business_type` = :business_NewType
-                                WHERE `business_tin` = :businesstin
+            $pharmacy_UpdateQuery = ' UPDATE `pharmacy`
+                                SET `pharmacy_name` = :pharmacy_NewName,
+                                    `pharmacy_tin` = :pharmacy_NewTin,
+                                    `pharmacy_type` = :pharmacy_NewType
+                                WHERE `pharmacy_tin` = :pharmacytin
             ';
 
-            $location_UpdateQuery = ' UPDATE `business_location`
-                                SET `business_tin` = :business_NewTin,
-                                    `district` = :nbusiness_district,
-                                    `sector` = :nbusiness_sector
-                                WHERE `business_tin` = :businesstin
+            $location_UpdateQuery = ' UPDATE `pharmacy_location`
+                                SET `pharmacy_tin` = :pharmacy_NewTin,
+                                    `district` = :npharmacy_district,
+                                    `sector` = :npharmacy_sector
+                                WHERE `pharmacy_tin` = :pharmacytin
             ';
 
             $location_UpdateStatement = $pdo->prepare($location_UpdateQuery);
             $location_UpdateStatement->execute([
-                'business_NewTin'       =>  $nbusiness_tin,
-                'nbusiness_district'    =>  $nbusiness_district,
-                'nbusiness_sector'      =>  $nbusiness_sector,
-                'businesstin'           =>  $old_btin
+                'pharmacy_NewTin'       =>  $npharmacy_tin,
+                'npharmacy_district'    =>  $npharmacy_district,
+                'npharmacy_sector'      =>  $npharmacy_sector,
+                'pharmacytin'           =>  $old_btin
             ]);
 
-            $business_UpdateStatement = $pdo->prepare($business_UpdateQuery);
-            $business_UpdateStatement->execute([
-                'business_NewName'      =>  $nbusiness_name,
-                'business_NewTin'       =>  $nbusiness_tin,
-                'business_NewType'      =>  $nbusiness_type,
-                'businesstin'           =>  $old_btin
+            $pharmacy_UpdateStatement = $pdo->prepare($pharmacy_UpdateQuery);
+            $pharmacy_UpdateStatement->execute([
+                'pharmacy_NewName'      =>  $npharmacy_name,
+                'pharmacy_NewTin'       =>  $npharmacy_tin,
+                'pharmacy_NewType'      =>  $npharmacy_type,
+                'pharmacytin'           =>  $old_btin
             ]);
 
-            if ($business_UpdateQuery && $location_UpdateQuery) {
+            if ($pharmacy_UpdateQuery && $location_UpdateQuery) {
                 $update_successMessage = " Updated Successful" . $successRefreshMessage;
             }
         }
@@ -307,14 +307,14 @@
 
     }
 
-    # withdraw agent Operation...
+    # withdraw cashier Operation...
 
-    if (isset($_POST['withdrawBusiness'])) {
+    if (isset($_POST['withdrawpharmacy'])) {
 
         $cpin = $_POST['cpin'];
         $ramount = $_POST['ramount'];
 
-        # checking agent activation key from request made ...
+        # checking cashier activation key from request made ...
 
         $requestFetchQuery = 'SELECT * FROM `request` WHERE `activation_key` = :cpin AND `amount` = :ramount';
         $requestFetchStatement = $pdo->prepare($requestFetchQuery);
@@ -355,33 +355,33 @@
 
                 else {
 
-                    # getting agent info from request ...
+                    # getting cashier info from request ...
 
                     $user_id = $requestResults->user_id;
                     
-                    # Checking for agent existing and his id meet with request ...
+                    # Checking for cashier existing and his id meet with request ...
 
-                    $fetch_UserQuery='SELECT * FROM `business` WHERE `business_tin` = :business_tin';
+                    $fetch_UserQuery='SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacy_tin';
                     $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
                     $fetch_UserStatement->execute([
-                        'business_tin' => $user_id
+                        'pharmacy_tin' => $user_id
                     ]);
 
-                    $business_Info = $fetch_UserStatement -> fetch();
+                    $pharmacy_Info = $fetch_UserStatement -> fetch();
 
-                    $businessCount = $fetch_UserStatement->rowCount();
+                    $pharmacyCount = $fetch_UserStatement->rowCount();
 
-                    # proceed with withdraw if agent info meet with request ...
+                    # proceed with withdraw if cashier info meet with request ...
 
-                    if ($businessCount > 0 ) {
+                    if ($pharmacyCount > 0 ) {
 
-                        # agent balance ...
+                        # cashier balance ...
 
-                        $business_balance = $business_Info->balance;
+                        $pharmacy_balance = $pharmacy_Info->balance;
 
-                        # checking agent balance to withdraw ...
+                        # checking cashier balance to withdraw ...
 
-                        if ($business_balance <= 0 || $business_balance < $ramount) {
+                        if ($pharmacy_balance <= 0 || $pharmacy_balance < $ramount) {
                             $update_errorMessage = " Not enough balance" . $errorRefreshMessage;
                         }
                         
@@ -408,27 +408,27 @@
                                 'admin_pin'       =>  $admin_pin
                             ]);
 
-                            # Modifying business ...
+                            # Modifying pharmacy ...
 
-                            $balance = $business_Info->balance;
+                            $balance = $pharmacy_Info->balance;
 
                             $balance -= $ramount;
 
-                            $business_UpdateQuery = ' UPDATE `business`
-                                                SET `balance` = :business_balance
-                                                WHERE `business_tin` = :business_tin
+                            $pharmacy_UpdateQuery = ' UPDATE `pharmacy`
+                                                SET `balance` = :pharmacy_balance
+                                                WHERE `pharmacy_tin` = :pharmacy_tin
                             ';
 
-                            $business_UpdateStatement = $pdo->prepare($business_UpdateQuery);
-                            $business_UpdateStatement->execute([
-                                'business_balance' =>  $balance,
-                                'business_tin'     =>  $user_id
+                            $pharmacy_UpdateStatement = $pdo->prepare($pharmacy_UpdateQuery);
+                            $pharmacy_UpdateStatement->execute([
+                                'pharmacy_balance' =>  $balance,
+                                'pharmacy_tin'     =>  $user_id
                             ]);
 
-                            if ($business_UpdateQuery && $admin_UpdateQuery) {
+                            if ($pharmacy_UpdateQuery && $admin_UpdateQuery) {
 
                                 $sender_id = 'admin';
-                                $receiver_id = $business_Info->business_tin;
+                                $receiver_id = $pharmacy_Info->pharmacy_tin;
                                 $amount = $ramount;
                                 $date_Sent = date('Y-m-d h:i:s');
                                 $time_Sent = date('h:i:s');
@@ -496,5 +496,5 @@
 ?>
 
 <?php 
-    include 'include/business_front.html';
+    include 'include/pharmacy_front.html';
 ?>

@@ -1,79 +1,78 @@
 <?php
     # DOCTYPE html file 1
-    include 'header/1_header.html';
+    include 'head/1_new_header.html';
 
     # DOCTYPE html file 2 with style document
-    echo ' Business</title>';
-    include 'header/2_header.html';
+    echo ' <title>Admin | Pharmacy</title>';
+    include 'head/2_new_header.html';
 
-    # NavBar
-    include 'header/nav_header_front_1.html';
     echo '
-    <li class="nav-item">
-        <a href="business.php" class="nav-link d-md-block d-none bi-arrow-clockwise"></a>
-    </li>
+    <a href="../admin/" class="btn text-altlight me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
     ';
-    include 'header/nav_header_front_2.html';
+    include 'head/3_new_header.html';
 ?>
 
-    <!-- Business Profile Tables -->
-    <section id="dashboard bg-light">
-        <div class="container-md">
+    <!-- title -->
+    <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+        <!-- row for admin profile -->
+        <div class="row">
 
-            <!-- row for admin profile -->
-            <div class="row">
-
-                <!-- Displaying user profile -->
-                <div class="col">
-                    <h2 class="float-start">
-                        <!-- browsing profile picture or else user svg used -->
-                        <?php if($adminResults->admin_profile): ?>
-                        <img src="../public/profile/<?php echo $adminResults->admin_profile ?>" alt="Profile" class="img-fluid rounded-1" style="width: 40px;">
-                        <?php else: ?>
-                        <img src="../public/img/user-profile.svg" alt="eBook" class="img-fluid rounded-1" style="width: 40px;">
-                        <?php endif ?>
-                        <span class="text-altprimary fw-bold text-uppercase">
-                            <?php # $adminResults->admin_name ?> Business <span class="d-lg-inline-block d-none">list</span>
-                        </span>
-                    </h2>
-                </div>
-
-                <!-- button for registering and withdraw business balance -->
-                <div class="col">
-                    <div class="input-group justify-content-end">
-                        <button class="btn btn-outline-gold text-dark bi-person-add" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-whatever="@register"><span class="d-lg-inline-block d-none">&nbsp;Register</span></button>
-                        <button class="btn btn-gold bi-box-arrow-down" title="Register" data-bs-toggle="modal" data-bs-target="#withdrawModal" data-bs-whatever="@withdraw"><span class="d-lg-inline-block d-none" title="Withdraw">&nbsp;Withdraw</span></button>
-                    </div>
-                </div>
-
-                <!-- refresh -->
-                <form method="post" class="float-end col-1 ms-3 d-md-none">
-                    <div class="input-group justify-content-end">
-                        <a href="agent.php" class="btn btn-outline-gold text-dark bi-arrow-clockwise"></a>
-                    </div>
-                </form>
-
-                <!-- filters and search box -->
-                <form method="post" class="col-3 float-end d-md-inline col-md-4 d-none">
-                    <div class="input-group">
-
-                        <div class="form-floating">
-                            <input type="text" name="filter_business_name" class="form-control form-control-sm" placeholder="Agent Name" id="floatingInputGroup1" required>
-                            <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Filter Name</label>
-                        </div>
-
-                        <!-- tooltips -->
-                        <div class="input-group-text">
-                            <div class="tt" data-bs-placement="bottom" title="Filter by full name">
-                                <button type="submit" name="business_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
+            <!-- Displaying user profile -->
+            <div class="col">
+                <h2 class="float-start">
+                    <!-- browsing profile picture or else user svg used -->
+                    <?php if($adminResults->admin_profile): ?>
+                    <img src="../public/profile/<?php echo $adminResults->admin_profile ?>" alt="Profile" class="img-fluid rounded-1" style="width: 40px;">
+                    <?php else: ?>
+                    <img src="../public/img/user-profile.svg" alt="eBook" class="img-fluid rounded-1" style="width: 40px;">
+                    <?php endif ?>
+                    <span class="text-altprimary fw-bold text-uppercase">
+                            <?php # $adminResults->admin_name ?> pharmacy <span class="d-lg-inline-block d-none">list</span>
+                    </span>
+                </h2>
             </div>
 
-            <div class="badge bg-dark p-2 p-sm-3">
+            <!-- button for registering and withdraw pharmacy balance -->
+            <div class="col">
+                <div class="input-group justify-content-end">
+                    <button class="btn btn-outline-gold text-dark bi-person-add" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-whatever="@register"><span class="d-lg-inline-block d-none">&nbsp;Register</span></button>
+                    <button class="btn btn-gold bi-box-arrow-down" title="Register" data-bs-toggle="modal" data-bs-target="#withdrawModal" data-bs-whatever="@withdraw"><span class="d-lg-inline-block d-none" title="Withdraw">&nbsp;Withdraw</span></button>
+                </div>
+            </div>
+
+            <!-- refresh -->
+            <form method="post" class="float-end col-1 ms-3 d-md-none">
+                <div class="input-group justify-content-end">
+                    <a href="agent.php" class="btn btn-outline-gold text-dark bi-arrow-clockwise"></a>
+                </div>
+            </form>
+
+            <!-- filters and search box -->
+            <form method="post" class="col-3 float-end d-md-inline col-md-4 d-none">
+                <div class="input-group">
+
+                    <div class="form-floating">
+                        <input type="text" name="filter_pharmacy_name" class="form-control form-control-sm" placeholder="Agent Name" id="floatingInputGroup1" required>
+                        <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Filter Name</label>
+                    </div>
+
+                    <!-- tooltips -->
+                    <div class="input-group-text">
+                        <div class="tt" data-bs-placement="bottom" title="Filter by full name">
+                            <button type="submit" name="pharmacy_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- pharmacy Profile Tables -->
+    <section id="dashboard" class="pb-3">
+        <div class="container-md">
+
+            <div class="badge bg-police-dark p-2 p-sm-3 mt-3">
                 <p class="lead d-inline text-capitalize ">B/f:
                     <?php echo number_format($adminResults->Balance) ?> Rwf
                 </p>
@@ -84,20 +83,20 @@
                 <div class="input-group mt-2">
 
                     <div class="form-floating">
-                        <input type="text" name="filter_business_name" class="form-control form-control-sm" placeholder="Agent Name" id="floatingInputGroup1" required>
+                        <input type="text" name="filter_pharmacy_name" class="form-control form-control-sm" placeholder="Agent Name" id="floatingInputGroup1" required>
                         <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Filter Name</label>
                     </div>
 
                     <!-- tooltips -->
                     <div class="input-group-text">
                         <div class="tt" data-bs-placement="bottom" title="Filter by full name">
-                            <button type="submit" name="business_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                            <button type="submit" name="pharmacy_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
                         </div>
                     </div>
                 </div>
             </form>
 
-            <!-- row for business table and list for small media -->
+            <!-- row for pharmacy table and list for small media -->
             <div class="row my-0 g-3 justify-content-around align-items-center">
                 <div class="col-lg-12 col-lg-6">
 
@@ -119,8 +118,8 @@
                     <!-- for large media -->
                     <div class="d-lg-block d-none text-capitalize">
                         <table class="table table-hover">
-                            <caption class="text-center fw-light">List of Registered businesses</caption>
-                            <thead class="table-dark">
+                            <caption class="text-center fw-light">List of Registered pharmacies</caption>
+                            <thead class="table-primary table-group-divider">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col"><i class="bi bi-person-circle"></i></th>
@@ -137,19 +136,19 @@
                                     <th scope="col">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="small">
+                            <tbody class="small table-group-divider">
                                 <?php
                                     # checking if user filtered agent name
 
-                                    if (isset($_POST['business_filter'])) {
-                                        $filter_business_name = $_POST['filter_business_name'];
+                                    if (isset($_POST['pharmacy_filter'])) {
+                                        $filter_pharmacy_name = $_POST['filter_pharmacy_name'];
 
                                         # Fetching filtered agents info ...
 
-                                        $filter_FetchQuery = 'SELECT * FROM `business` WHERE `business_name` = :business_name ORDER BY `Date` DESC ';
+                                        $filter_FetchQuery = 'SELECT * FROM `pharmacy` WHERE `pharmacy_name` = :pharmacy_name ORDER BY `Date` DESC ';
                                         $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
                                         $filter_FetchStatement->execute([
-                                            'business_name' => $filter_business_name
+                                            'pharmacy_name' => $filter_pharmacy_name
                                         ]);
                                         $filter_Result = $filter_FetchStatement->fetchAll();
 
@@ -161,49 +160,49 @@
                                                 echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                                                     <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                                                 $no = 1; 
-                                                foreach($filter_Result as $business) { ?>
+                                                foreach($filter_Result as $pharmacy) { ?>
                                     <tr>
                                         <th scope="row">
                                             <?php echo $no ?>
                                         </th>
-                                        <td><img src="../public/profile/<?php echo $business->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
+                                        <td><img src="../public/profile/<?php echo $pharmacy->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
                                         <td>
-                                            <?php echo date('M d, Y', strtotime($business->Date)) ?>
+                                            <?php echo date('M d, Y', strtotime($pharmacy->Date)) ?>
                                         </td>
-                                        <?php if ($business->status != "Active") {
-                                                                    echo "<td class='text-uppercase text-danger'>" . $business->business_name . "</td>";
+                                        <?php if ($pharmacy->status != "Active") {
+                                                                    echo "<td class='text-uppercase text-danger'>" . $pharmacy->pharmacy_name . "</td>";
                                                                 } else {
-                                                                    echo "<td class='text-uppercase'>" . $business->business_name . "</td>";
+                                                                    echo "<td class='text-uppercase'>" . $pharmacy->pharmacy_name . "</td>";
                                                                 }
                                                                 ?>
                                         <td class="text-lowercase">
-                                            <?php echo $business->business_mail ?>
+                                            <?php echo $pharmacy->pharmacy_mail ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_tin ?>
+                                            <?php echo $pharmacy->pharmacy_tin ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_type ?>
+                                            <?php echo $pharmacy->pharmacy_type ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_pin ?>
+                                            <?php echo $pharmacy->pharmacy_pin ?>
                                         </td>
                                         <td class="text-end">
-                                            <?php echo number_format($business->balance) ?>
+                                            <?php echo number_format($pharmacy->balance) ?>
                                         </td>
                                         <td class="text-center"><a href="#" class="btn btn-sm btn-altprimary" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><i class="bi bi-pencil-square"></i> </a></td>
                                         <td class="text-center">
                                             <?php 
-                                                                if ($business->approved_by == 'N/A') {
-                                                                    echo '<a href="?AbID='.$business->bID.'" class="btn btn-sm btn-danger"><i class="bi-exclamation-triangle-fill"></i> </a>'; } else { echo '<a href="#" class="btn btn-sm btn-success"><i class="bi-check2-all"></i> </a>'; } ?>
+                                                                if ($pharmacy->approved_by == 'N/A') {
+                                                                    echo '<a href="?AphID='.$pharmacy->phID.'" class="btn btn-sm btn-danger"><i class="bi-exclamation-triangle-fill"></i> </a>'; } else { echo '<a href="#" class="btn btn-sm btn-success"><i class="bi-check2-all"></i> </a>'; } ?>
                                         </td>
-                                        <td class="text-center"><a href="business.php?dbID=<?php echo $business->bID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
-                                        <!-- <td class="text-center"><a href="#?bID=<?php echo $business->bID ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><i class="bi bi-trash3"></i> Delete</a></td> -->
+                                        <td class="text-center"><a href="pharmacy.php?dphID=<?php echo $pharmacy->phID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
+                                        <!-- <td class="text-center"><a href="#?phID=<?php echo $pharmacy->phID ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><i class="bi bi-trash3"></i> Delete</a></td> -->
                                         <?php 
-                                                    if ($business->status == "Active") {
-                                                        echo "<td class='fw-light text-altlight bg-success text-center'><small>" . $business->status . "</small></td>"; 
+                                                    if ($pharmacy->status == "Active") {
+                                                        echo "<td class='fw-light text-altlight bg-success text-center'><small>" . $pharmacy->status . "</small></td>"; 
                                                     } else {
-                                                        echo "<td class='fw-light text-altlight bg-danger text-center'><small>" . $business->status . "</small></td>";
+                                                        echo "<td class='fw-light text-altlight bg-danger text-center'><small>" . $pharmacy->status . "</small></td>";
                                                     }
                                                 ?>
                                     </tr>
@@ -213,7 +212,7 @@
                                         
                                         $no = 1; 
                                     
-                                        foreach($business_Result as $key => $business) { 
+                                        foreach($pharmacy_Result as $key => $pharmacy) { 
     
                                             # To list few of agents. 
                                                 if ($key == 20) {
@@ -225,44 +224,44 @@
                                         <th scope="row">
                                             <?php echo $no ?>
                                         </th>
-                                        <td><img src="../public/profile/<?php echo $business->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
+                                        <td><img src="../public/profile/<?php echo $pharmacy->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
                                         <td>
-                                            <?php echo date('M d, Y', strtotime($business->Date)) ?>
+                                            <?php echo date('M d, Y', strtotime($pharmacy->Date)) ?>
                                         </td>
-                                        <?php if ($business->status != "Active") {
-                                                    echo "<td class='text-uppercase text-danger'>" . $business->business_name . "</td>";
+                                        <?php if ($pharmacy->status != "Active") {
+                                                    echo "<td class='text-uppercase text-danger'>" . $pharmacy->pharmacy_name . "</td>";
                                                 } else {
-                                                    echo "<td class='text-uppercase'>" . $business->business_name . "</td>";
+                                                    echo "<td class='text-uppercase'>" . $pharmacy->pharmacy_name . "</td>";
                                                 }
                                                 ?>
                                         <td class="text-lowercase">
-                                            <?php echo $business->business_mail ?>
+                                            <?php echo $pharmacy->pharmacy_mail ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_tin ?>
+                                            <?php echo $pharmacy->pharmacy_tin ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_type ?>
+                                            <?php echo $pharmacy->pharmacy_type ?>
                                         </td>
                                         <td>
-                                            <?php echo $business->business_pin ?>
+                                            <?php echo $pharmacy->pharmacy_pin ?>
                                         </td>
                                         <td class="text-end">
-                                            <?php echo number_format($business->balance) ?>
+                                            <?php echo number_format($pharmacy->balance) ?>
                                         </td>
                                         <td class="text-center"><a href="#" class="btn btn-sm btn-altprimary" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><i class="bi bi-pencil-square"></i> </a></td>
                                         <td class="text-center">
                                             <?php 
-                                                if ($business->approved_by == 'N/A') {
-                                                    echo '<a href="?AbID='.$business->bID.'" class="btn btn-sm btn-danger"><i class="bi-exclamation-triangle-fill"></i> </a>'; } else { echo '<a href="#" class="btn btn-sm btn-success"><i class="bi-check2-all"></i> </a>'; } ?>
+                                                if ($pharmacy->approved_by == 'N/A') {
+                                                    echo '<a href="?AphID='.$pharmacy->phID.'" class="btn btn-sm btn-danger"><i class="bi-exclamation-triangle-fill"></i> </a>'; } else { echo '<a href="#" class="btn btn-sm btn-success"><i class="bi-check2-all"></i> </a>'; } ?>
                                         </td>
-                                        <td class="text-center"><a href="business.php?dbID=<?php echo $business->bID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
-                                        <!-- <td class="text-center"><a href="#?bID=<?php echo $business->bID ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><i class="bi bi-trash3"></i> Delete</a></td> -->
+                                        <td class="text-center"><a href="pharmacy.php?dphID=<?php echo $pharmacy->phID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
+                                        <!-- <td class="text-center"><a href="#?phID=<?php echo $pharmacy->phID ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><i class="bi bi-trash3"></i> Delete</a></td> -->
                                         <?php 
-                                    if ($business->status == "Active") {
-                                        echo "<td class='fw-light text-altlight bg-success text-center'><small>" . $business->status . "</small></td>"; 
+                                    if ($pharmacy->status == "Active") {
+                                        echo "<td class='fw-light text-altlight bg-success text-center'><small>" . $pharmacy->status . "</small></td>"; 
                                     } else {
-                                        echo "<td class='fw-light text-altlight bg-danger text-center'><small>" . $business->status . "</small></td>";
+                                        echo "<td class='fw-light text-altlight bg-danger text-center'><small>" . $pharmacy->status . "</small></td>";
                                     }
                                 ?>
                                     </tr>
@@ -279,15 +278,15 @@
                         <?php
                         # checking if user filtered agent name
 
-                        if (isset($_POST['business_filter'])) {
-                            $filter_business_name = $_POST['filter_business_name'];
+                        if (isset($_POST['pharmacy_filter'])) {
+                            $filter_pharmacy_name = $_POST['filter_pharmacy_name'];
 
                             # Fetching filtered agents info ...
 
-                            $filter_FetchQuery = 'SELECT * FROM `business` WHERE `business_name` = :business_name ORDER BY `Date` DESC ';
+                            $filter_FetchQuery = 'SELECT * FROM `pharmacy` WHERE `pharmacy_name` = :pharmacy_name ORDER BY `Date` DESC ';
                             $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
                             $filter_FetchStatement->execute([
-                                'business_name' => $filter_business_name
+                                'pharmacy_name' => $filter_pharmacy_name
                             ]);
                             $filter_Result = $filter_FetchStatement->fetchAll();
 
@@ -299,44 +298,44 @@
                                     echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
  
-                                    foreach ($filter_Result as $business) { 
+                                    foreach ($filter_Result as $pharmacy) { 
                             ?>
                             <div class="list-group-item py-3">
                                 <h5 class="mb-1 text-uppercase">
                                     <?php 
-                                        if ($business->status == "Active") { 
-                                            if ($business->business_type == "gas") {
-                                                echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                        if ($pharmacy->status == "Active") { 
+                                            if ($pharmacy->pharmacy_type == "gas") {
+                                                echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             } 
                                             else { 
-                                                echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                                echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             }
-                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                         } 
                                         else {
-                                            if ($business->business_type == "gas") {
-                                                echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                            if ($pharmacy->pharmacy_type == "gas") {
+                                                echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             } 
                                             else { 
-                                                echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                                echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             }
-                                            echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                            echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                         }
                                         ?>
                                 </h5>
 
-                                <!-- Fetch Business Location -->
+                                <!-- Fetch pharmacy Location -->
                                 <p class="mb-1 fw-medium">Location:
                                     <span class="fw-light float-end">
                                     <?php
-                                        # Fetching business location info ...
+                                        # Fetching pharmacy location info ...
     
-                                        $business_tin = $business->business_tin;
+                                        $pharmacy_tin = $pharmacy->pharmacy_tin;
     
-                                        $buslocation_FetchQuery = 'SELECT * FROM `business_location` WHERE `business_tin` = :btin';
+                                        $buslocation_FetchQuery = 'SELECT * FROM `pharmacy_location` WHERE `pharmacy_tin` = :btin';
                                         $buslocation_FetchStatement = $pdo->prepare($buslocation_FetchQuery);
                                         $buslocation_FetchStatement->execute([
-                                                    'btin'  =>  $business_tin
+                                                    'btin'  =>  $pharmacy_tin
                                                 ]);
                                         $buslocation_Result = $buslocation_FetchStatement->fetch(); 
     
@@ -349,37 +348,37 @@
                                 <!-- Fetch Tin -->
                                 <p class="mb-1 fw-medium">TIN:
                                     <span class="fw-light float-end">
-                                        <?php echo $business->business_tin ?>
+                                        <?php echo $pharmacy->pharmacy_tin ?>
                                     </span>
                                 </p>
 
                                 <!-- Fetch email -->
                                 <p class="mb-1 fw-medium">Email:
                                     <span class="fw-light float-end">
-                                        <?php echo $business->business_mail ?>
+                                        <?php echo $pharmacy->pharmacy_mail ?>
                                     </span>
                                 </p>
 
                                 <!-- Fetch Balance -->
                                 <p class="mb-1 fw-medium">Balance:
                                     <span class="fw-medium float-end">
-                                        <?php echo number_format($business->balance) ?> Rwf
+                                        <?php echo number_format($pharmacy->balance) ?> Rwf
                                     </span>
                                 </p>
 
                                 <!-- update and delete modal triggers -->
                                 <small class="text-muted">
-                                    Registered on <?php echo date('M d, Y', strtotime($business->Date)) ?>
+                                    Registered on <?php echo date('M d, Y', strtotime($pharmacy->Date)) ?>
                                     <span class="btn-group-sm float-end">
                                         <button class="btn btn-altdash bi-pencil-square" title="Update" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><span class="d-md-inline-block d-none">&nbsp;Update</span></button>
-                                        <a href="business.php?dbID=<?php echo $business->bID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                        <a href="pharmacy.php?dphID=<?php echo $pharmacy->phID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
                                         <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
                                     </span>
                                 </small>
                             </div>
                             <?php # } ?>
-                            <?php } } } else { foreach($business_Result as $key => $business) {
-                                # To list few of business. 
+                            <?php } } } else { foreach($pharmacy_Result as $key => $pharmacy) {
+                                # To list few of pharmacy. 
                                 if ($key == 10) {
                                     break;
                                 }
@@ -389,39 +388,39 @@
                             <div class="list-group-item py-3">
                                 <h5 class="mb-1 text-uppercase">
                                     <?php 
-                                        if ($business->status == "Active") { 
-                                            if ($business->business_type == "gas") {
-                                                echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                        if ($pharmacy->status == "Active") { 
+                                            if ($pharmacy->pharmacy_type == "gas") {
+                                                echo '<span class="text-success"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             } 
                                             else { 
-                                                echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                                echo '<span class="text-success"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             }
-                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                         } 
                                         else {
-                                            if ($business->business_type == "gas") {
-                                                echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $business->business_name . '</span>';
+                                            if ($pharmacy->pharmacy_type == "gas") {
+                                                echo '<span class="text-danger"><i class="bi-fuel-pump-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             } 
                                             else { 
-                                                echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $business->business_name . '</span>';
+                                                echo '<span class="text-danger"><i class="bi-buildings-fill"></i> '. $pharmacy->pharmacy_name . '</span>';
                                             }
-                                            echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $business->status .'</small></span>';
+                                            echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $pharmacy->status .'</small></span>';
                                         }
                                         ?>
                                 </h5>
 
-                                <!-- Fetch Business Location -->
+                                <!-- Fetch pharmacy Location -->
                                 <p class="mb-1 fw-medium">Location:
                                     <span class="fw-light float-end">
                                     <?php
-                                        # Fetching business location info ...
+                                        # Fetching pharmacy location info ...
     
-                                        $business_tin = $business->business_tin;
+                                        $pharmacy_tin = $pharmacy->pharmacy_tin;
     
-                                        $buslocation_FetchQuery = 'SELECT * FROM `business_location` WHERE `business_tin` = :btin';
+                                        $buslocation_FetchQuery = 'SELECT * FROM `pharmacy_location` WHERE `pharmacy_tin` = :btin';
                                         $buslocation_FetchStatement = $pdo->prepare($buslocation_FetchQuery);
                                         $buslocation_FetchStatement->execute([
-                                                    'btin'  =>  $business_tin
+                                                    'btin'  =>  $pharmacy_tin
                                                 ]);
                                         $buslocation_Result = $buslocation_FetchStatement->fetch(); 
     
@@ -434,30 +433,30 @@
                                 <!-- Fetch Tin -->
                                 <p class="mb-1 fw-medium">TIN:
                                     <span class="fw-light float-end">
-                                        <?php echo $business->business_tin ?>
+                                        <?php echo $pharmacy->pharmacy_tin ?>
                                     </span>
                                 </p>
 
                                 <!-- Fetch email -->
                                 <p class="mb-1 fw-medium">Email:
                                     <span class="fw-light float-end">
-                                        <?php echo $business->business_mail ?>
+                                        <?php echo $pharmacy->pharmacy_mail ?>
                                     </span>
                                 </p>
 
                                 <!-- Fetch Balance -->
                                 <p class="mb-1 fw-medium">Balance:
                                     <span class="fw-medium float-end">
-                                        <?php echo number_format($business->balance) ?> Rwf
+                                        <?php echo number_format($pharmacy->balance) ?> Rwf
                                     </span>
                                 </p>
 
                                 <!-- update and delete modal triggers -->
                                 <small class="text-muted">
-                                    Registered on <?php echo date('M d, Y', strtotime($business->Date)) ?>
+                                    Registered on <?php echo date('M d, Y', strtotime($pharmacy->Date)) ?>
                                     <span class="btn-group-sm float-end">
                                         <button class="btn btn-altdash bi-pencil-square" title="Update" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><span class="d-md-inline-block d-none">&nbsp;Update</span></button>
-                                        <a href="business.php?dbID=<?php echo $business->bID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                        <a href="pharmacy.php?dphID=<?php echo $pharmacy->phID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
                                         <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
                                     </span>
                                 </small>
@@ -483,8 +482,8 @@
         <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header bg-gold">
-                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold" id="exampleModalLabel"> Register business</h1>
+                    <div class="modal-header bg-police-dark">
+                        <h1 class="modal-title fs-5 text-uppercase text-altlight bi-person-fill-add fw-bold" id="exampleModalLabel"> Register pharmacy</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -497,20 +496,20 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-house-fill"></i>
                                 </span>
-                                <input type="text" name="business_name" class="form-control" placeholder="Business Name">
+                                <input type="text" name="pharmacy_name" class="form-control" placeholder="pharmacy Name">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Add your business name">
+                                    <span class="tt" data-bs-placement="bottom" title="Add your pharmacy name">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
                             </div>
 
-                            <!-- post business_type -->
+                            <!-- post pharmacy_type -->
                             <div class="input-group mb-4">
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
-                                <select class="form-select" name="business_type" id="inputGroupSelect01">
+                                <select class="form-select" name="pharmacy_type" id="inputGroupSelect01">
                                     <option selected>Choose ...</option>
                                     <option value="gas">Gas station</option>
                                     <option value="others">Other</option>
@@ -522,7 +521,7 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-envelope-fill"></i>
                                 </span>
-                                <input type="email" name="business_mail" id="email" class="form-control" placeholder="Email address">
+                                <input type="email" name="pharmacy_mail" id="email" class="form-control" placeholder="Email address">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -532,12 +531,12 @@
                                 </span>
                             </div>
 
-                            <!-- business tin -->
+                            <!-- pharmacy tin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
                                 </span>
-                                <input type="text" name="business_tin" id="name" class="form-control" placeholder="Business TIN" required>
+                                <input type="text" name="pharmacy_tin" id="name" class="form-control" placeholder="pharmacy TIN" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -547,10 +546,10 @@
                                 </span>
                             </div>
 
-                            <!-- business profile -->
+                            <!-- pharmacy profile -->
                             <div class="input-group mb-3">
                                 <label class="input-group-text bi-upload" for="inputGroupFile01"></label>
-                                <input type="file" name="business_profile" class="form-control" id="inputGroupFile01">
+                                <input type="file" name="pharmacy_profile" class="form-control" id="inputGroupFile01">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -560,15 +559,15 @@
                                 </span>
                             </div>
 
-                            <p class="lead text-gold fw-bold bi-globe text-uppercase text-center"> Location</p>
+                            <p class="lead text-police-dark fw-bold bi-globe text-uppercase text-center"> Location</p>
 
                             <!-- location -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-globe"></i>
                                 </span>
-                                <input type="text" name="business_district" class="form-control" placeholder="District" required>
-                                <input type="text" name="business_sector" class="form-control" placeholder="Sector" required>
+                                <input type="text" name="pharmacy_district" class="form-control" placeholder="District" required>
+                                <input type="text" name="pharmacy_sector" class="form-control" placeholder="Sector" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -581,7 +580,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="registerbusiness" class="btn btn-gold float-end">Submit</button>
+                            <button type="submit" name="registerpharmacy" class="btn btn-gold float-end">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -592,7 +591,7 @@
         <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header bg-gold">
+                    <div class="modal-header bg-police-dark">
                         <h1 class="modal-title fs-5 text-altlight text-uppercase bi-currency-exchange fw-bold" id="exampleModalLabel"> Withdraw Account</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -636,7 +635,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="withdrawBusiness" class="btn btn-gold float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="withdrawpharmacy" class="btn btn-gold float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -661,16 +660,16 @@
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
 
                                 <?php
-                                    # fetching current business tin from database
-                                    $tin = 'SELECT * FROM `business` ORDER BY `Date` DESC';
-                                    $business_FetchStatement = $pdo->prepare($tin);
-                                    $business_FetchStatement->execute();
-                                    // $business_listTin = $business_FetchStatement->fetch();
+                                    # fetching current pharmacy tin from database
+                                    $tin = 'SELECT * FROM `pharmacy` ORDER BY `Date` DESC';
+                                    $pharmacy_FetchStatement = $pdo->prepare($tin);
+                                    $pharmacy_FetchStatement->execute();
+                                    // $pharmacy_listTin = $pharmacy_FetchStatement->fetch();
                                 ?>
                                     <select class="form-select" name="old_btin" id="inputGroupSelect01" required>
                                     <option>Re-select TIN</option>
-                                    <?php while ($business_listTin = $business_FetchStatement->fetch()) { ?>
-                                    <option value="<?php echo $business_listTin->business_tin ?>"><?php echo $business_listTin->business_tin ?></option>
+                                    <?php while ($pharmacy_listTin = $pharmacy_FetchStatement->fetch()) { ?>
+                                    <option value="<?php echo $pharmacy_listTin->pharmacy_tin ?>"><?php echo $pharmacy_listTin->pharmacy_tin ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -680,32 +679,32 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-house-fill"></i>
                                 </span>
-                                <input type="text" name="nbusiness_name" class="form-control" placeholder="New Business Name" required>
+                                <input type="text" name="npharmacy_name" class="form-control" placeholder="New pharmacy Name" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Re-new business name">
+                                    <span class="tt" data-bs-placement="bottom" title="Re-new pharmacy name">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
                             </div>
 
-                            <!-- post new business_type -->
+                            <!-- post new pharmacy_type -->
                             <div class="input-group mb-4">
                                 <label class="input-group-text bi-unity" for="inputGroupSelect01">&nbsp;Type</label>
-                                <select class="form-select" name="nbusiness_type" id="inputGroupSelect01" required>
+                                <select class="form-select" name="npharmacy_type" id="inputGroupSelect01" required>
                                     <option selected>Choose ...</option>
                                     <option value="gas">Gas station</option>
                                     <option value="others">Other</option>
                                 </select>
                             </div>
 
-                            <!-- new business tin -->
+                            <!-- new pharmacy tin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
                                 </span>
-                                <input type="text" name="nbusiness_tin" id="name" class="form-control" placeholder="New Business TIN" required>
+                                <input type="text" name="npharmacy_tin" id="name" class="form-control" placeholder="New pharmacy TIN" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -722,8 +721,8 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-globe"></i>
                                 </span>
-                                <input type="text" name="nbusiness_district" class="form-control" placeholder="Re-new District" required>
-                                <input type="text" name="nbusiness_sector" class="form-control" placeholder="Re-new Sector" required>
+                                <input type="text" name="npharmacy_district" class="form-control" placeholder="Re-new District" required>
+                                <input type="text" name="npharmacy_sector" class="form-control" placeholder="Re-new Sector" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -736,7 +735,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="updatebusiness" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="updatepharmacy" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -773,5 +772,5 @@
     </div>
 
     <?php
-        include 'include/footer_front.html';
-    ?>
+    include 'include/footer/footer_new_front.html';
+?>

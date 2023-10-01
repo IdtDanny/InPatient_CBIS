@@ -1,70 +1,70 @@
 <?php
     # DOCTYPE html file 1
-    include 'header/1_header.html';
+    include 'head/1_new_header.html';
 
     # DOCTYPE html file 2 with style document
-    echo ' Client</title>';
-    include 'header/2_header.html';
+    echo ' <title>Admin | Receptionist</title>';
+    include 'head/2_new_header.html';
 
-    # NavBar
-    include 'header/nav_header_front_1.html';
     echo '
-    <li class="nav-item">
-        <a href="client.php" class="nav-link d-md-block d-none bi-arrow-clockwise"></a>
-    </li>
+    <a href="../admin/receptionist.php" class="btn text-altlight me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
     ';
-    include 'header/nav_header_front_2.html';
+    include 'head/3_new_header.html';
 ?>
 
-    <!-- Business Profile Tables -->
-    <section id="dashboard bg-light">
+    <!-- title -->
+    <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+        <!-- row for admin profile -->
+        <div class="row">
+
+            <!-- Displaying user profile -->
+            <div class="col">
+                <h2 class="float-start">
+                    <!-- browsing profile picture or else user svg used -->
+                    <?php if($adminResults->admin_profile): ?>
+                    <img src="../public/profile/<?php echo $adminResults->admin_profile ?>" alt="Profile" class="img-fluid rounded-1" style="width: 40px;">
+                    <?php else: ?>
+                    <img src="../public/img/user-profile.svg" alt="eBook" class="rounded-5 img-thumbnail p-5 border-2 border-dark">
+                    <?php endif ?>
+                    <span class="text-altprimary fw-bold text-uppercase">
+                            <?php # $adminResults->admin_name ?> patient <span class="d-md-inline-block d-none">list</span>
+                    </span>
+                </h2>
+            </div>
+
+            <!-- button for registering and withdraw pharmacy balance -->
+            <div class="col">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- pharmacy Profile Tables -->
+    <section id="dashboard" class="pb-3">
         <div class="container-md">
 
-            <!-- row for admin profile -->
-            <div class="row">
-
-                <!-- Displaying user profile -->
-                <div class="col">
-                    <h2 class="float-start">
-                        <!-- browsing profile picture or else user svg used -->
-                        <?php if($adminResults->admin_profile): ?>
-                        <img src="../public/profile/<?php echo $adminResults->admin_profile ?>" alt="Profile" class="img-fluid rounded-1" style="width: 40px;">
-                        <?php else: ?>
-                        <img src="../public/img/user-profile.svg" alt="eBook" class="rounded-5 img-thumbnail p-5 border-2 border-dark">
-                        <?php endif ?>
-                        <span class="text-altprimary fw-bold text-uppercase">
-                            <?php # $adminResults->admin_name ?> Client <span class="d-md-inline-block d-none">list</span>
-                        </span>
-                    </h2>
-                </div>
-
-                <!-- button for registering and withdraw business balance -->
-                <div class="col">
-                </div>
-
-            </div>
-            <p class="text-muted text-capitalize">Review on registered cards for client.</p>
+            <p class="text-muted text-capitalize mt-3">Review on registered cards for patient.</p>
 
             <!-- document download button -->
             <form method="post" class="d-md-none d-flex">
-                <a href="agent.php" class="btn btn-outline-gold text-dark d-lg-none d-md-none bi-arrow-clockwise justify-content-end"></a>
+                <a href="receptionist.php" class="btn btn-outline-gold text-dark d-lg-none d-md-none bi-arrow-clockwise justify-content-end"></a>
                 <span class="input-group justify-content-end">
-                    <a href="export/export_client_excel.php" type="submit" name="export_excel" class="btn btn-outline-success bi-filetype-xlsx jus" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
-                <a href="export/export_client_pdf.php" type="submit" name="export_pdf" class="btn btn-altorange bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
+                    <a href="export/export_patient_excel.php" type="submit" name="export_excel" class="btn btn-outline-success bi-filetype-xlsx jus" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
+                <a href="export/export_patient_pdf.php" type="submit" name="export_pdf" class="btn btn-altorange bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
                 </span>
             </form>
 
-            <!-- row for business table and list for small media -->
+            <!-- row for pharmacy table and list for small media -->
             <div class="row my-0 g-0 justify-content-around align-items-center">
                 <div class="col-lg-12 col-lg-6">
 
                     <!-- Error messages -->
-                    <?php if($client_errorMessage || $client_deleteErrorMessage || $update_errorMessage) { ?>
+                    <?php if($patient_errorMessage || $patient_deleteErrorMessage || $update_errorMessage) { ?>
                     <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
                         <strong class="bi bi-exclamation-triangle">
                             <?php 
-                                echo $client_errorMessage; 
-                                echo $client_deleteErrorMessage; 
+                                echo $patient_errorMessage; 
+                                echo $patient_deleteErrorMessage; 
                                 echo $update_errorMessage; 
                             ?>
                         </strong>
@@ -74,12 +74,12 @@
                     <?php } ?>
 
                     <!-- success messages -->
-                    <?php if($client_successMessage || $client_deleteSuccessMessage || $update_successMessage) { ?>
+                    <?php if($patient_successMessage || $patient_deleteSuccessMessage || $update_successMessage) { ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong class="bi bi-check2-all">
                             <?php 
-                                echo $client_successMessage; 
-                                echo $client_deleteSuccessMessage; 
+                                echo $patient_successMessage; 
+                                echo $patient_deleteSuccessMessage; 
                                 echo $update_successMessage 
                             ?>
                         </strong>
@@ -90,13 +90,13 @@
                     <!-- for large media -->
                     <div class="d-lg-block d-none text-capitalize">
                         <table class="table table-hover">
-                            <caption class="text-center fw-light">List of Registered client</caption>
-                            <thead class="table-dark">
+                            <caption class="text-center fw-light">List of Registered patient</caption>
+                            <thead class="table-primary table-group-divider">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col"><i class="bi bi-person-circle"></i></th>
                                     <th scope="col">Created_at</th>
-                                    <th scope="col">Client ID</th>
+                                    <th scope="col">patient ID</th>
                                     <th scope="col">Full Name</th>
                                     <th scope="col">Tel No</th>
                                     <th scope="col">E-mail</th>
@@ -106,45 +106,45 @@
                                     <th scope="col">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="small">
+                            <tbody class="small table-group-divider">
 
-                                <?php $no = 1; foreach($client_Result as $client) { ?>
+                                <?php $no = 1; foreach($patient_Result as $patient) { ?>
                                 <tr>
                                     <th scope="row">
                                         <?php echo $no ?>
                                     </th>
                                     <td><i class="bi bi-person-circle"></i></td>
                                     <td>
-                                        <?php echo date('M d, Y', strtotime($client->created_at)) ?>
+                                        <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
                                     </td>
                                     <td>
-                                        <?php echo $client->client_id ?>
+                                        <?php echo $patient->patient_id ?>
                                     </td>
                                     <?php 
-                                        if ($client->client_balance == 0) {
-                                            echo "<td class='text-uppercase text-danger'>" . $client->client_name . "</td>";
+                                        if ($patient->patient_balance == 0) {
+                                            echo "<td class='text-uppercase text-danger'>" . $patient->patient_name . "</td>";
                                         } else {
-                                            echo "<td class='text-uppercase'>" . $client->client_name . "</td>";
+                                            echo "<td class='text-uppercase'>" . $patient->patient_name . "</td>";
                                         }
                                     ?>
                                     <td>
-                                        <?php echo $client->client_tel ?>
+                                        <?php echo $patient->patient_tel ?>
                                     </td>
                                     <td class="text-lowercase">
-                                        <?php echo $client->client_mail ?>
+                                        <?php echo $patient->patient_mail ?>
                                     </td>
                                     <td class="text-end">
-                                        <?php echo number_format($client->client_balance) ?>
+                                        <?php echo number_format($patient->patient_balance) ?>
                                     </td>
                                     <td class="text-end">
-                                        <?php echo $client->referral_agent ?>
+                                        <?php echo $patient->referral_cashier ?>
                                     </td>
-                                    <td class="text-center"><a href="client.php?dcID=<?php echo $client->cID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
+                                    <td class="text-center"><a href="patient.php?dpID=<?php echo $patient->pID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
                                     <?php 
-                                    if ($client->status != 'active') {
-                                        echo "<td class='fw-light text-altlight bg-danger text-center'><a href='?AcID=". $client->cID ."' class='text-light bi-exclamation-triangle-fill text-decoration-none'> Inactive" . $client->status . "</a></td>";
+                                    if ($patient->status != 'active') {
+                                        echo "<td class='fw-light text-altlight bg-danger text-center'><a href='?ApID=". $patient->pID ."' class='text-light bi-exclamation-triangle-fill text-decoration-none'> Inactive" . $patient->status . "</a></td>";
                                     } else {
-                                        echo "<td class='fw-light text-altlight bg-success text-center'><i class='bi-check2-all'></i> " . $client->status . "</td>"; 
+                                        echo "<td class='fw-light text-altlight bg-success text-center'><i class='bi-check2-all'></i> " . $patient->status . "</td>"; 
                                     }
                                 ?>
                                 </tr>
@@ -155,10 +155,10 @@
 
                     <!-- For small media -->
                     <div class="list-group d-lg-none mt-2">
-                        <?php foreach ($client_Result as $agt_count => $client){ ?>
+                        <?php foreach ($patient_Result as $agt_count => $patient){ ?>
                         <?php 
-                            # To list few of clients. 
-                                #if ($client_count != 0) {
+                            # To list few of patients. 
+                                #if ($patient_count != 0) {
                                 #    continue;
                                 #}
                                 #else {
@@ -166,75 +166,75 @@
                         <div class="list-group-item py-3 small">
                             <h5 class="mb-1 text-uppercase">
                                 <?php 
-                                    if ($client->client_balance > 0) {
-                                        echo "<span class='text-success'><i class='bi bi-person-circle'></i> ". $client->client_name . "</span>";
+                                    if ($patient->patient_balance > 0) {
+                                        echo "<span class='text-success'><i class='bi bi-person-circle'></i> ". $patient->patient_name . "</span>";
                                 ?>
-                                <span class="badge fw-light bg-success float-end"><i class='d-md-none d-inline bi-check2-all'></i> <small class="d-md-inline d-none"> <?php echo "$client->status" ?></small></span>
+                                <span class="badge fw-light bg-success float-end"><i class='d-md-none d-inline bi-check2-all'></i> <small class="d-md-inline d-none"> <?php echo "$patient->status" ?></small></span>
                                 <?php 
                                     } else {
-                                        echo "<span class='text-danger'>". $client->client_name . "</span>";
+                                        echo "<span class='text-danger'>". $patient->patient_name . "</span>";
                                 ?>
-                                <span class="badge fw-light bg-danger float-end"><i class='d-md-none d-inline bi-exclamation-triangle-fill'></i><small class="d-md-inline d-none"> <?php echo "$client->status" ?></small></span>
+                                <span class="badge fw-light bg-danger float-end"><i class='d-md-none d-inline bi-exclamation-triangle-fill'></i><small class="d-md-inline d-none"> <?php echo "$patient->status" ?></small></span>
                                 <?php } ?>
                             </h5>
 
-                            <!-- Fetch client Location -->
+                            <!-- Fetch patient Location -->
                             <p class="mb-1 fw-medium">Location:
                                 <span class="fw-light float-end">
                                 <?php
 
-                                    # Fetching client location info ...
+                                    # Fetching patient location info ...
 
-                                    $cID = $client->cID;
+                                    $pID = $patient->pID;
 
-                                    $client_location_FetchQuery = 'SELECT * FROM `client_location` WHERE `cID` = :cID';
-                                    $client_location_FetchStatement = $pdo->prepare($client_location_FetchQuery);
-                                    $client_location_FetchStatement->execute([
-                                             'cID'  =>  $cID
+                                    $patient_location_FetchQuery = 'SELECT * FROM `patient_location` WHERE `pID` = :pID';
+                                    $patient_location_FetchStatement = $pdo->prepare($patient_location_FetchQuery);
+                                    $patient_location_FetchStatement->execute([
+                                             'pID'  =>  $pID
                                          ]);
-                                    $client_location_Result = $client_location_FetchStatement->fetch(); 
+                                    $patient_location_Result = $patient_location_FetchStatement->fetch(); 
 
-                                    echo $client_location_Result->district . " District - ";
-                                    echo $client_location_Result->sector . " Sector";
+                                    echo $patient_location_Result->district . " District - ";
+                                    echo $patient_location_Result->sector . " Sector";
                                 ?>
                                 </span>
                             </p>
 
 
-                            <!-- Fetch Client ID -->
-                            <p class="mb-1 fw-medium">Client ID:
+                            <!-- Fetch patient ID -->
+                            <p class="mb-1 fw-medium">patient ID:
                                 <span class="fw-light float-end">
-                                <?php echo $client->client_id; ?>
+                                <?php echo $patient->patient_id; ?>
                                 </span>
                             </p>
 
                             <!-- Fetch phone number -->
                             <p class="mb-1 fw-medium">Tel:
                                 <span class="fw-light float-end">
-                                    <?php echo $client->client_tel ?>
+                                    <?php echo $patient->patient_tel ?>
                                 </span>
                             </p>
 
                             <!-- Fetch email -->
                             <p class="mb-1 fw-medium">Email:
                                 <span class="fw-light float-end">
-                                    <?php echo $client->client_mail ?>
+                                    <?php echo $patient->patient_mail ?>
                                 </span>
                             </p>
 
                             <!-- Fetch Balance -->
                             <p class="mb-1 fw-medium">Balance:
                                 <span class="fw-medium float-end">
-                                    <?php echo number_format($client->client_balance) ?> Rwf
+                                    <?php echo number_format($patient->patient_balance) ?> Rwf
                                 </span>
                             </p>
 
                             <!-- update and delete modal triggers -->
                             <small class="text-muted">
-                                Registered on <?php echo date('M d, Y', strtotime($client->created_at)) ?>
+                                Registered on <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
                                 <span class="btn-group-sm float-end">
                                     <!-- <button class="btn btn-altdash bi-pencil-square" title="Update" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><span class="d-md-inline-block d-none">&nbsp;Update</span></button> -->
-                                    <a href="business.php?dcID=<?php echo $client->cID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                    <a href="pharmacy.php?dpID=<?php echo $patient->pID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
                                     <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
                                 </span>
                             </small>
@@ -243,8 +243,8 @@
                         <?php } ?>
                     </div>
                     <form method="post" class="input-group justify-content-end d-md-flex d-none">
-                        <a href="export/export_client_excel.php" type="submit" class="btn btn-outline-success float-end mt-3 bi-filetype-xlsx" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
-                        <a href="export/export_client_pdf.php" type="submit" class="btn btn-altorange float-end mt-3 bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
+                        <a href="export/export_patient_excel.php" type="submit" class="btn btn-outline-success float-end mt-3 bi-filetype-xlsx" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
+                        <a href="export/export_patient_pdf.php" type="submit" class="btn btn-altorange float-end mt-3 bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
                     </form>
 
                 </div>
@@ -260,7 +260,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-altprimary">
-                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold" id="exampleModalLabel"> Add client</h1>
+                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold" id="exampleModalLabel"> Add patient</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -273,11 +273,11 @@
                                 <span class="input-group-text">
                                 <i class="bi bi-house-fill"></i>
                             </span>
-                                <input type="text" name="client_name" class="form-control" placeholder="client Name">
+                                <input type="text" name="patient_name" class="form-control" placeholder="patient Name">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                <span class="tt" data-bs-placement="bottom" title="Register client name">
+                                <span class="tt" data-bs-placement="bottom" title="Register patient name">
                                     <i class="bi bi-info"></i>
                                 </span>
                                 </span>
@@ -286,7 +286,7 @@
                             <!-- post username -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
-                                <input type="text" name="client_uname" class="form-control" placeholder="Username">
+                                <input type="text" name="patient_uname" class="form-control" placeholder="Username">
 
                                 <!-- tooltips -->
                                 <div class="input-group-text">
@@ -299,7 +299,7 @@
                                 <span class="input-group-text">
                                 <i class="bi bi-envelope-fill"></i>
                             </span>
-                                <input type="email" name="client_mail" id="email" class="form-control" placeholder="Email address">
+                                <input type="email" name="patient_mail" id="email" class="form-control" placeholder="Email address">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -309,14 +309,14 @@
                                 </span>
                             </div>
 
-                            <!-- client profile -->
+                            <!-- patient profile -->
                             <div class="input-group mb-3">
                                 <label class="input-group-text bi-upload" for="inputGroupFile01"></label>
-                                <input type="file" name="client_profile" class="form-control" id="inputGroupFile01">
+                                <input type="file" name="patient_profile" class="form-control" id="inputGroupFile01">
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                <span class="tt" data-bs-placement="bottom" title="Add client profile photo">
+                                <span class="tt" data-bs-placement="bottom" title="Add patient profile photo">
                                     <i class="bi bi-info"></i>
                                 </span>
                                 </span>
@@ -329,8 +329,8 @@
                                 <span class="input-group-text">
                                 <i class="bi bi-globe"></i>
                             </span>
-                                <input type="text" name="client_district" class="form-control" placeholder="District" required>
-                                <input type="text" name="client_sector" class="form-control" placeholder="Sector" required>
+                                <input type="text" name="patient_district" class="form-control" placeholder="District" required>
+                                <input type="text" name="patient_sector" class="form-control" placeholder="Sector" required>
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
@@ -344,7 +344,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="registerclient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="registerpatient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -396,16 +396,16 @@
                                 <label class="input-group-text bi-person-circle" for="inputGroupSelect01">&nbsp;</label>
 
                                 <?php
-                                    # fetching current client_username from database
-                                    $uname = 'SELECT * FROM `client` ORDER BY `created_at` DESC';
-                                    $client_FetchStatement = $pdo->prepare($uname);
-                                    $client_FetchStatement->execute();
-                                    // $business_listTin = $business_FetchStatement->fetch();
+                                    # fetching current patient_username from database
+                                    $uname = 'SELECT * FROM `patient` ORDER BY `created_at` DESC';
+                                    $patient_FetchStatement = $pdo->prepare($uname);
+                                    $patient_FetchStatement->execute();
+                                    // $pharmacy_listTin = $pharmacy_FetchStatement->fetch();
                                 ?>
-                                    <select class="form-select" name="client_username" id="inputGroupSelect01" required>
+                                    <select class="form-select" name="patient_username" id="inputGroupSelect01" required>
                                     <option>Select username</option>
-                                    <?php while ($client_list = $client_FetchStatement->fetch()) { ?>
-                                    <option value="<?php echo $client_list->client_username ?>"><?php echo $client_list->client_username ?></option>
+                                    <?php while ($patient_list = $patient_FetchStatement->fetch()) { ?>
+                                    <option value="<?php echo $patient_list->patient_username ?>"><?php echo $patient_list->patient_username ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -425,7 +425,7 @@
                                 </span>
                             </div>
 
-                            <!-- confirm with client pin -->
+                            <!-- confirm with patient pin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
@@ -434,7 +434,7 @@
 
                                 <!-- tooltips -->
                                 <span class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with client pin">
+                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with patient pin">
                                         <i class="bi bi-info"></i>
                                     </span>
                                 </span>
@@ -443,7 +443,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="rechargeclient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="rechargepatient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -480,5 +480,5 @@
     </div>
 
     <?php
-        include 'include/footer_front.html';
-    ?>
+    include 'include/footer/footer_new_front.html';
+?>

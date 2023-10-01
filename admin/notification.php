@@ -15,9 +15,9 @@
     $admin_ID = $_SESSION['sessionToken']->admin_ID;
     $admin_name = $_SESSION['sessionToken']->admin_name;
 
-    # Calculating Each Number of Users, Cards, business, agents and so on...
-    $sql_agent = 'SELECT * FROM agent';
-    $sql_client = 'SELECT * FROM client';
+    # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
+    $sql_cashier = 'SELECT * FROM cashier';
+    $sql_patient = 'SELECT * FROM patient';
     # error and success alerts
 
     $notify_updateSuccessMessage = "";
@@ -25,15 +25,15 @@
     $notify_deleteSuccessMessage = "";
     $notify_deleteErrorMessage = "";
 
-    $statement = $pdo->prepare($sql_agent);
+    $statement = $pdo->prepare($sql_cashier);
     $statement->execute();
 
-    $statement_client = $pdo->prepare($sql_client);
-    $statement_client -> execute();
+    $statement_patient = $pdo->prepare($sql_patient);
+    $statement_patient -> execute();
 
-    # Getting The number of Agents, Cards, agent...
-    $agentsCount = $statement->rowCount();
-    $clientCount = $statement_client->rowCount();
+    # Getting The number of cashiers, Cards, cashier...
+    $cashiersCount = $statement->rowCount();
+    $patientCount = $statement_patient->rowCount();
 
     # Getting Admin Info. for update form...
 
@@ -59,7 +59,7 @@
 
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>&nbsp; Refresh to see the change </span><a href='notification.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # getting agent delete response
+    # getting cashier delete response
     if (isset($_GET['vnID'])) {
         $dnID = $_GET['vnID'];
         $sql_nupdate = 'UPDATE `notification` SET `status` =:nread WHERE `nID` = :nid';
@@ -75,7 +75,7 @@
             $notify_updateSuccessMessage = " Viewed" . $successRefreshMessage;
         }
         else {
-            $notify_updateErrorMessage = " Could not update, check agent id" . $errorRefreshMessage;
+            $notify_updateErrorMessage = " Could not update, check cashier id" . $errorRefreshMessage;
         }
 
     }
@@ -96,7 +96,7 @@
             $notify_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
         }
         else {
-            $notify_deleteErrorMessage = " Could not delete, check agent id" . $errorRefreshMessage;
+            $notify_deleteErrorMessage = " Could not delete, check cashier id" . $errorRefreshMessage;
         }
     }
 
