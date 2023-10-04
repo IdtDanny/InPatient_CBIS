@@ -6,9 +6,15 @@
     require_once 'public/config/connection.php';
 
     # Variable Declaration...
-    $sessionToken='';
-    $error_message='';
-    $user_balance='';
+    $sessionToken ='';
+    $error_message ='';
+    $user_details ='';
+    $user_balance ='';
+    $user_detail ='';
+    $patientResults = '';
+    $patientLocation = '';
+    $busy_successMessage = '';
+    $busy_errorMessage = '';
 
     # Getting Data From Form...
 
@@ -390,18 +396,36 @@
 
         # checking if patient exists ...
 
-        $patient_existFetchQuery = 'SELECT * FROM `patient` WHERE `patient_ID` = :patient_id';
+        $patient_existFetchQuery = 'SELECT * FROM `patient` WHERE `patient_id` = :patient_id';
         $patient_existFetchStatement = $pdo->prepare($patient_existFetchQuery);
         $patient_existFetchStatement->execute([
             'patient_id' => $patient_id
         ]);
-        $patient_existResults = $patient_existFetchStatement->fetch();
+        $patientResults = $patient_existFetchStatement->fetch();
 
         # if user is found then fetch the balance ...
 
-        if ($patient_existResults) {
-            $user_balance = $patient_existResults->patient_balance;
+        if ($patientResults) {
+
+            $pID = $patientResults->pID;
+
+            # retrieving patient location if patient exists ...
+
+            $patient_locationFetchQuery = 'SELECT * FROM `patient_location` WHERE `pID` = :pID';
+            $patient_locationFetchStatement = $pdo->prepare($patient_locationFetchQuery);
+            $patient_locationFetchStatement->execute([
+                'pID' => $pID
+            ]);
+            $patientLocation = $patient_locationFetchStatement->fetch();
+
+            if ($patientLocation) {
+                $busy_successMessage = ' Found'. $successRefreshMessage;
+                // $user_details = $patient_existResults->patient_balance;
+            }
         }
+
+        # otherwise user not found
+
         else {
             $busy_errorMessage = " Unknown ID" . $errorRefreshMessage;
         }

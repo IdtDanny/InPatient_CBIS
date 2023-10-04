@@ -34,7 +34,7 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-lg-5 pb-md-5 pt-md-3 col-md-9 text-center text-lg-start text-muted d-block">
                     <h1>
-                        <div class="display-1 fw-bold">InPatient CBIS</div>
+                        <div class="display-2 fw-bold">InPatient CBIS</div>
                     </h1>
 
                     <!-- image for small media -->
@@ -49,9 +49,9 @@
                     <!-- <p class="my-4 d-lg-block d-none text-muted">&raquo; <em>Come on Just do it Yourself. </em></p> -->
 
                     <!-- exploring other possibilities -->
-                    <a class="btn btn-gold d-inline-block bi-view-stacked" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    <!-- <a class="btn btn-gold d-inline-block bi-view-stacked" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                         Explore
-                      </a>
+                      </a> -->
 
                     <!-- <a href="#" class="btn btn-police-dark bi-people d-lg-inline-block d-none" data-bs-toggle="modal" data-bs-target="#aregisterModal" data-bs-whatever="@aregister"><span class="d-lg-inline-block">&nbsp;Land a Job</span></a> -->
 
@@ -63,7 +63,7 @@
 
 
                     <!-- Printing alerts -->
-                    <?php if($cashier_errorMessage || $cashier_deleteErrorMessage || $update_errorMessage || $busy_errorMessage) { ?>
+                    <?php if($cashier_errorMessage || $cashier_deleteErrorMessage || $update_errorMessage) { ?>
                     <div class="alert alert-warning alert-dismissible fade show alert-danger mt-2" role="alert">
                         <strong class="bi bi-exclamation-triangle"><?php echo $cashier_errorMessage; echo $cashier_deleteErrorMessage; echo $update_errorMessage; echo $busy_errorMessage; ?></strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -71,7 +71,7 @@
 
                     <?php } ?>
 
-                    <?php if($cashier_successMessage || $cashier_deleteSuccessMessage || $update_successMessage || $busy_successMessage) { ?>
+                    <?php if($cashier_successMessage || $cashier_deleteSuccessMessage || $update_successMessage) { ?>
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
                         <strong class="bi bi-check2-all"><?php echo $cashier_successMessage; echo $cashier_deleteSuccessMessage; echo $update_successMessage; echo $busy_successMessage; ?></strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -176,22 +176,22 @@
                 <p class="lead text-muted">Just place your card to the reader!</p>
             </div>
             <div class="row justify-content-center">
-                <div class="col-md-8 col-12">
+                <div class="col-md-9 col-12">
 
-                    <!-- check the balance on card -->
+                    <!-- check the identity and/or bill on card -->
                     <form action="" method="post">
                         <div class="mb-4 input-group">
                             <div class="input-group-text text-bg-police-dark">
                                 <i class="bi bi-credit-card-2-front-fill"></i>
                             </div>
 
-                            <!-- checking user balance input -->
+                            <!-- getting user card info -->
                             <div class="form-floating">
                                 <input type="text" name="patient_id" id="balance" class="form-control" placeholder="Username" id="floatingInputGroup1">
                                 <label for="floatingInputGroup1" class="text-body-tertiary">Card ID</label>
                             </div>
 
-                            <!-- printing user balance -->
+                            <!-- printing user identification -->
                             <?php if ($user_detail) { ?>
                             <div class="input-group-text text-bg-success fw-medium">
                                 <i class="bi-check-lg"></i>
@@ -210,10 +210,88 @@
                         </div>
                     </form>
 
+                    <!-- Printing alerts -->
+                    <?php if($cashier_errorMessage || $cashier_deleteErrorMessage || $update_errorMessage || $busy_errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger mt-2" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $cashier_errorMessage; echo $cashier_deleteErrorMessage; echo $update_errorMessage; echo $busy_errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <?php } ?>
+
+                    <?php if($cashier_successMessage || $cashier_deleteSuccessMessage || $update_successMessage || $busy_successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $cashier_successMessage; echo $cashier_deleteSuccessMessage; echo $update_successMessage; echo $busy_successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
                     <div class="card" aria-hidden="true">
 
-                        <!-- if user is searched -->
-                        <?php if ($user_details) { ?>
+                        <!-- if user is searched and found -->
+                        <?php if ($patientResults) { ?>
+                        <div class="card-header d-md-inline-flex d-block">
+                            <img src="public/profile/<?php echo $patientResults->patient_profile ?>" class="img-thumbnail col-lg-2 col-md-3 col-12" alt="...">
+                            <h6 class="col-9 d-md-block d-none ms-2 card-text p-1">
+
+                                <!-- patient names -->
+                                <div class="d-md-inline-flex">
+                                    <div class="col-6 pb-1">First Name:
+                                        <span class="fw-light"><?php echo $patientResults->patient_name ?></span>
+                                    </div>
+                                    <div class="col-6 pb-1">Middle Name:
+                                        <span class="fw-light"><?php echo $patientResults->patient_mname ?></span>
+                                    </div>
+                                    <div class="col-4 pb-1">Last Name:
+                                        <span class="fw-light"><?php echo $patientResults->patient_lname ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- patient_location -->
+                                <div class="d-md-block pt-2">
+                                    <div class="col-6">ID:
+                                        <span class="fw-light"><?php echo $patientResults->patient_idnumber ?></span>
+                                    </div>
+                                    <div class="col-6">Middle Name:
+                                        <span class="fw-light"><?php echo $patientResults->patient_mname ?></span>
+                                    </div>
+                                    <div class="col-4">Last Name:
+                                        <span class="fw-light"><?php echo $patientResults->patient_lname ?></span>
+                                    </div>
+                                </div>
+
+                                <hr class="my-2">
+
+                                <!-- patient location -->
+                                <!-- <div class="d-md-inline-flex">
+                                    <div class="col-4">District:
+                                        <span class="fw-light"><?php echo $patientLocation->district ?></span>
+                                    </div>
+                                    <div class="col-4">Sector:
+                                        <span class="fw-light"><?php echo $patientLocation->sector ?></span>
+                                    </div>
+                                    <div class="col-4">Cell:
+                                        <span class="fw-light"><?php echo $patientLocation->cell ?></span>
+                                    </div>
+                                    <div class="col-4">Village:
+                                        <span class="fw-light"><?php echo $patientLocation->village ?></span>
+                                    </div>
+                                </div> -->
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title placeholder-glow">
+                                <span class="placeholder col-6 bg-success"></span>
+                            </h5>
+                            <p class="card-text placeholder-glow">
+                                <span class="placeholder col-7"></span>
+                                <span class="placeholder col-4"></span>
+                                <span class="placeholder col-4"></span>
+                                <span class="placeholder col-6"></span>
+                                <span class="placeholder col-8"></span>
+                            </p>
+                            <a class="btn btn-altprimary disabled placeholder col-6" aria-disabled="true"></a>
+                        </div>
 
                         <!-- if not searched -->
                         <?php } else { ?>
