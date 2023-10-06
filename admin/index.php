@@ -10,6 +10,11 @@
     # Includes...
     require_once '../public/config/connection.php';
 
+    $photo_errorMessage = '';
+    $photo_successMessage = '';
+    $errorMessage = '';
+    $successMessage = '';
+
     # Getting Information of Signed in User
     $admin_username = $_SESSION['sessionToken']->admin_username;
     $admin_ID = $_SESSION['sessionToken']->admin_ID;

@@ -14,6 +14,13 @@
     $patientResults = '';
     $patientLocation = '';
     $busy_successMessage = '';
+    $cashier_errorMessage = '';
+    $cashier_deleteErrorMessage = '';
+    $update_errorMessage = '';
+    $cashier_successMessage = '';
+    $cashier_successMessage = '';
+    $cashier_deleteSuccessMessage = '';
+    $update_successMessage = '';
     $busy_errorMessage = '';
 
     # Getting Data From Form...
