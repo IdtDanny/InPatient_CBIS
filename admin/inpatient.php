@@ -72,7 +72,7 @@
     $cashier_FetchStatement->execute();
     $cashier_Result = $cashier_FetchStatement->fetchAll();
 
-    # Fetching cashiers info ...
+    # Fetching Patient info ...
 
     $patient_FetchQuery = 'SELECT * FROM `patient` ORDER BY `created_at` DESC';
     $patient_FetchStatement = $pdo->prepare($patient_FetchQuery);

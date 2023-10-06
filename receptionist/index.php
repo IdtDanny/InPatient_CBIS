@@ -11,10 +11,10 @@
     require_once '../public/config/connection.php';
 
     # Getting Information of Signed in User
-    $cashier_username = $_SESSION['sessionToken']->cashier_username;
-    $caID = $_SESSION['sessionToken']->caID;
-    $cashier_name = $_SESSION['sessionToken']->cashier_name;
-    $cashier_pin = $_SESSION['sessionToken']->cashier_pin;
+    $agent_username = $_SESSION['sessionToken']->agent_username;
+    $aID = $_SESSION['sessionToken']->aID;
+    $agent_name = $_SESSION['sessionToken']->agent_name;
+    $agent_pin = $_SESSION['sessionToken']->agent_pin;
 
     # error and success alerts
     $photo_errorMessage = "";
@@ -23,63 +23,50 @@
     $successMessage = "";
     $key_errorMessage = "";
     $key_successMessage = "";
-    $patient_errorMessage = "";
-    $patient_deleteErrorMessage  = "";
-    $patient_successMessage   = "";
-    $patient_deleteSuccessMessage  = "";
-    $update_successMessage  = "";
-    $update_errorMessage   = "";
 
-    # Calculating Each Number of Users, Cards, cashier, cashiers and so on...
-    $sql_cashier = 'SELECT * FROM cashier';
-    $sql_patient = 'SELECT * FROM patient';
-    $sql_notify = 'SELECT * FROM `notification_all` WHERE `receiver_id` =:cashier_pin OR `sender_id`';
+    # Calculating Each Number of Users, Cards, agent, agents and so on...
+    $sql_agent = 'SELECT * FROM agent';
+    $sql_client = 'SELECT * FROM client';
+    $sql_notify = 'SELECT * FROM `notification_all` WHERE `receiver_id` =:agent_pin OR `sender_id`';
     $statement_notify = $pdo->prepare($sql_notify);
-    $statement_notify -> execute([ 'cashier_pin' => $cashier_pin ]); 
+    $statement_notify -> execute([ 'agent_pin' => $agent_pin ]); 
     
-    $statement = $pdo->prepare($sql_cashier);
+    $statement = $pdo->prepare($sql_agent);
     $statement->execute();
 
-    $statement_patient = $pdo->prepare($sql_patient);
-    $statement_patient -> execute();
+    $statement_client = $pdo->prepare($sql_client);
+    $statement_client -> execute();
 
-    # Getting The number of cashiers, Cards, cashier...
-    $cashiersCount = $statement->rowCount();
-    $registered_patient = $statement_patient->rowCount();
+    # Getting The number of Agents, Cards, agent...
+    $agentsCount = $statement->rowCount();
+    $registered_client = $statement_client->rowCount();
     $registered_notify = $statement_notify->rowCount();
 
-    # Fetching cashier info ...
+    # Fetching agent info ...
 
-    $cashier_FetchQuery = 'SELECT * FROM `cashier` ORDER BY `created_at` DESC';
-    $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
-    $cashier_FetchStatement->execute();
-    $cashier_Result = $cashier_FetchStatement->fetchAll();
+    $agent_FetchQuery = 'SELECT * FROM `agent` ORDER BY `created_at` DESC';
+    $agent_FetchStatement = $pdo->prepare($agent_FetchQuery);
+    $agent_FetchStatement->execute();
+    $agent_Result = $agent_FetchStatement->fetchAll();
 
-    # Getting cashier Info. for update form...
+    # Getting agent Info. for update form...
 
-    $cashierFetchQuery = 'SELECT * FROM `cashier` WHERE `caID` = :cashierid';
-    $cashierFetchStatement = $pdo->prepare($cashierFetchQuery);
-    $cashierFetchStatement->execute([
-        'cashierid' => $caID
+    $agentFetchQuery = 'SELECT * FROM `agent` WHERE `aID` = :agentid';
+    $agentFetchStatement = $pdo->prepare($agentFetchQuery);
+    $agentFetchStatement->execute([
+        'agentid' => $aID
     ]);
-    $cashierResults = $cashierFetchStatement->fetch();
+    $agentResults = $agentFetchStatement->fetch();
 
     # Getting user notifications
 
-    $cashier_notifyFetchQuery = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :cashier_pin OR `sender_id` = :scashier_pin ORDER BY `date_sent` AND `time_sent` DESC';
-    $cashier_notifyFetchStatement = $pdo->prepare($cashier_notifyFetchQuery);
-    $cashier_notifyFetchStatement->execute([
-        'cashier_pin'     => $cashier_pin,
-        'scashier_pin'    => $cashier_pin
+    $agent_notifyFetchQuery = 'SELECT * FROM `notification_all` WHERE `receiver_id` = :agent_pin OR `sender_id` = :sagent_pin ORDER BY `date_sent` AND `time_sent` DESC';
+    $agent_notifyFetchStatement = $pdo->prepare($agent_notifyFetchQuery);
+    $agent_notifyFetchStatement->execute([
+        'agent_pin'     => $agent_pin,
+        'sagent_pin'    => $agent_pin
     ]);
-    $cashier_notifyResults = $cashier_notifyFetchStatement->fetchAll();
-
-    # Fetching Patient info ...
-
-    $patient_FetchQuery = 'SELECT * FROM `patient` ORDER BY `created_at` DESC';
-    $patient_FetchStatement = $pdo->prepare($patient_FetchQuery);
-    $patient_FetchStatement->execute();
-    $patient_Result = $patient_FetchStatement->fetchAll();
+    $agent_notifyResults = $agent_notifyFetchStatement->fetchAll();
 
     # refreshing message
     $errorRefreshMessage = "<span class='d-md-inline-block d-none'>&nbsp; Refresh to continue </span><a href='index.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
@@ -87,35 +74,35 @@
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>&nbsp; Refresh to see the change </span><a href='index.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
  
 
-    # Updating cashier Information...
+    # Updating agent Information...
 
     if (isset($_POST['editinfo'])) {
-        $new_cashier_Name = $_POST['cashier-name'];
-        $new_cashier_Mail = $_POST['cashier-mail'];
-        $new_cashier_Username = $_POST['cashier-username'];
-        $cashier_Old_Password = $_POST['old-password'];
-        $cashier_New_Password = $_POST['new-password'];
-        $cashier_Confirm_password = $_POST['confirm-password'];
+        $new_agent_Name = $_POST['agent-name'];
+        $new_agent_Mail = $_POST['agent-mail'];
+        $new_agent_Username = $_POST['agent-username'];
+        $agent_Old_Password = $_POST['old-password'];
+        $agent_New_Password = $_POST['new-password'];
+        $agent_Confirm_password = $_POST['confirm-password'];
 
         # Checking for Password fields(if they are empty, It will only update the username or name only)...
 
-        if (empty($cashier_Old_Password)) {
+        if (empty($agent_Old_Password)) {
 
             # Updating Query...
 
-            $cashier_Update_Query = 'UPDATE `cashier`
-                                    SET `cashier_name` = :cashiername,
-                                        `cashier_username` = :cashierusername
-                                        `cashier_mail` = :cashier_mail,
-                                    WHERE `caID` = :cashierid
+            $agent_Update_Query = 'UPDATE `agent`
+                                    SET `agent_name` = :agentname,
+                                        `agent_username` = :agentusername
+                                        `agent_mail` = :agent_mail,
+                                    WHERE `aID` = :agentid
             ';
 
-            $cashier_Update_stmt = $pdo->prepare($cashier_Update_Query);
-            $cashier_Update_stmt->execute([
-                'cashiername'     =>  $new_cashier_Name,
-                'cashierusername' =>  $new_cashier_Username,
-                'cashier_mail'    =>  $new_cashier_Mail,
-                'cashierid'       =>  $caID
+            $agent_Update_stmt = $pdo->prepare($agent_Update_Query);
+            $agent_Update_stmt->execute([
+                'agentname'     =>  $new_agent_Name,
+                'agentusername' =>  $new_agent_Username,
+                'agent_mail'    =>  $new_agent_Mail,
+                'agentid'       =>  $aID
             ]);
             $successMessage = " Username Edited Successfully";
         }
@@ -123,31 +110,31 @@
 
             # Checking if the old password match...
 
-            $hashedpass = md5($cashier_Old_Password);
+            $hashedpass = md5($agent_Old_Password);
             
-            // $hashedpass = $cashier_Old_Password;
+            // $hashedpass = $agent_Old_Password;
 
-            if ($cashierResults->cashier_password == $hashedpass || $cashierResults->cashier_password == $cashier_Old_Password ) {
+            if ($agentResults->agent_password == $hashedpass || $agentResults->agent_password == $agent_Old_Password ) {
 
-                if ($cashier_New_Password == $cashier_Confirm_password) {
+                if ($agent_New_Password == $agent_Confirm_password) {
 
                     # Update Query Including Passwords...
 
-                    $cashier_Update_Query = 'UPDATE `cashier`
-                                            SET `cashier_name` = :cashiername,
-                                                `cashier_username` = :cashierusername,
-                                                `cashier_mail` = :cashier_mail,
-                                                `cashier_password` = :cashierpassword
-                                            WHERE `caID` = :cashierid
+                    $agent_Update_Query = 'UPDATE `agent`
+                                            SET `agent_name` = :agentname,
+                                                `agent_username` = :agentusername,
+                                                `agent_mail` = :agent_mail,
+                                                `agent_password` = :agentpassword
+                                            WHERE `aID` = :agentid
                     ';
 
-                    $cashier_Update_stmt = $pdo->prepare($cashier_Update_Query);
-                    $cashier_Update_stmt->execute([
-                        'cashiername'     =>  $new_cashier_Name,
-                        'cashierusername' =>  $new_cashier_Username,
-                        'cashier_mail'    =>  $new_cashier_Mail,
-                        'cashierpassword' =>  md5($cashier_New_Password),
-                        'cashierid'       =>  $caID
+                    $agent_Update_stmt = $pdo->prepare($agent_Update_Query);
+                    $agent_Update_stmt->execute([
+                        'agentname'     =>  $new_agent_Name,
+                        'agentusername' =>  $new_agent_Username,
+                        'agent_mail'    =>  $new_agent_Mail,
+                        'agentpassword' =>  md5($agent_New_Password),
+                        'agentid'       =>  $aID
                     ]);
                     $successMessage = " Data Edited Successfully";
                 }
@@ -167,13 +154,13 @@
 
     if(isset($_POST["submit-profile"])) {
         $target_dir = "../public/profile/";
-        $target_file = $target_dir . basename($_FILES["cashier-profile"]["name"]);
-        $photo = $_FILES['cashier-profile']['name'];
+        $target_file = $target_dir . basename($_FILES["agent-profile"]["name"]);
+        $photo = $_FILES['agent-profile']['name'];
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
         # Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["cashier-profile"]["tmp_name"]);
+        $check = getimagesize($_FILES["agent-profile"]["tmp_name"]);
         if($check !== false) {
             $uploadOk = 1;
         }
@@ -183,7 +170,7 @@
         }
         
         # Check file size
-        if ($_FILES["cashier-profile"]["size"] > 4000000) {
+        if ($_FILES["agent-profile"]["size"] > 4000000) {
             $photo_errorMessage = " Sorry, your file is too large.";
             $uploadOk = 0;
         }
@@ -201,18 +188,18 @@
             # if everything is ok, try to upload file 
         } 
         else {
-            if (move_uploaded_file($_FILES["cashier-profile"]["tmp_name"], $target_file)) {        
+            if (move_uploaded_file($_FILES["agent-profile"]["tmp_name"], $target_file)) {        
                 
-                # Updating cashier profile...
-                $profile_update = 'UPDATE `cashier` 
+                # Updating agent profile...
+                $profile_update = 'UPDATE `agent` 
                                     SET `photo` = :photo 
-                                    WHERE `caID` = :cashierid
+                                    WHERE `aID` = :agentid
                                 ';
         
-                $cashier_updateStatement = $pdo->prepare($profile_update);
-                $cashier_updateStatement->execute([
+                $agent_updateStatement = $pdo->prepare($profile_update);
+                $agent_updateStatement->execute([
                                     'photo'     =>  $photo,
-                                    'cashierid'   =>  $cashierResults->caID
+                                    'agentid'   =>  $agentResults->aID
                                 ]);
             
                 if ($profile_update) {
@@ -231,15 +218,15 @@
         $cpin = $_POST['cpin'];
         $amount = $_POST['ramount'];
 
-        # check if cashier pin are same ... 
+        # check if agent pin are same ... 
 
-        if ($cashierResults->cashier_pin == $cpin) {
+        if ($agentResults->agent_pin == $cpin) {
 
-            # checking if cashier has enough balance to withdraw ...
+            # checking if agent has enough balance to withdraw ...
 
-            $cashier_balance = $cashierResults->cashier_balance;
+            $agent_balance = $agentResults->agent_balance;
 
-            if ($cashier_balance <= 0 || $cashier_balance < $amount) {
+            if ($agent_balance <= 0 || $agent_balance < $amount) {
                 $key_errorMessage = " Not enough balance, ". $errorRefreshMessage;
             }
 
@@ -294,7 +281,7 @@
                     }
                 }
 
-                # create a request row for cashier if he/she does not exist ...
+                # create a request row for agent if he/she does not exist ...
 
                 else {
 
@@ -328,5 +315,5 @@
 ?>
 
 <?php 
-    include 'include_copy/index_new.html';
+    include 'include/index_front.html';
 ?>

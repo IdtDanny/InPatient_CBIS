@@ -10,11 +10,11 @@
     include 'include/header/nav_header_front.html';
 ?>
 
-    <!-- cashier Profile -->
+    <!-- agent Profile -->
     <section id="dashboard bg-light">
         <div class="container-md">
             <div class="text-center">
-                <h2>Welcome <span class="text-altprimary fst-italic fw-bold"><?php echo $cashierResults->cashier_name ?></span> </h2>
+                <h2>Welcome <span class="text-altprimary fst-italic fw-bold"><?php echo $agentResults->agent_name ?></span> </h2>
                 <p class="lead text-muted">A quick glance at your profile</p>
             </div>
 
@@ -38,16 +38,16 @@
                     <?php endif ?>
 
                     <!-- browsing profile picture or else user svg used -->
-                    <?php if($cashierResults->photo): ?>
-                    <img src="../public/profile/<?php echo $cashierResults->photo ?>" alt="eBook" class="rounded-5 img-thumbnail border-2 border-dark">
+                    <?php if($agentResults->photo): ?>
+                    <img src="../public/profile/<?php echo $agentResults->photo ?>" alt="eBook" class="rounded-5 img-thumbnail border-2 border-dark">
                     <?php else: ?>
                     <img src="../public/img/user-profile.svg" alt="eBook" class="rounded-5 img-thumbnail p-5 border-2 border-dark">
                     <?php endif ?>
 
                     <form method="post" enctype="multipart/form-data" class="pt-3 input-group">
-                        <input type="file" name="cashier-profile" class="form-control ms-2" id="inputGroupFile02" aria-describedby="inputGroupFileAddon02" aria-label="Upload">
+                        <input type="file" name="agent-profile" class="form-control ms-2" id="inputGroupFile02" aria-describedby="inputGroupFileAddon02" aria-label="Upload">
                         <button class="btn btn-dark" name="submit-profile" type="submit" id="inputGroupFileAddon02"><i class="bi bi-cloud-upload-fill"></i></button>
-                        <a href="../cashier/" class="btn btn-gold me-2" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
+                        <a href="../agent/" class="btn btn-gold me-2" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
                     </form>
 
                 </div>
@@ -73,20 +73,20 @@
 
                     <div class="accordion accordion-flush" id="chapters">
 
-                        <!-- cashier profile -->
+                        <!-- agent profile -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading1">
-                                <button class="accordion-button text-light bi-buildings bg-altprimary" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-1" aria-expanded="true" aria-controls="chapter-1">&nbsp;cashier Profile</button>
+                                <button class="accordion-button text-light bi-buildings bg-altprimary" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-1" aria-expanded="true" aria-controls="chapter-1">&nbsp;Agent Profile</button>
                             </h2>
                             <div id="chapter-1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#chapters">
                                 <div class="accordion-body">
                                     <p class="text-muted text-start small">Review your profile and login credentials <span class="badge bg-gold float-end"><i class="bi bi-person-fill"></i></span></p>
-                                    <p>Name: <span class="fw-medium float-end"><?php echo $cashierResults->cashier_name ?></span></p>
-                                    <p>Username: <span class="fw-light float-end"><?php echo $cashierResults->cashier_username ?></span></p>
-                                    <!-- <p>PIN: <span class="fw-light float-end"><?php echo $cashierResults->cashier_pin ?></span></p> -->
-                                    <p>Tel: <span class="fw-light float-end text-decoration-none"><?php echo $cashierResults->cashier_tel ?></span></p>
-                                    <p>Email: <span class="fw-light float-end"><?php echo $cashierResults->cashier_mail ?></span></p>
-                                    <p>Balance: <span class="fw-bold float-end"><?php echo number_format($cashierResults->cashier_balance) ?> rwf</span></p>
+                                    <p>Name: <span class="fw-medium float-end"><?php echo $agentResults->agent_name ?></span></p>
+                                    <p>Username: <span class="fw-light float-end"><?php echo $agentResults->agent_username ?></span></p>
+                                    <!-- <p>PIN: <span class="fw-light float-end"><?php echo $agentResults->agent_pin ?></span></p> -->
+                                    <p>Tel: <span class="fw-light float-end text-decoration-none"><?php echo $agentResults->agent_tel ?></span></p>
+                                    <p>Email: <span class="fw-light float-end"><?php echo $agentResults->agent_mail ?></span></p>
+                                    <p>Balance: <span class="fw-bold float-end"><?php echo number_format($agentResults->agent_balance) ?> rwf</span></p>
                                     <a href="#edit" class="btn btn-gold bi-pencil-square"><small> Edit</small></a>
                                     <a href="#withdraw" class="btn btn-success bi-currency-exchange float-end" title="withdraw" data-bs-toggle="modal" data-bs-target="#withdrawModal" data-bs-whatever="@withdraw"><small> Withdraw</small></a>
                                 </div>
@@ -132,9 +132,9 @@
                         <div class="card-header text-center text-dark">Most Recent</div>
                         <div class="card-body">
 
-                            <!-- Listing user cashiers -->
+                            <!-- Listing user agents -->
                             <div class="list-group list-group-flush">
-                                <?php foreach($cashier_notifyResults as $list_count => $notify){ ?>
+                                <?php foreach($agent_notifyResults as $list_count => $notify){ ?>
                                 <?php 
                                 # To list few of notifys. 
                                     if ($list_count == 3) {
@@ -143,14 +143,14 @@
                                     else {
                                         # getting everything
 
-                                        $patient_FetchQuery = 'SELECT * FROM `patient` WHERE `patient_id` = :receiver_id ';
-                                        $patient_FetchStatement = $pdo->prepare($patient_FetchQuery);
-                                        $patient_FetchStatement->execute([
+                                        $client_FetchQuery = 'SELECT * FROM `client` WHERE `client_id` = :receiver_id ';
+                                        $client_FetchStatement = $pdo->prepare($client_FetchQuery);
+                                        $client_FetchStatement->execute([
                                             'receiver_id'   => $notify->receiver_id
                                         ]);
-                                        $patient_Result = $patient_FetchStatement->fetch();
+                                        $client_Result = $client_FetchStatement->fetch();
 
-                                        $patient_name = $patient_Result->patient_name;
+                                        $client_name = $client_Result->client_name;
                                 ?>
                                 <a href="#?vnID=<?php echo $notify->nID ?>" class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
@@ -208,9 +208,9 @@
                                     </div>
                                     <p class="mb-1 fw-light">
                                         <?php if ($notify->action == 'withdraw') { ?>
-                                        <small class="fw-light"><?php echo "Tps M-Card: ". number_format($notify->amount)." RWF withdrawn from account ". $notify->receiver_id ." (". $patient_name . ") on ". $notify->date_sent ." at ". $notify->time_sent . "." ?></small>
+                                        <small class="fw-light"><?php echo "Tps M-Card: ". number_format($notify->amount)." RWF withdrawn from account ". $notify->receiver_id ." (". $client_name . ") on ". $notify->date_sent ." at ". $notify->time_sent . "." ?></small>
                                         <?php } if ($notify->action == 'topup') { ?>
-                                        <small class="fw-light"><?php echo "Tps M-Card: You have recharged ". $patient_name ." (". $notify->receiver_id .") with ". number_format($notify->amount)." RWF on ". $notify->date_sent ." at ". $notify->time_sent . "." ?></small>
+                                        <small class="fw-light"><?php echo "Tps M-Card: You have recharged ". $client_name ." (". $notify->receiver_id .") with ". number_format($notify->amount)." RWF on ". $notify->date_sent ." at ". $notify->time_sent . "." ?></small>
                                         <?php } if ($notify->action == 'recharge') { ?>
                                         <small class="fw-light"><?php echo "Tps M-Card: You have received ". number_format($notify->amount)." RWF on your account with PIN (****) from ". $notify->sender_id ." on ". $notify->date_sent ." at ". $notify->time_sent . "." ?></small>
                                         <?php } if ($notify->action == 'transfer') { ?>
@@ -262,7 +262,7 @@
                             <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
 
                             <div class="form-floating">
-                                <input type="text" name="cashier-name" id="email" class="form-control" value="<?php echo $cashierResults->cashier_name ?>" id="floatingInputGroup1">
+                                <input type="text" name="agent-name" id="email" class="form-control" value="<?php echo $agentResults->agent_name ?>" id="floatingInputGroup1">
                                 <label for="floatingInputGroup1">New Name</label>
                             </div>
 
@@ -277,7 +277,7 @@
                             <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
 
                             <div class="form-floating">
-                                <input type="email" name="cashier-mail" id="email" class="form-control" value="<?php echo $cashierResults->cashier_mail ?>" id="floatingInputGroup1">
+                                <input type="email" name="agent-mail" id="email" class="form-control" value="<?php echo $agentResults->agent_mail ?>" id="floatingInputGroup1">
                                 <label for="floatingInputGroup1">New Email</label>
                             </div>
 
@@ -292,7 +292,7 @@
                             <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
 
                             <div class="form-floating">
-                                <input type="text" name="cashier-username" id="name" class="form-control" value="<?php  echo $cashierResults->cashier_username ?>" id="floatingInputGroup1" required>
+                                <input type="text" name="agent-username" id="name" class="form-control" value="<?php  echo $agentResults->agent_username ?>" id="floatingInputGroup1" required>
                                 <label for="floatingInputGroup1">New Username</label>
                             </div>
 
@@ -307,7 +307,7 @@
                             <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
 
                             <div class="form-floating">
-                                <input type="password" name="old-password" id="opassword" class="form-control" placeholder="old-password" value="<?php echo $cashierResults->cashier_password ?>" id="floatingInputGroup1" required>
+                                <input type="password" name="old-password" id="opassword" class="form-control" placeholder="old-password" value="<?php echo $agentResults->agent_password ?>" id="floatingInputGroup1" required>
                                 <label for="floatingInputGroup1">Current Password</label>
                             </div>
 

@@ -6,9 +6,9 @@
         </a>
 
         <!-- browsing profile picture or else user svg used -->
-        <div class="d-md-none tt" data-bs-placement="bottom" title="<?php echo $cashierResults->cashier_name; ?>">
-            <?php if($cashierResults->photo): ?>
-            <img src="../public/profile/<?php echo $cashierResults->photo ?>" alt="Profile" class="img-fluid img-thumbnail rounded-4" style="width: 45px;">
+        <div class="d-md-none tt" data-bs-placement="bottom" title="<?php echo $agentResults->agent_name; ?>">
+            <?php if($agentResults->photo): ?>
+            <img src="../public/profile/<?php echo $agentResults->photo ?>" alt="Profile" class="img-fluid img-thumbnail rounded-4" style="width: 45px;">
             <?php else: ?>
             <img src="../public/img/user-profile.svg" alt="eBook" class="img-fluid rounded-1" style="width: 40px;">
             <?php endif ?>
@@ -26,7 +26,7 @@
                     <a href="index.php" class="nav-link">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a href="patient.php" class="nav-link">patient</a>
+                    <a href="client.php" class="nav-link">Client</a>
                 </li>
                 <!-- <li class="nav-item"> -->
                 <!-- <a href="records.php" class="nav-link">Records</a> -->
@@ -35,10 +35,10 @@
                     <a href="notification.php" class="nav-link">Notification</a>
                 </li>
                 <li class="d-md-inline d-none">
-                    <a href="#dashboard" class="tt" data-bs-placement="bottom" title="<?php echo $cashierResults->cashier_name; ?>">
+                    <a href="#dashboard" class="tt" data-bs-placement="bottom" title="<?php echo $agentResults->agent_name; ?>">
                         <!-- browsing profile picture or else user svg used -->
-                        <?php if($cashierResults->photo): ?>
-                        <img src="../public/profile/<?php echo $cashierResults->photo ?>" alt="Profile" class="img-fluid img-thumbnail rounded-4" style="width: 42px;">
+                        <?php if($agentResults->photo): ?>
+                        <img src="../public/profile/<?php echo $agentResults->photo ?>" alt="Profile" class="img-fluid img-thumbnail rounded-4" style="width: 42px;">
                         <?php else: ?>
                         <img src="../public/img/user-profile.svg" alt="eBook" class="img-fluid rounded-1" style="width: 40px;">
                         <?php endif ?>

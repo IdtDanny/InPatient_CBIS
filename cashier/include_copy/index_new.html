@@ -1,25 +1,28 @@
 <?php
     # DOCTYPE html file 1
-    include 'include/header/1_header.html';
+    include 'head/1_new_header.html';
 
     # DOCTYPE html file 2 with style document
-    echo ' Dashboard</title>';
-    include 'include/header/2_header.html';
+    echo ' <title>Cashier | Dashboard</title>';
+    include 'head/2_new_header.html';
 
-    # NavBar
-    include 'include/header/nav_header_front.html';
+    echo '
+    <a href="../cashier/" class="btn text-altlight me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
+    ';
+    include 'head/3_new_header.html';
 ?>
 
+    <!-- title -->
+    <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+        <h3>Welcome <span class="text-police-dark fst-italic fw-bold"><?php echo $cashierResults->cashier_name ?></span> </h3>
+    </div>
+
     <!-- cashier Profile -->
-    <section id="dashboard bg-light">
+    <section id="dashboard" class="pb-5 border-bottom">
         <div class="container-md">
-            <div class="text-center">
-                <h2>Welcome <span class="text-altprimary fst-italic fw-bold"><?php echo $cashierResults->cashier_name ?></span> </h2>
-                <p class="lead text-muted">A quick glance at your profile</p>
-            </div>
 
             <div class="row my-0 g-3 justify-content-around align-items-center">
-                <div class="col-6 col-lg-4">
+                <div class="col-9 col-lg-5">
 
                     <!-- Notifying about profile change | Error -->
                     <?php if($photo_errorMessage): ?>
@@ -71,12 +74,12 @@
                     </div>
                     <?php } ?>
 
-                    <div class="accordion accordion-flush" id="chapters">
+                    <div class="accordion" id="chapters">
 
                         <!-- cashier profile -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading1">
-                                <button class="accordion-button text-light bi-buildings bg-altprimary" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-1" aria-expanded="true" aria-controls="chapter-1">&nbsp;cashier Profile</button>
+                                <button class="accordion-button text-light bi-buildings bg-police-dark" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-1" aria-expanded="true" aria-controls="chapter-1">&nbsp;cashier Profile</button>
                             </h2>
                             <div id="chapter-1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#chapters">
                                 <div class="accordion-body">
@@ -117,9 +120,361 @@
             </div>
         </div>
     </section>
+    
+    <!-- Billing form edit form -->
+    <section id="bill" class=" bg-altlight pt-5 pb-5 border-bottom">
+        <div class="container-lg">
+            <div class="text-center">
+                <h2 class="fw-medium text-gold">BILLING</h2>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-lg-6">
+
+                    <?php if($errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <form method="post">
+                        <!-- post new name -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="text" name="cashier-name" id="email" class="form-control" value="<?php echo $cashierResults->cashier_name ?>" id="floatingInputGroup1">
+                                <label for="floatingInputGroup1">New Name</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your name."><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post mail -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="email" name="cashier-mail" id="email" class="form-control" value="<?php echo $cashierResults->cashier_mail ?>" id="floatingInputGroup1">
+                                <label for="floatingInputGroup1">New Email</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your email address."><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post new username -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="text" name="cashier-username" id="name" class="form-control" value="<?php  echo $cashierResults->cashier_username ?>" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">New Username</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your username!"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post current password -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="password" name="old-password" id="opassword" class="form-control" placeholder="old-password" value="<?php echo $cashierResults->cashier_password ?>" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Current Password</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Your current password?"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- set new password -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+
+
+                            <div class="form-floating">
+                                <input type="password" name="new-password" id="opassword" class="form-control" placeholder="New" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Set Password</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input type="password" name="confirm-password" id="npassword" class="form-control" placeholder="Confirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Confirm Password</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Make sure they match!"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 text-center">
+                            <button type="submit" name="editinfo" class="btn btn-gold float-end bi-send-check"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- title -->
+    <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+
+        <!-- row for cashier profile -->
+        <div class="row">
+
+            <!-- Displaying user profile -->
+            <div class="col">
+                <h2 class="float-start">
+                    <span class="text-police-dark fw-bold text-uppercase">
+                            <?php # $cashierResults->cashier_name ?> patient <span class="d-md-inline-block d-none">list</span>
+                    </span>
+                </h2>
+            </div>
+
+            <!-- button for registering and withdraw business balance -->
+            <div class="col">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Patient Profile Tables -->
+    <section id="dashboard" class="pb-4 border-bottom">
+        <div class="container-md">
+
+            <p class="text-muted text-capitalize pt-2">Review on registered cards for patient.</p>
+
+            <!-- document download button -->
+            <form method="post" class="d-md-none d-flex">
+                <a href="patient.php" class="btn btn-outline-gold text-dark d-lg-none d-md-none bi-arrow-clockwise justify-content-end"></a>
+                <span class="input-group justify-content-end">
+                    <a href="export/export_patient_excel.php" type="submit" name="export_excel" class="btn btn-outline-success bi-filetype-xlsx jus" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
+                <a href="export/export_patient_pdf.php" type="submit" name="export_pdf" class="btn btn-altorange bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
+                </span>
+            </form>
+
+            <!-- row for business table and list for small media -->
+            <div class="row my-0 g-0 justify-content-around align-items-center">
+                <div class="col-lg-12 col-lg-6">
+
+                    <!-- Error messages -->
+                    <?php if($patient_errorMessage || $patient_deleteErrorMessage || $update_errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle">
+                            <?php 
+                                echo $patient_errorMessage; 
+                                echo $patient_deleteErrorMessage; 
+                                echo $update_errorMessage; 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- success messages -->
+                    <?php if($patient_successMessage || $patient_deleteSuccessMessage || $update_successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all">
+                            <?php 
+                                echo $patient_successMessage; 
+                                echo $patient_deleteSuccessMessage; 
+                                echo $update_successMessage 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- for large media -->
+                    <div class="d-lg-block d-none text-capitalize">
+                        <table class="table table-hover">
+                            <caption class="text-center fw-light">List of Registered patient</caption>
+                            <thead class="table-bordered table-primary table-group-divider">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col"><i class="bi bi-person-circle"></i></th>
+                                    <th scope="col">Created_at</th>
+                                    <th scope="col">patient ID</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Tel No</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Balance</th>
+                                    <th scope="col">Referral</th>
+                                    <th scope="col">Delete</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small table-group-divider">
+
+                                <?php $no = 1; foreach($patient_Result as $patient) { ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?php echo $no ?>
+                                    </th>
+                                    <td><i class="bi bi-person-circle"></i></td>
+                                    <td>
+                                        <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $patient->patient_id ?>
+                                    </td>
+                                    <?php 
+                                        if ($patient->patient_balance == 0) {
+                                            echo "<td class='text-uppercase text-danger'>" . $patient->patient_name . "</td>";
+                                        } else {
+                                            echo "<td class='text-uppercase'>" . $patient->patient_name . "</td>";
+                                        }
+                                    ?>
+                                    <td>
+                                        <?php echo $patient->patient_tel ?>
+                                    </td>
+                                    <td class="text-lowercase">
+                                        <?php echo $patient->patient_mail ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <?php echo number_format($patient->patient_balance) ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <?php echo $patient->referral_cashier ?>
+                                    </td>
+                                    <td class="text-center"><a href="patient.php?dpID=<?php echo $patient->pID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> </a></td>
+                                    <?php 
+                                    if ($patient->status != 'active') {
+                                        echo "<td class='fw-light text-altlight bg-danger text-center'><a href='?ApID=". $patient->pID ."' class='text-light bi-exclamation-triangle-fill text-decoration-none'> Inactive" . $patient->status . "</a></td>";
+                                    } else {
+                                        echo "<td class='fw-light text-altlight bg-success text-center'><i class='bi-check2-all'></i> " . $patient->status . "</td>"; 
+                                    }
+                                ?>
+                                </tr>
+                                <?php $no++; } ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- For small media -->
+                    <div class="list-group d-lg-none mt-2">
+                        <?php foreach ($patient_Result as $agt_count => $patient){ ?>
+                        <?php 
+                            # To list few of patients. 
+                                #if ($patient_count != 0) {
+                                #    continue;
+                                #}
+                                #else {
+                        ?>
+                        <div class="list-group-item py-3 small">
+                            <h5 class="mb-1 text-uppercase">
+                                <?php 
+                                    if ($patient->patient_balance > 0) {
+                                        echo "<span class='text-success'><i class='bi bi-person-circle'></i> ". $patient->patient_name . "</span>";
+                                ?>
+                                <span class="badge fw-light bg-success float-end"><i class='d-md-none d-inline bi-check2-all'></i> <small class="d-md-inline d-none"> <?php echo "$patient->status" ?></small></span>
+                                <?php 
+                                    } else {
+                                        echo "<span class='text-danger'>". $patient->patient_name . "</span>";
+                                ?>
+                                <span class="badge fw-light bg-danger float-end"><i class='d-md-none d-inline bi-exclamation-triangle-fill'></i><small class="d-md-inline d-none"> <?php echo "$patient->status" ?></small></span>
+                                <?php } ?>
+                            </h5>
+
+                            <!-- Fetch patient Location -->
+                            <p class="mb-1 fw-medium">Location:
+                                <span class="fw-light float-end">
+                                <?php
+
+                                    # Fetching patient location info ...
+
+                                    $pID = $patient->pID;
+
+                                    $patient_location_FetchQuery = 'SELECT * FROM `patient_location` WHERE `pID` = :pID';
+                                    $patient_location_FetchStatement = $pdo->prepare($patient_location_FetchQuery);
+                                    $patient_location_FetchStatement->execute([
+                                             'pID'  =>  $pID
+                                         ]);
+                                    $patient_location_Result = $patient_location_FetchStatement->fetch(); 
+
+                                    echo $patient_location_Result->district . " District - ";
+                                    echo $patient_location_Result->sector . " Sector";
+                                ?>
+                                </span>
+                            </p>
+
+
+                            <!-- Fetch patient ID -->
+                            <p class="mb-1 fw-medium">patient ID:
+                                <span class="fw-light float-end">
+                                <?php echo $patient->patient_id; ?>
+                                </span>
+                            </p>
+
+                            <!-- Fetch phone number -->
+                            <p class="mb-1 fw-medium">Tel:
+                                <span class="fw-light float-end">
+                                    <?php echo $patient->patient_tel ?>
+                                </span>
+                            </p>
+
+                            <!-- Fetch email -->
+                            <p class="mb-1 fw-medium">Email:
+                                <span class="fw-light float-end">
+                                    <?php echo $patient->patient_mail ?>
+                                </span>
+                            </p>
+
+                            <!-- Fetch Balance -->
+                            <p class="mb-1 fw-medium">Balance:
+                                <span class="fw-medium float-end">
+                                    <?php echo number_format($patient->patient_balance) ?> Rwf
+                                </span>
+                            </p>
+
+                            <!-- update and delete modal triggers -->
+                            <small class="text-muted">
+                                Registered on <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                <span class="btn-group-sm float-end">
+                                    <!-- <button class="btn btn-altdash bi-pencil-square" title="Update" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><span class="d-md-inline-block d-none">&nbsp;Update</span></button> -->
+                                    <a href="business.php?dpID=<?php echo $patient->pID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                    <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
+                                </span>
+                            </small>
+                        </div>
+                        <?php # } ?>
+                        <?php } ?>
+                    </div>
+                    <form method="post" class="input-group justify-content-end d-md-flex d-none">
+                        <a href="export/export_patient_excel.php" type="submit" class="btn btn-outline-success float-end mt-3 bi-filetype-xlsx" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
+                        <a href="export/export_patient_pdf.php" type="submit" class="btn btn-altorange float-end mt-3 bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </section> 
 
     <!-- Notifications info -->
-    <section id="notify" class="bg-light">
+    <section id="notify" class="pt-5 pb-5">
         <div class="container-lg">
             <div class="text-center">
                 <h2>Your Notifications</h2>
@@ -150,11 +505,17 @@
                                         ]);
                                         $patient_Result = $patient_FetchStatement->fetch();
 
-                                        $patient_name = $patient_Result->patient_name;
+                                        if ($patient_Result) {
+                                            $patient_name = $patient_Result->patient_name;
+                                        }
+                                        else {
+                                            $patient_name = '';
+                                        }
+
                                 ?>
                                 <a href="#?vnID=<?php echo $notify->nID ?>" class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1 text-altprimary text-capitalize">
+                                        <h5 class="mb-1 text-police-dark text-capitalize">
                                             <?php 
                                             if ($notify->status == "read") {
                                                 echo "<span class='text-success'><i class='bi-bell-fill'></i>TPS - ". $notify->action . "</span>";
@@ -232,7 +593,7 @@
     </section>
 
     <!-- Profile edit form -->
-    <section id="edit">
+    <section id="edit" class="bg-altlight pt-5 pb-5">
         <div class="container-lg">
             <div class="text-center">
                 <h2 class="fw-medium text-gold">Modify your Profile</h2>
@@ -408,5 +769,5 @@
     </div>
 
     <?php
-        include 'include/footer_front.html';
-    ?>
+    include 'include_copy/footer/footer_new_front.html';
+?>
