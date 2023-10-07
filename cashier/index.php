@@ -328,5 +328,5 @@
 ?>
 
 <?php 
-    include 'include_copy/index_new.html';
+    include 'include/index_new.html';
 ?>
