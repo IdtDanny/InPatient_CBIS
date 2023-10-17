@@ -89,9 +89,9 @@
     $adminResults = $adminFetchStatement->fetch();
 
     # refreshing message
-    $errorRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to continue </span><a href='receptionist.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+    $errorRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to continue </span><a href='authorized.php' class='float-end fw-bold text-danger'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='receptionist.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
+    $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='authorized.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
     # Registering new cashier
 
@@ -315,5 +315,5 @@
 ?>
 
 <?php 
-    include 'include/receptionist_front.html';
+    include 'include/authorized_front.html';
 ?>
