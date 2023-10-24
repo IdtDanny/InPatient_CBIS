@@ -3,11 +3,11 @@
     include 'head/1_new_header.html';
 
     # DOCTYPE html file 2 with style document
-    echo ' <title>Admin | Receptionist</title>';
+    echo ' <title>Admin | Authorized</title>';
     include 'head/2_new_header.html';
 
     echo '
-    <a href="../admin/receptionist.php" class="btn text-altlight me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
+    <a href="../admin/authorized.php" class="btn text-altlight me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
     ';
     include 'head/3_new_header.html';
 ?>
@@ -27,15 +27,15 @@
                     <img src="../public/img/user-profile.svg" alt="eBook" class="rounded-5 img-thumbnail p-5 border-2 border-dark">
                     <?php endif ?>
                     <span class="text-police-dark fw-bold text-uppercase">
-                            <?php # $adminResults->admin_name ?> RECEPTIONIST <span class="d-lg-inline-block d-none">list</span>
+                            <?php # $adminResults->admin_name ?> authorized <span class="d-lg-inline-block d-none">list</span>
                     </span>
                 </h2>
             </div>
 
-            <!-- button for registering and withdraw business balance -->
+            <!-- button for registering and withdraw business  -->
             <div class="col">
                 <div class="input-group justify-content-end">
-                    <button class="btn btn-outline-gold text-dark bi-person-add" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-whatever="@register"><span class="d-lg-inline-block d-none">&nbsp;Add</span></button>
+                    <button class="btn btn-outline-police-dark bi-person-add" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-whatever="@register"><span class="d-lg-inline-block d-none">&nbsp;Add</span></button>
                     <!-- <button class="btn btn-gold bi-currency-exchange" title="withdraw" data-bs-toggle="modal" data-bs-target="#withdrawModal" data-bs-whatever="@withdraw"><span class="d-lg-inline-block d-none" title="Withdraw">&nbsp;Withdraw</span></button>
                     <button class="btn btn-police-dark bi-rocket" title="Top Up" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@update"><span class="d-lg-inline-block d-none" title="recharge">&nbsp;Top Up</span></button> -->
                 </div>
@@ -44,7 +44,7 @@
             <!-- refresh -->
             <form method="post" class="float-end col-1 ms-3 d-md-none">
                 <div class="input-group justify-content-end">
-                    <a href="cashier.php" class="btn btn-outline-gold text-dark bi-arrow-clockwise"></a>
+                    <a href="authorized.php" class="btn btn-outline-gold text-dark bi-arrow-clockwise"></a>
                 </div>
             </form>
 
@@ -54,14 +54,14 @@
                 <div class="input-group">
 
                     <div class="form-floating">
-                        <input type="text" name="filter_cashier_name" class="form-control form-control-sm" placeholder="cashier Name" id="floatingInputGroup1" required>
+                        <input type="text" name="filter_authorized_name" class="form-control form-control-sm" placeholder="authorized Name" id="floatingInputGroup1" required>
                         <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Filter Name</label>
                     </div>
 
                     <!-- tooltips -->
                     <div class="input-group-text">
                         <div class="tt" data-bs-placement="bottom" title="Filter by full name">
-                            <button type="submit" name="cashier_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                            <button type="submit" name="authorized_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -74,25 +74,19 @@
     <section id="dashboard" class="pb-3">
         <div class="container-md">
 
-            <div class="badge bg-police-dark p-2 p-sm-3 mt-3">
-                <p class="lead d-inline text-capitalize ">B/f:
-                    <?php echo number_format($adminResults->Balance) ?> Rwf
-                </p>
-            </div>
-
             <!-- filter search field -->
             <form method="post" class="d-md-none d-inline ">
                 <div class="input-group mt-2 ">
 
                     <div class="form-floating ">
-                        <input type="text " name="filter_cashier_name " class="form-control form-control-sm " placeholder="cashier Name " id="floatingInputGroup1 " required>
+                        <input type="text " name="filter_authorized_name " class="form-control form-control-sm " placeholder="authorized Name " id="floatingInputGroup1 " required>
                         <label for="floatingInputGroup1 "><i class="bi bi-filter-left "></i> Filter Name</label>
                     </div>
 
                     <!-- tooltips -->
                     <div class="input-group-text ">
                         <div class="tt " data-bs-placement="bottom " title="Filter by full name ">
-                            <button type="submit " name="cashier_filter " class="btn btn-sm "><i class="bi bi-search "></i></button>
+                            <button type="submit " name="authorized_filter " class="btn btn-sm "><i class="bi bi-search "></i></button>
                         </div>
                     </div>
                 </div>
@@ -103,12 +97,12 @@
                 <div class="col-lg-12 col-lg-6">
 
                     <!-- Error messages -->
-                    <?php if($cashier_errorMessage || $cashier_deleteErrorMessage || $update_errorMessage) { ?>
+                    <?php if($authorized_errorMessage || $authorized_deleteErrorMessage || $update_errorMessage) { ?>
                     <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
                         <strong class="bi bi-exclamation-triangle">
                             <?php 
-                                echo $cashier_errorMessage; 
-                                echo $cashier_deleteErrorMessage; 
+                                echo $authorized_errorMessage; 
+                                echo $authorized_deleteErrorMessage; 
                                 echo $update_errorMessage; 
                             ?>
                         </strong>
@@ -118,12 +112,12 @@
                     <?php } ?>
 
                     <!-- success messages -->
-                    <?php if($cashier_successMessage || $cashier_deleteSuccessMessage || $update_successMessage) { ?>
+                    <?php if($authorized_successMessage || $authorized_deleteSuccessMessage || $update_successMessage) { ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong class="bi bi-check2-all">
                             <?php 
-                                echo $cashier_successMessage; 
-                                echo $cashier_deleteSuccessMessage; 
+                                echo $authorized_successMessage; 
+                                echo $authorized_deleteSuccessMessage; 
                                 echo $update_successMessage 
                             ?>
                         </strong>
@@ -134,7 +128,7 @@
                     <!-- for large media -->
                     <div class="d-lg-block d-none text-capitalize">
                         <table class="table table-hover">
-                            <caption class="text-center fw-light">List of Registered cashiers</caption>
+                            <caption class="text-center fw-light">List of Registered authorized</caption>
                             <thead class="table-primary table-group-divider">
                                 <tr>
                                     <th scope="col ">#</th>
@@ -145,26 +139,25 @@
                                     <th scope="col ">Sex</th>
                                     <th scope="col ">Tel</th>
                                     <th scope="col ">Email</th>
-                                    <th scope="col ">Balance</th>
                                     <th scope="col ">Update</th>
                                     <th scope="col ">Delete</th>
                                     <th scope="col ">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="small table-group-divider">
-                                <!-- filtering cashier by name -->
+                                <!-- filtering authorized by name -->
                                 <?php
-                                    # checking if user filtered cashier name
+                                    # checking if user filtered authorized name
 
-                                    if (isset($_POST['cashier_filter'])) {
-                                        $filter_cashier_name = $_POST['filter_cashier_name'];
+                                    if (isset($_POST['authorized_filter'])) {
+                                        $filter_authorized_name = $_POST['filter_authorized_name'];
 
-                                        # Fetching filtered cashiers info ...
+                                        # Fetching filtered authorized info ...
 
-                                        $filter_FetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_name` = :cashier_name ORDER BY `created_at` DESC ';
+                                        $filter_FetchQuery = 'SELECT * FROM `authorized` WHERE `authorized_name` = :authorized_name ORDER BY `created_at` DESC ';
                                         $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
                                         $filter_FetchStatement->execute([
-                                            'cashier_name' => $filter_cashier_name
+                                            'authorized_name' => $filter_authorized_name
                                         ]);
                                         $filter_Result = $filter_FetchStatement->fetchAll();
                                         
@@ -176,46 +169,43 @@
                                                 echo '<div class="alert alert-success alert-dismissible fade show " role="alert ">
                                                     <strong class="bi bi-check2-all "> Match found '.$successRefreshMessage.'</strong><button type="button " class="btn-close " data-bs-dismiss="alert " aria-label="Close "></button>';
                                                 $no = 1; 
-                                                foreach($filter_Result as $cashier) {
+                                                foreach($filter_Result as $authorized) {
                                     ?>
                                     <tr>
                                         <th scope="row">
                                             <?php echo $no ?>
                                         </th>
-                                        <td><img src="../public/profile/<?php echo $cashier->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
+                                        <td scope="col "><i class="bi bi-person-circle "></i></td>
                                         <td>
-                                            <?php echo date('M d, Y', strtotime($cashier->created_at)) ?>
+                                            <?php echo date('M d, Y', strtotime($authorized->created_at)) ?>
                                         </td>
                                         <?php 
-                                            if ($cashier->status != "active") {
-                                                echo "<td class='text-uppercase text-danger'>" . $cashier->cashier_name . "</td>";
+                                            if ($authorized->status != "active") {
+                                                echo "<td class='text-uppercase text-danger'>" . $authorized->authorized_name . "</td>";
                                             } 
                                             else {
-                                                echo "<td class='text-uppercase'>" . $cashier->cashier_name . "</td>";
+                                                echo "<td class='text-uppercase'>" . $authorized->authorized_name . "</td>";
                                             }
                                             ?>
                                         <td>
-                                            <?php echo $cashier->cashier_username ?>
+                                            <?php echo $authorized->authorized_username ?>
                                         </td>
                                         <td>
-                                            <?php if ($cashier->cashier_gender == 'male') { echo 'M(<i class="bi bi-gender-male"></i>)';} else { echo 'F(<i class="bi bi-gender-female"></i>)';} ?>
+                                            <?php if ($authorized->authorized_gender == 'male') { echo 'M(<i class="bi bi-gender-male"></i>)';} else { echo 'F(<i class="bi bi-gender-female"></i>)';} ?>
                                         </td>
                                         <td>
-                                            <?php echo $cashier->cashier_tel ?>
+                                            <?php echo $authorized->authorized_tel ?>
                                         </td>
                                         <td class="text-lowercase">
-                                            <?php echo $cashier->cashier_mail ?>
-                                        </td>
-                                        <td class="text-end">
-                                            <?php echo number_format($cashier->cashier_balance) ?>
+                                            <?php echo $authorized->authorized_mail ?>
                                         </td>
                                         <td class="text-center"><a href="#" class="btn btn-sm btn-police-dark" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@edit"><i class="bi bi-pencil-square"></i></a></td>
-                                        <td class="text-center"><a href="cashier.php?dcaID=<?php echo $cashier->caID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i></a></td>
+                                        <td class="text-center"><a href="authorized.php?dauID=<?php echo $authorized->auID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i></a></td>
 
                                         <?php 
-                                            if ($cashier->status == "active") {
-                                                echo "<td class='fw-light text-altlight bg-success text-center'><small class='bi-check2-all small'> " . $cashier->status . "</small>
-                                        </td>"; } else { echo "<td class='fw-light text-altlight bg-danger text-center'><a href='cashier.php?AcaID=".$cashier->caID."' class='btn btn-sm bi-exclamation-triangle-fill'> " . $cashier->status . "</a>
+                                            if ($authorized->status == "active") {
+                                                echo "<td class='fw-light text-altlight bg-success text-center'><small class='bi-check2-all small'> " . $authorized->status . "</small>
+                                        </td>"; } else { echo "<td class='fw-light text-altlight bg-danger text-center'><a href='authorized.php?AauID=".$authorized->auID."' class='btn btn-sm bi-exclamation-triangle-fill'> " . $authorized->status . "</a>
                                         </td>"; } ?>
                                     </tr>
 
@@ -224,9 +214,9 @@
                                         $no++; 
                                         } } } else {  
                                             $no = 1; 
-                                            foreach($cashier_Result as $key => $cashier) { 
+                                            foreach($authorized_Result as $key => $authorized) { 
 
-                                            # To list few of cashiers. 
+                                            # To list few of authorized. 
                                                 if ($key == 15) {
                                                     break;
                                                 }
@@ -236,40 +226,37 @@
                                         <th scope="row">
                                             <?php echo $no ?>
                                         </th>
-                                        <td><img src="../public/profile/<?php echo $cashier->photo ?>" alt="Profile" class="img-fluid rounded-1" style="width: 30px;"></td>
+                                        <td scope="col "><i class="bi bi-person-circle "></i></td>
                                         <td>
-                                            <?php echo date('M d, Y', strtotime($cashier->created_at)) ?>
+                                            <?php echo date('M d, Y', strtotime($authorized->created_at)) ?>
                                         </td>
                                         <?php 
-                                            if ($cashier->status != "active") {
-                                                echo "<td class='text-uppercase text-danger'>" . $cashier->cashier_name . "</td>";
+                                            if ($authorized->status != "active") {
+                                                echo "<td class='text-uppercase text-danger'>" . $authorized->authorized_name . "</td>";
                                             } 
                                             else {
-                                                echo "<td class='text-uppercase'>" . $cashier->cashier_name . "</td>";
+                                                echo "<td class='text-uppercase'>" . $authorized->authorized_name . "</td>";
                                             }
                                             ?>
                                         <td>
-                                            <?php echo $cashier->cashier_username ?>
+                                            <?php echo $authorized->authorized_username ?>
                                         </td>
                                         <td>
-                                            <?php if ($cashier->cashier_gender == 'male') { echo 'M(<i class="bi bi-gender-male"></i>)';} else { echo 'F(<i class="bi bi-gender-female"></i>)';} ?>
+                                            <?php if ($authorized->authorized_gender == 'male') { echo 'M(<i class="bi bi-gender-male"></i>)';} else { echo 'F(<i class="bi bi-gender-female"></i>)';} ?>
                                         </td>
                                         <td>
-                                            <?php echo $cashier->cashier_tel ?>
+                                            <?php echo $authorized->authorized_tel ?>
                                         </td>
                                         <td class="text-lowercase">
-                                            <?php echo $cashier->cashier_mail ?>
-                                        </td>
-                                        <td class="text-end">
-                                            <?php echo number_format($cashier->cashier_balance) ?>
+                                            <?php echo $authorized->authorized_mail ?>
                                         </td>
                                         <td class="text-center"><a href="#" class="btn btn-sm btn-police-dark" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@edit"><i class="bi bi-pencil-square"></i></a></td>
-                                        <td class="text-center"><a href="cashier.php?dcaID=<?php echo $cashier->caID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i></a></td>
+                                        <td class="text-center"><a href="authorized.php?dauID=<?php echo $authorized->auID ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i></a></td>
 
                                         <?php 
-                                            if ($cashier->status == "active") {
-                                                echo "<td class='fw-light text-altlight bg-success text-center'><small class='bi-check2-all small'> " . $cashier->status . "</small>
-                                        </td>"; } else { echo "<td class='fw-light text-altlight bg-danger text-center'><a href='cashier.php?AcaID=".$cashier->caID."' class='btn btn-sm bi-exclamation-triangle-fill'> " . $cashier->status . "</a>
+                                            if ($authorized->status == "active") {
+                                                echo "<td class='fw-light text-altlight bg-success text-center'><small class='bi-check2-all small'> " . $authorized->status . "</small>
+                                        </td>"; } else { echo "<td class='fw-light text-altlight bg-danger text-center'><a href='authorized.php?AauID=".$authorized->auID."' class='btn btn-sm bi-exclamation-triangle-fill'> " . $authorized->status . "</a>
                                         </td>"; } ?>
                                     </tr>
                                     <?php 
@@ -282,19 +269,19 @@
 
                     <!-- For small media -->
                     <div class="list-group d-lg-none">
-                        <!-- filtering cashier by name -->
+                        <!-- filtering authorized by name -->
                         <?php
-                        # checking if user filtered cashier name
+                        # checking if user filtered authorized name
 
-                        if (isset($_POST['cashier_filter'])) {
-                            $filter_cashier_name = $_POST['filter_cashier_name'];
+                        if (isset($_POST['authorized_filter'])) {
+                            $filter_authorized_name = $_POST['filter_authorized_name'];
 
-                            # Fetching filtered cashiers info ...
+                            # Fetching filtered authorized info ...
 
-                            $filter_FetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_name` = :cashier_name ORDER BY `created_at` DESC ';
+                            $filter_FetchQuery = 'SELECT * FROM `authorized` WHERE `authorized_name` = :authorized_name ORDER BY `created_at` DESC ';
                             $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
                             $filter_FetchStatement->execute([
-                                'cashier_name' => $filter_cashier_name
+                                'authorized_name' => $filter_authorized_name
                             ]);
                             $filter_Result = $filter_FetchStatement->fetchAll();
                             
@@ -306,84 +293,53 @@
                                     echo '<div class="alert alert-success alert-dismissible fade show " role="alert ">
                                         <strong class="bi bi-check2-all "> Match found '.$successRefreshMessage.'</strong><button type="button " class="btn-close " data-bs-dismiss="alert " aria-label="Close "></button>';
                                     $no = 1; 
-                                    foreach($filter_Result as $cashier) {
+                                    foreach($filter_Result as $authorized) {
                                     ?>
 
                             <div class="list-group-item py-3 small">
                                 <h5 class="mb-1 text-uppercase">
                                     <?php 
-                                    if ($cashier->cashier_balance > 0) {
-                                        echo "<span class='text-success bi-person-circle'> ". $cashier->cashier_name . "</span>";
-                                        echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $cashier->status .'</small>
-                                </span>'; 
-                                    } 
-                                    else { 
-                                        echo "<span class='text-danger bi-person-circle'> ". $cashier->cashier_name . "</span>"; 
-                                        echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $cashier->status .'</small></span>'; 
-                                    } 
+                                        echo "<span class='text-success bi-person-circle'> ". $authorized->authorized_name . "</span>";
+                                        echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $authorized->status .'</small>
+                                </span>';
                                     ?>
                                 </h5>
-
-                                <!-- Fetch Business Location -->
-                                <p class="mb-1 fw-medium">Location:
-                                    <span class="fw-light float-end">
-                            <?php
-                                # Fetching business location info ...
-
-                                $caID = $cashier->caID;
-
-                                $cashier_location_FetchQuery = 'SELECT * FROM `cashier_location` WHERE `caID` = :caID';
-                                $cashier_location_FetchStatement = $pdo->prepare($cashier_location_FetchQuery);
-                                $cashier_location_FetchStatement->execute([
-                                            'caID'  =>  $caID
-                                        ]);
-                                $cashier_location_Result = $cashier_location_FetchStatement->fetch(); 
-
-                                echo $cashier_location_Result->district . " District - ";
-                                echo $cashier_location_Result->sector . " Sector";
-                            ?>
-                            </span>
                                 </p>
 
                                 <!-- Fetch tel -->
                                 <p class="mb-1 fw-medium">Tel:
-                                    <span class="fw-light float-end"><?php echo $cashier->cashier_tel ?></span>
+                                    <span class="fw-light float-end"><?php echo $authorized->authorized_tel ?></span>
                                 </p>
 
                                 <!-- Fetch email -->
                                 <p class="mb-1 fw-medium">Email:
-                                    <span class="fw-light float-end"><?php echo $cashier->cashier_mail ?></span>
+                                    <span class="fw-light float-end"><?php echo $authorized->authorized_mail ?></span>
                                 </p>
 
                                 <!-- Fetch gender -->
                                 <p class="mb-1 text-capitalize fw-medium">Sex:
                                     <span class="fw-light float-end">
                                     <?php 
-                                    if ($cashier->cashier_gender == 'male') { 
+                                    if ($authorized->authorized_gender == 'male') { 
                                         echo 'male (<i class="bi-gender-male"></i>)';
                                     } else { 
                                         echo 'female (<i class="bi-gender-female"></i>)';
                                     } ?></span>
                                 </p>
 
-                                <!-- Fetch Balance -->
-                                <p class="mb-1 fw-medium">Balance:
-                                    <span class="fw-medium float-end"><?php echo number_format($cashier->cashier_balance) ?> Rwf</span>
-                                </p>
-
                                 <!-- update and delete modal triggers -->
                                 <small class="text-muted">
-                            Registered on <?php echo date('M d, Y', strtotime($cashier->created_at)) ?>
+                            Registered on <?php echo date('M d, Y', strtotime($authorized->created_at)) ?>
                             <span class="btn-group-sm float-end">
                                 <button class="btn btn-altdash bi-pencil-square" title="edit" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@edit"><span class="d-md-inline-block d-none">&nbsp;Edit</span></button>
-                                <a href="business.php?dphID=<?php echo $cashier->caID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                <a href="business.php?dphID=<?php echo $authorized->auID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
                                 <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
                                 </span>
                             </small>
                             </div>
                             <?php  } ?>
-                            <?php } } else { foreach ($cashier_Result as $key => $cashier){ 
-                                # To list few of cashiers. 
+                            <?php } } else { foreach ($authorized_Result as $key => $authorized){ 
+                                # To list few of authorized. 
                                 if ($key == 10) {
                                     break;
                                 }
@@ -392,71 +348,39 @@
                             <div class="list-group-item py-3 small">
                                 <h5 class="mb-1 text-uppercase">
                                     <?php 
-                                        if ($cashier->cashier_balance > 0) {
-                                            echo "<span class='text-success bi-person-circle'> ". $cashier->cashier_name . "</span>";
-                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $cashier->status .'</small>
-                                    </span>'; 
-                                        } 
-                                        else { 
-                                            echo "<span class='text-danger bi-person-circle'> ". $cashier->cashier_name . "</span>"; 
-                                            echo '<span class="badge fw-light bg-danger float-end"><i class="d-md-none d-inline bi-exclamation-triangle-fill"></i><small class="d-md-inline d-none">'. $cashier->status .'</small></span>'; 
-                                        } 
+                                            echo "<span class='text-success bi-person-circle'> ". $authorized->authorized_name . "</span>";
+                                            echo '<span class="badge fw-light bg-success float-end"><i class="d-md-none d-inline bi-check2-all"></i><small class="d-md-inline d-none">'. $authorized->status .'</small>
+                                    </span>';
                                         ?>
                                 </h5>
 
-                                <!-- Fetch Business Location -->
-                                <p class="mb-1 fw-medium">Location:
-                                    <span class="fw-light float-end">
-                                <?php
-                                    # Fetching business location info ...
-
-                                    $caID = $cashier->caID;
-
-                                    $cashier_location_FetchQuery = 'SELECT * FROM `cashier_location` WHERE `caID` = :caID';
-                                    $cashier_location_FetchStatement = $pdo->prepare($cashier_location_FetchQuery);
-                                    $cashier_location_FetchStatement->execute([
-                                                'caID'  =>  $caID
-                                            ]);
-                                    $cashier_location_Result = $cashier_location_FetchStatement->fetch(); 
-
-                                    echo $cashier_location_Result->district . " District - ";
-                                    echo $cashier_location_Result->sector . " Sector";
-                                ?>
-                                </span>
-                                </p>
-
                                 <!-- Fetch tel -->
                                 <p class="mb-1 fw-medium">Tel:
-                                    <span class="fw-light float-end"><?php echo $cashier->cashier_tel ?></span>
+                                    <span class="fw-light float-end"><?php echo $authorized->authorized_tel ?></span>
                                 </p>
 
                                 <!-- Fetch email -->
                                 <p class="mb-1 fw-medium">Email:
-                                    <span class="fw-light float-end"><?php echo $cashier->cashier_mail ?></span>
+                                    <span class="fw-light float-end"><?php echo $authorized->authorized_mail ?></span>
                                 </p>
 
                                 <!-- Fetch gender -->
                                 <p class="mb-1 text-capitalize fw-medium">Sex:
                                     <span class="fw-light float-end">
                                         <?php 
-                                        if ($cashier->cashier_gender == 'male') { 
+                                        if ($authorized->authorized_gender == 'male') { 
                                             echo 'male (<i class="bi-gender-male"></i>)';
                                         } else { 
                                             echo 'female (<i class="bi-gender-female"></i>)';
                                         } ?></span>
                                 </p>
 
-                                <!-- Fetch Balance -->
-                                <p class="mb-1 fw-medium">Balance:
-                                    <span class="fw-medium float-end"><?php echo number_format($cashier->cashier_balance) ?> Rwf</span>
-                                </p>
-
                                 <!-- update and delete modal triggers -->
                                 <small class="text-muted">
-                                Registered on <?php echo date('M d, Y', strtotime($cashier->created_at)) ?>
+                                Registered on <?php echo date('M d, Y', strtotime($authorized->created_at)) ?>
                                 <span class="btn-group-sm float-end">
                                     <button class="btn btn-altdash bi-pencil-square" title="edit" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@edit"><span class="d-md-inline-block d-none">&nbsp;Edit</span></button>
-                                    <a href="business.php?dphID=<?php echo $cashier->caID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                    <a href="business.php?dphID=<?php echo $authorized->auID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
                                     <!-- <button class="btn btn-danger bi-trash3" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="@delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></button>                                     -->
                                     </span>
                                 </small>
@@ -465,8 +389,8 @@
 
                     </div>
                     <form method="post" class="input-group justify-content-end d-md-flex">
-                        <a href="export/export_cashier_excel.php" type="submit" class="btn btn-outline-success float-end mt-3 bi-filetype-xlsx" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
-                        <a href="export/export_cashier_pdf.php" type="submit" class="btn btn-altorange float-end mt-3 bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
+                        <a href="export/export_authorized_excel.php" type="submit" class="btn btn-outline-success float-end mt-3 bi-filetype-xlsx" title="View More Details"> <span class="d-md-inline-block d-none">Excel</span></a>
+                        <a href="export/export_authorized_pdf.php" type="submit" class="btn btn-altorange float-end mt-3 bi-file-pdf bi-download" title="View More Details"> <span class="d-md-inline-block d-none">Pdf</span></a>
                     </form>
 
                 </div>
@@ -477,12 +401,12 @@
 
     <!-- Modal Lists -->
     <div>
-        <!-- cashier register modal -->
+        <!-- authorized register modal -->
         <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-police-dark">
-                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold text-altlight" id="exampleModalLabel"> Apply for cashier</h1>
+                        <h1 class="modal-title fs-5 text-uppercase bi-person-add fw-bold text-altlight" id="exampleModalLabel"> Apply for authorized</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -495,12 +419,12 @@
                                 <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
 
                                 <div class="form-floating">
-                                    <input type="text" name="cashier_name" class="form-control" placeholder="cashier Name" id="floatingInputGroup1">
+                                    <input type="text" name="authorized_name" class="form-control" placeholder="authorized Name" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your Name</label>
                                 </div>
 
                                 <div class="form-floating">
-                                    <input type="text" name="cashier_uname" class="form-control" placeholder="Username" id="floatingInputGroup1">
+                                    <input type="text" name="authorized_uname" class="form-control" placeholder="Username" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Username</label>
                                 </div>
 
@@ -529,7 +453,7 @@
                                 <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
 
                                 <div class="form-floating">
-                                    <input type="tel" name="cashier_tel" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
+                                    <input type="tel" name="authorized_tel" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your mobile number</label>
                                 </div>
 
@@ -544,7 +468,7 @@
                                 <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
 
                                 <div class="form-floating">
-                                    <input type="email" name="cashier_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
+                                    <input type="email" name="authorized_mail" id="email" class="form-control" placeholder="Email address" id="floatingInputGroup1">
                                     <label for="floatingInputGroup1">Your e-mail address</label>
                                 </div>
 
@@ -554,43 +478,38 @@
                                 </div>
                             </div>
 
-                            <!-- cashier profile -->
-                            <div class="input-group mb-3">
-                                <label class="input-group-text bi-upload" for="inputGroupFile01"></label>
-                                <input type="file" name="cashier_profile" class="form-control" id="inputGroupFile01">
-
-                                <!-- tooltips -->
-                                <div class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Add cashier profile photo"><i class="bi bi-info"></i></span>
+                            <!-- post genger -->
+                            <div class="input-group mb-4">
+                                <label class="input-group-text bi-person-workspace" for="inputGroupSelect01">&nbsp;</label>
+                                <div class="form-floating">
+                                    <select class="form-select" name="brole" id="floatingSelectGrid" id="inputGroupSelect01">
+                                        <option selected>Choose ...</option>
+                                        <option value="doctor">Doctor</option>
+                                        <option value="nurse">Nurse</option>
+                                        <option value="other">other</option>
+                                    </select>
+                                    <label for="floatingSelectGrid">Occupation role:</label>
                                 </div>
                             </div>
+
+                            <!-- authorized profile -->
+                            <!-- <div class="input-group mb-3"> -->
+                            <!-- <label class="input-group-text bi-upload" for="inputGroupFile01"></label> -->
+                            <!-- <input type="file" name="authorized_profile" class="form-control" id="inputGroupFile01"> -->
+
+                            <!-- tooltips -->
+                            <!-- <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Add authorized profile photo"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div> -->
 
                             <p class="lead text-police-dark fw-bold bi-globe text-uppercase text-center"> Location</p>
-
-                            <!-- location -->
-                            <div class="mb-4 input-group">
-                                <span class="input-group-text"><i class="bi bi-globe"></i></span>
-
-                                <div class="form-floating">
-                                    <input type="text" name="cashier_district" class="form-control" placeholder="District" id="floatingInputGroup1" required>
-                                    <label for="floatingInputGroup1">District</label>
-                                </div>
-                                <div class="form-floating">
-                                    <input type="text" name="cashier_sector" class="form-control" placeholder="Sector" id="floatingInputGroup1" required>
-                                    <label for="floatingInputGroup1">Sector</label>
-                                </div>
-
-                                <!-- tooltips -->
-                                <div class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Add current working location"><i class="bi bi-info"></i></span>
-                                </div>
-                            </div>
 
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="cashierApply" class="btn btn-police-dark float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="authorizedApply" class="btn btn-police-dark float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -638,14 +557,14 @@
 
                                 <!-- tooltips -->
                                 <div class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with cashier pin"><i class="bi bi-info"></i></span>
+                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with authorized pin"><i class="bi bi-info"></i></span>
                                 </div>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="withdrawcashier" class="btn btn-gold float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="withdrawauthorized" class="btn btn-gold float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>
@@ -669,16 +588,16 @@
                                 <label class="input-group-text bi-person-circle" for="inputGroupSelect01">&nbsp;</label>
 
                                 <?php
-                                    # fetching current cashier_username from database
-                                    $uname = 'SELECT * FROM `cashier` ORDER BY `created_at` DESC';
-                                    $cashier_FetchStatement = $pdo->prepare($uname);
-                                    $cashier_FetchStatement->execute();
+                                    # fetching current authorized_username from database
+                                    $uname = 'SELECT * FROM `authorized` ORDER BY `created_at` DESC';
+                                    $authorized_FetchStatement = $pdo->prepare($uname);
+                                    $authorized_FetchStatement->execute();
                                     // $business_listTin = $business_FetchStatement->fetch();
                                 ?>
-                                    <select class="form-select" name="cashier_username" id="inputGroupSelect01" required>
+                                    <select class="form-select" name="authorized_username" id="inputGroupSelect01" required>
                                     <option>Select username</option>
-                                    <?php while ($cashier_list = $cashier_FetchStatement->fetch()) { ?>
-                                    <option value="<?php echo $cashier_list->cashier_username ?>"><?php echo $cashier_list->cashier_username ?></option>
+                                    <?php while ($authorized_list = $authorized_FetchStatement->fetch()) { ?>
+                                    <option value="<?php echo $authorized_list->authorized_username ?>"><?php echo $authorized_list->authorized_username ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -698,7 +617,7 @@
                                 </div>
                             </div>
 
-                            <!-- confirm with cashier pin -->
+                            <!-- confirm with authorized pin -->
                             <div class="mb-4 input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-123"></i>
@@ -707,14 +626,14 @@
 
                                 <!-- tooltips -->
                                 <div class="input-group-text">
-                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with cashier pin"><i class="bi bi-info"></i></span>
+                                    <span class="tt" data-bs-placement="bottom" title="Confirm recharge with authorized pin"><i class="bi bi-info"></i></span>
                                 </div>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
-                            <button type="submit" name="rechargecashier" class="btn btn-police-dark float-end bi-send-check"> Submit</button>
+                            <button type="submit" name="rechargeauthorized" class="btn btn-police-dark float-end bi-send-check"> Submit</button>
                         </div>
                     </form>
                 </div>

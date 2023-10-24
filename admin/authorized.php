@@ -24,15 +24,15 @@
     $update_errorMessage = "";
     $update_successMessage = "";
 
-    # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
-    $sql_cashier = 'SELECT * FROM cashier';
+    # Calculating Each Number of Users, Cards, pharmacy, authorizeds and so on...
+    $sql_authorized = 'SELECT * FROM authorized';
     $sql_patient = 'SELECT * FROM patient';
     $sql_pharmacy = 'SELECT * FROM pharmacy';
     $sql_pharmacy_gas = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :btype';
     $sql_pharmacy_others = 'SELECT * FROM `pharmacy` WHERE `pharmacy_type` = :otype';
     // $usedCardsSql = 'SELECT * FROM `patient` WHERE `Approve` = :approve';
 
-    $statement = $pdo->prepare($sql_cashier);
+    $statement = $pdo->prepare($sql_authorized);
     $statement->execute();
 
     $statement_patient = $pdo->prepare($sql_patient);
@@ -51,8 +51,8 @@
         'otype' => 'others'
     ]);
 
-    # Getting The number of cashiers, Cards, pharmacy...
-    $cashiersCount = $statement->rowCount();
+    # Getting The number of authorizeds, Cards, pharmacy...
+    $authorizedsCount = $statement->rowCount();
     $registered_patient = $statement_patient->rowCount();
     $registered_pharmacy = $statement_pharmacy -> rowCount();
     $gas_pharmacy = $statement_pharmacy_gas -> rowCount();
@@ -65,14 +65,14 @@
     $pharmacy_FetchStatement->execute();
     $pharmacy_Result = $pharmacy_FetchStatement->fetchAll();
 
-    # Fetching cashiers info ...
+    # Fetching authorizeds info ...
 
-    $cashier_FetchQuery = 'SELECT * FROM `cashier` WHERE `role` = :roles ORDER BY `created_at` DESC';
-    $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
-    $cashier_FetchStatement->execute([ 'roles' => 'receptionist' ]);
-    $cashier_Result = $cashier_FetchStatement->fetchAll();
+    $authorized_FetchQuery = 'SELECT * FROM `authorized` ORDER BY `created_at` DESC';
+    $authorized_FetchStatement = $pdo->prepare($authorized_FetchQuery);
+    $authorized_FetchStatement->execute([]);
+    $authorized_Result = $authorized_FetchStatement->fetchAll();
 
-    # Fetching cashiers info ...
+    # Fetching authorizeds info ...
 
     $patient_FetchQuery = 'SELECT * FROM `patient` ORDER BY `created_at` DESC';
     $patient_FetchStatement = $pdo->prepare($patient_FetchQuery);
@@ -93,195 +93,150 @@
 
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='authorized.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # Registering new cashier
+    # Registering new authorized
 
-    if (isset($_POST['cashierApply'])) {
+    if (isset($_POST['authorizedApply'])) {
 
-        $cashier_name = $_POST['cashier_name'];
-        $cashier_uname = $_POST['cashier_uname'];
-        $cashier_tel = $_POST['cashier_tel'];
-        $cashier_gender = $_POST['agender'];
-        $cashier_mail = $_POST['cashier_mail'];
-        $cashier_district = $_POST['cashier_district'];
-        $cashier_sector = $_POST['cashier_sector'];
+        $authorized_name = $_POST['authorized_name'];
+        $authorized_uname = $_POST['authorized_uname'];
+        $authorized_tel = $_POST['authorized_tel'];
+        $authorized_gender = $_POST['agender'];
+        $authorized_mail = $_POST['authorized_mail'];
+        $brole = $_POST['brole'];
         $date_Sent = date('Y-m-d h:i:s');
-        $cashier_pin = rand(1000,9999);
-        $password= $cashier_uname.'-'.$cashier_pin;
+        $authorized_pin = rand(1000,9999);
+        $password= $authorized_uname.'-'.$authorized_pin;
         $hashed_Password = md5($password);
 
-        # checking if cashier exists
-        $cashier_existFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_name` = :cashier_name';
-        $cashier_existFetchStatement = $pdo->prepare($cashier_existFetchQuery);
-        $cashier_existFetchStatement->execute([
-            'cashier_name' => $cashier_name
+        # checking if authorized exists
+        $authorized_existFetchQuery = 'SELECT * FROM `authorized` WHERE `authorized_name` =:authorized_name';
+        $authorized_existFetchStatement = $pdo->prepare($authorized_existFetchQuery);
+        $authorized_existFetchStatement->execute([
+            'authorized_name' => $authorized_name
         ]);
-        $cashier_existResults = $cashier_existFetchStatement->fetch();
+        $authorized_existResults = $authorized_existFetchStatement->fetch();
 
-        # if exist, pop some message
-        if ($cashier_existResults) {
-            $cashier_errorMessage = " Already registered" . $errorRefreshMessage;
+        # if exist, pop some message ...
+
+        if ($authorized_existResults) {
+            $authorized_errorMessage = " Already registered" . $errorRefreshMessage;
         }
 
-        # otherwise proceed with registration process
+        # otherwise proceed with registration process ...
+
         else {
-            $target_dir = "../public/profile/";
-            $target_file = $target_dir . basename($_FILES['cashier_profile']['name']);
-            $cashier_profile = $_FILES['cashier_profile']['name'];
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-            
-            # Check if image file is a actual image or fake image
-            $check = getimagesize($_FILES["cashier_profile"]["tmp_name"]);
-            if($check !== false) {
-                $uploadOk = 1;
+            # Inserting pharmacy...
+
+            $sql_insert_authorized = " INSERT INTO `authorized` (
+                `created_at`,
+                `authorized_name`, 
+                `authorized_gender`, 
+                `authorized_username`, 
+                `authorized_tel`, 
+                `authorized_mail`, 
+                `authorized_password`, 
+                `authorized_pin`, 
+                `photo`, 
+                `status`,
+                `role`) 
+                                            VALUES(
+                                                :adate, 
+                                                :auth_name, 
+                                                :auth_gender, 
+                                                :auth_username, 
+                                                :auth_tel, 
+                                                :auth_mail, 
+                                                :auth_password, 
+                                                :auth_pin, 
+                                                :photo, 
+                                                :bstatus,
+                                                :brole)";
+
+            $authorized_InsertStatement = $pdo->prepare($sql_insert_authorized);
+            $authorized_InsertStatement->execute([
+                'adate'          =>  $date_Sent,
+                'auth_name'      =>  $authorized_name,
+                'auth_gender'    =>  $authorized_gender,
+                'auth_username'  =>  $authorized_uname,
+                'auth_tel'       =>  $authorized_tel,
+                'auth_mail'      =>  $authorized_mail,
+                'auth_password'  =>  $hashed_Password,
+                'auth_pin'       =>  $authorized_pin,
+                'photo'          =>  'optional',
+                'bstatus'        =>  'active',
+                'brole'          =>  $brole
+            ]);
+
+            if ($sql_insert_authorized) {
+                        $authorized_successMessage = " Receptionist Registered, Pin: ". $authorized_pin . $successRefreshMessage;
             }
             else {
-                $cashier_errorMessage = " File is not an image.";
-                $uploadOk = 0;
-            }
-            
-            # Check file size
-            if ($_FILES["cashier_profile"]["size"] > 400000) {
-                $cashier_errorMessage = " Sorry, your file is too large." . $errorRefreshMessage;
-                $uploadOk = 0;
-            }
-            
-            # Allow certain file formats
-            else if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif" ) {
-                $cashier_errorMessage = " Sorry, only JPG, JPEG, PNG & GIF files are allowed." . $errorRefreshMessage;
-                $uploadOk = 0;
-            }
-            
-            # Check if $uploadOk is set to 0 by an error
-            else if ($uploadOk == 0) {
-                $cashier_errorMessage = " Sorry, your file was not uploaded." . $errorRefreshMessage;
-            } 
-            else {
-                if (move_uploaded_file($_FILES["cashier_profile"]["tmp_name"], $target_file)) {
-
-                    # Inserting pharmacy...
-
-                    $sql_insert_cashier = " INSERT INTO `cashier`(`created_at`, `cashier_name`, `cashier_username`, `cashier_gender`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`, `role`) VALUES(:adate, :cashier_name, :cashier_uname, :cashier_gender, :cashier_tel, :cashier_mail, :cashier_password, :cashier_pin, :photo, :balance, :bstatus, :roles)";
-
-                    $cashier_InsertStatement = $pdo->prepare($sql_insert_cashier);
-                    $cashier_InsertStatement->execute([
-                        'adate'             =>  $date_Sent,
-                        'cashier_name'      =>  $cashier_name,
-                        'cashier_uname'     =>  $cashier_uname,
-                        'cashier_gender'    =>  $cashier_gender,
-                        'cashier_tel'       =>  $cashier_tel,
-                        'cashier_mail'      =>  $cashier_mail,
-                        'cashier_password'  =>  $hashed_Password,
-                        'cashier_pin'       =>  $cashier_pin,
-                        'photo'             =>  $cashier_profile,
-                        'balance'           =>  '0',
-                        'bstatus'           =>  'active',
-                        'roles'             =>  'receptionist'
-                    ]);
-
-                    if ($sql_insert_cashier) {
-
-                        # Getting Admin Info. for update form...
-
-                        $cashier_locationFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_pin` = :apin';
-                        $cashier_locationFetchStatement = $pdo->prepare($cashier_locationFetchQuery);
-                        $cashier_locationFetchStatement->execute([
-                            'apin' => $cashier_pin
-                        ]);
-                        $cashier_locationResults = $cashier_locationFetchStatement->fetch();
-                        $caID = $cashier_locationResults->caID;
-
-                        $sql_insert_location = "  INSERT INTO `cashier_location`(`caID`, `cashier_name`, `district`, `sector`) VALUES(:caID, :cashier_name, :district, :sector) ";
-                        $location_InsertStatement = $pdo->prepare($sql_insert_location);
-                        $location_InsertStatement->execute([
-                                'caID'           =>  $caID,
-                                'cashier_name'    =>  $cashier_name,
-                                'district'      =>  $cashier_district,
-                                'sector'        =>  $cashier_sector
-                        ]);
-                        if ($sql_insert_cashier && $sql_insert_location) {
-                                $cashier_successMessage = " Receptionist Registered, Pin: ". $cashier_pin . $successRefreshMessage;
-                        }
-                    }
-                    else {
-                        $cashier_errorMessage = " Could not register" . $errorRefreshMessage;
-                    }
-                } 
-                else {
-                    $cashier_errorMessage = " Something went wrong" . $errorRefreshMessage;
-                }
+                $authorized_errorMessage = " Could not register" . $errorRefreshMessage;
             }
         }
     }
 
-    # getting cashier delete response
-    if (isset($_GET['dpID'])) {
-        $dcaID = $_GET['dpID'];
-        $sql_adelete = 'DELETE FROM `patient` WHERE pID = :pID';
-        $sql_lodelete = 'DELETE FROM `patient_location` WHERE pID = :pID';
+    # getting authorized delete response
+    if (isset($_GET['dauID'])) {
+        $dauID = $_GET['dauID'];
+        $sql_adelete = 'DELETE FROM `authorized` WHERE auID = :auID';
 
         # PDO Prep & Exec..
-        $delete_patient = $pdo->prepare($sql_adelete);
-        $delete_patient->execute([
-            'pID'  =>  $dcaID
+        $delete_authorized = $pdo->prepare($sql_adelete);
+        $delete_authorized->execute([
+            'auID'  =>  $dauID
         ]);
 
-        $delete_patient_location = $pdo->prepare($sql_lodelete);
-        $delete_patient_location->execute([
-            'pID'  =>  $dcaID
-        ]);
-
-        if ($sql_adelete && $sql_lodelete) {
-            $patient_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
+        if ($sql_adelete) {
+            $authorized_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
         }
         else {
-            $patient_deleteErrorMessage = " Could not delete, check cashier id" . $errorRefreshMessage;
+            $authorized_deleteErrorMessage = " Could not delete, check authorized id" . $errorRefreshMessage;
         }
 
     }
 
-    # Recharge cashier Operation...
+    # Recharge authorized Operation...
 
-    if (isset($_POST['rechargecashier'])) {
+    if (isset($_POST['rechargeauthorized'])) {
 
         $cpin = $_POST['cpin'];
-        $cashier_username = $_POST['cashier_username'];
+        $authorized_username = $_POST['authorized_username'];
         $ramount = $_POST['ramount'];
 
         # Checking for pharmacyTin ...
 
-        $fetch_UserQuery='SELECT * FROM `cashier` WHERE `cashier_username` = :cashier_name AND `cashier_pin` = :cpin';
+        $fetch_UserQuery='SELECT * FROM `authorized` WHERE `authorized_username` = :authorized_name AND `authorized_pin` = :cpin';
         $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
         $fetch_UserStatement->execute([
-            'cashier_name' => $cashier_username,
+            'authorized_name' => $authorized_username,
             'cpin'       => $cpin
         ]);
 
-        $cashier_Info = $fetch_UserStatement -> fetch();
+        $authorized_Info = $fetch_UserStatement -> fetch();
 
-        $cashierCount = $fetch_UserStatement->rowCount();
+        $authorizedCount = $fetch_UserStatement->rowCount();
 
-        if ($cashierCount > 0 ) {
+        if ($authorizedCount > 0 ) {
 
-            # Modifying cashier ...
+            # Modifying authorized ...
 
-            $balance = $cashier_Info->cashier_balance;
+            $balance = $authorized_Info->authorized_balance;
 
             $balance += $ramount;
 
-            $cashier_UpdateQuery = ' UPDATE `cashier`
-                                SET `cashier_balance` = :cashier_balance
-                                WHERE `cashier_pin` = :cashier_pin
+            $authorized_UpdateQuery = ' UPDATE `authorized`
+                                SET `authorized_balance` = :authorized_balance
+                                WHERE `authorized_pin` = :authorized_pin
             ';
 
-            $cashier_UpdateStatement = $pdo->prepare($cashier_UpdateQuery);
-            $cashier_UpdateStatement->execute([
-                'cashier_balance'   =>  $balance,
-                'cashier_pin'       =>  $cpin
+            $authorized_UpdateStatement = $pdo->prepare($authorized_UpdateQuery);
+            $authorized_UpdateStatement->execute([
+                'authorized_balance'   =>  $balance,
+                'authorized_pin'       =>  $cpin
             ]);
 
-            if ($cashier_UpdateQuery) {
+            if ($authorized_UpdateQuery) {
                 $update_successMessage = " Recharged Successful" . $successRefreshMessage;
             }
         }
@@ -291,24 +246,24 @@
 
     }
 
-    # getting cashier activation response
+    # getting authorized activation response
 
     if (isset($_GET['ApID'])) {
-        $dcaID = $_GET['ApID'];
-        $sql_active = 'UPDATE `patient` SET `status` =:active WHERE pID = :caID';
+        $dauID = $_GET['ApID'];
+        $sql_active = 'UPDATE `patient` SET `status` =:active WHERE pID = :auID';
 
         # PDO Prep & Exec..
-        $active_cashier = $pdo->prepare($sql_active);
-        $active_cashier->execute([
+        $active_authorized = $pdo->prepare($sql_active);
+        $active_authorized->execute([
             'active' => 'active',
-            'caID'    =>  $dcaID
+            'auID'    =>  $dauID
         ]);
 
         if ($sql_active) {
             $update_successMessage = " Activated Successful" . $successRefreshMessage;
         }
         else {
-            $update_errorMessage = " Could not activate, check cashier id" . $errorRefreshMessage;
+            $update_errorMessage = " Could not activate, check authorized id" . $errorRefreshMessage;
         }
 
     }

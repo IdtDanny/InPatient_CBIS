@@ -216,82 +216,107 @@
     }
 
     # getting cashier delete response
-    if (isset($_GET['dpID'])) {
-        $dcaID = $_GET['dpID'];
-        $sql_adelete = 'DELETE FROM `patient` WHERE pID = :pID';
-        $sql_lodelete = 'DELETE FROM `patient_location` WHERE pID = :pID';
+    if (isset($_GET['dcaID'])) {
+        $dcaID = $_GET['dcaID'];
+        $sql_adelete = 'DELETE FROM `cashier` WHERE `caID` = :caID';
+        $sql_lodelete = 'DELETE FROM `cashier_location` WHERE `caID` = :caID';
 
         # PDO Prep & Exec..
-        $delete_patient = $pdo->prepare($sql_adelete);
-        $delete_patient->execute([
-            'pID'  =>  $dcaID
+        $delete_cashier = $pdo->prepare($sql_adelete);
+        $delete_cashier->execute([
+            'caID'  =>  $dcaID
         ]);
+        $cashier_existResults = $delete_cashier->fetch();
 
-        $delete_patient_location = $pdo->prepare($sql_lodelete);
-        $delete_patient_location->execute([
-            'pID'  =>  $dcaID
+        $delete_cashier_location = $pdo->prepare($sql_lodelete);
+        $delete_cashier_location->execute([
+            'caID'  =>  $dcaID
         ]);
 
         if ($sql_adelete && $sql_lodelete) {
-            $patient_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
+            $cashier_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
         }
         else {
-            $patient_deleteErrorMessage = " Could not delete, check cashier id" . $errorRefreshMessage;
+            $cashier_deleteErrorMessage = " Could not delete, check cashier id" . $errorRefreshMessage;
         }
-
     }
 
     # Recharge cashier Operation...
+ 
+    if (isset($_POST['editReceptionist'])) {
 
-    if (isset($_POST['rechargecashier'])) {
+        $c_uname = $_POST['cashier_username'];
+        $cashier_name = $_POST['new_cashier_name'];
+        $cashier_uname = $_POST['new_cashier_uname'];
+        $cashier_tel = $_POST['new_cashier_tel'];
+        $cashier_mail = $_POST['new_cashier_mail'];
+        $cashier_district = $_POST['new_cashier_district'];
+        $cashier_sector = $_POST['new_cashier_sector'];
 
-        $cpin = $_POST['cpin'];
-        $cashier_username = $_POST['cashier_username'];
-        $ramount = $_POST['ramount'];
-
-        # Checking for pharmacyTin ...
-
-        $fetch_UserQuery='SELECT * FROM `cashier` WHERE `cashier_username` = :cashier_name AND `cashier_pin` = :cpin';
-        $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
-        $fetch_UserStatement->execute([
-            'cashier_name' => $cashier_username,
-            'cpin'       => $cpin
+        # checking if cashier exists
+        $cashier_existFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_username` = :c_uname';
+        $cashier_existFetchStatement = $pdo->prepare($cashier_existFetchQuery);
+        $cashier_existFetchStatement->execute([
+            'c_uname' => $c_uname
         ]);
+        $cashier_existResults = $cashier_existFetchStatement->fetch();
 
-        $cashier_Info = $fetch_UserStatement -> fetch();
+        $caID = $cashier_existResults->caID;
 
-        $cashierCount = $fetch_UserStatement->rowCount();
+        # if exist, proceed with updating
 
-        if ($cashierCount > 0 ) {
+        if ($cashier_existResults) {
 
-            # Modifying cashier ...
+            # update current receptionist data
 
-            $balance = $cashier_Info->cashier_balance;
+            $sql_update_cashier = "UPDATE `cashier` SET `cashier_name`=:cashier_name, `cashier_username`=:cashier_uname, `cashier_tel`=:cashier_tel, `cashier_mail`=:cashier_mail WHERE `caID`=:caID ";
 
-            $balance += $ramount;
-
-            $cashier_UpdateQuery = ' UPDATE `cashier`
-                                SET `cashier_balance` = :cashier_balance
-                                WHERE `cashier_pin` = :cashier_pin
-            ';
-
-            $cashier_UpdateStatement = $pdo->prepare($cashier_UpdateQuery);
-            $cashier_UpdateStatement->execute([
-                'cashier_balance'   =>  $balance,
-                'cashier_pin'       =>  $cpin
+            $cashier_updateStatement = $pdo->prepare($sql_update_cashier);
+            $cashier_updateStatement->execute([
+                'cashier_name'      =>  $cashier_name,
+                'cashier_uname'     =>  $cashier_uname,
+                'cashier_tel'       =>  $cashier_tel,
+                'cashier_mail'      =>  $cashier_mail,
+                'caID'              =>  $caID,
             ]);
 
-            if ($cashier_UpdateQuery) {
-                $update_successMessage = " Recharged Successful" . $successRefreshMessage;
+            # print out that update is done
+
+            if ($sql_update_cashier) {
+
+                # Getting Cashier Info. for update form...
+
+                $sql_update_location = "UPDATE `cashier_location` SET `cashier_name`=:cashier_name, `district`=:district, `sector`=:sector WHERE `caID`=:caID ";
+                $location_updateStatement = $pdo->prepare($sql_update_location);
+                $location_updateStatement->execute([
+                    'cashier_name'  =>  $cashier_name,
+                    'district'      =>  $cashier_district,
+                    'sector'        =>  $cashier_sector,
+                    'caID'          =>  $caID
+                ]);
+
+                if ($sql_update_cashier && $sql_update_location) {
+                        $cashier_successMessage = " Receptionist Updated". $successRefreshMessage;
+                }
             }
+            
+            # print out otherwise
+            
+            else {
+                $cashier_errorMessage = " Could not update" . $errorRefreshMessage;
+            }
+
         }
+
+        # otherwise proceed with notifying the user
+
         else {
-            $update_errorMessage = " Unknown Pin" . $errorRefreshMessage;
+            $cashier_errorMessage = " Reception not exit" . $errorRefreshMessage;
         }
 
     }
 
-    # getting cashier activation response
+    # getting cashier activation response 
 
     if (isset($_GET['ApID'])) {
         $dcaID = $_GET['ApID'];
