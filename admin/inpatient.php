@@ -212,7 +212,7 @@
                         'patient_tel'       =>  $patient_tel,  
                         'patient_mail'      =>  $patient_mail,
                         'patient_balance'   =>  '0',
-                        'referral_cashier'  =>  $admin_name,
+                        'referral_cashier'  =>  'Admin',
                         'bstatus'           =>  'active',
                         'approve'           =>  'Admitted',
                         'patient_pin'       =>  $patient_pin

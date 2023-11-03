@@ -93,7 +93,7 @@
 
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='authorized.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # Registering new authorized
+    # Registering new authorized ...
 
     if (isset($_POST['authorizedApply'])) {
 
@@ -103,6 +103,7 @@
         $authorized_gender = $_POST['agender'];
         $authorized_mail = $_POST['authorized_mail'];
         $brole = $_POST['brole'];
+        $department = $_POST['department'];
         $date_Sent = date('Y-m-d h:i:s');
         $authorized_pin = rand(1000,9999);
         $password= $authorized_uname.'-'.$authorized_pin;
@@ -125,46 +126,25 @@
         # otherwise proceed with registration process ...
 
         else {
-            # Inserting pharmacy...
+            # Inserting authorized...
 
-            $sql_insert_authorized = " INSERT INTO `authorized` (
-                `created_at`,
-                `authorized_name`, 
-                `authorized_gender`, 
-                `authorized_username`, 
-                `authorized_tel`, 
-                `authorized_mail`, 
-                `authorized_password`, 
-                `authorized_pin`, 
-                `photo`, 
-                `status`,
-                `role`) 
-                                            VALUES(
-                                                :adate, 
-                                                :auth_name, 
-                                                :auth_gender, 
-                                                :auth_username, 
-                                                :auth_tel, 
-                                                :auth_mail, 
-                                                :auth_password, 
-                                                :auth_pin, 
-                                                :photo, 
-                                                :bstatus,
-                                                :brole)";
+            $sql_insert_authorized = " INSERT INTO `authorized` (`created_at`, `authorized_name`, `authorized_gender`, `authorized_username`, `authorized_tel`, `authorized_mail`, `authorized_password`, 
+                `authorized_pin`, `photo`, `status`, `role`, `department`) VALUES(:created_at, :authorized_name, :authorized_gender, :authorized_username, :authorized_tel, :authorized_mail, :authorized_password, :authorized_pin, :photo, :bstatus, :brole, :department)";
 
             $authorized_InsertStatement = $pdo->prepare($sql_insert_authorized);
             $authorized_InsertStatement->execute([
-                'adate'          =>  $date_Sent,
-                'auth_name'      =>  $authorized_name,
-                'auth_gender'    =>  $authorized_gender,
-                'auth_username'  =>  $authorized_uname,
-                'auth_tel'       =>  $authorized_tel,
-                'auth_mail'      =>  $authorized_mail,
-                'auth_password'  =>  $hashed_Password,
-                'auth_pin'       =>  $authorized_pin,
-                'photo'          =>  'optional',
-                'bstatus'        =>  'active',
-                'brole'          =>  $brole
+                'created_at'           =>  $date_Sent,
+                'authorized_name'      =>  $authorized_name,
+                'authorized_gender'    =>  $authorized_gender,
+                'authorized_username'  =>  $authorized_uname,
+                'authorized_tel'       =>  $authorized_tel,
+                'authorized_mail'      =>  $authorized_mail,
+                'authorized_password'  =>  $hashed_Password,
+                'authorized_pin'       =>  $authorized_pin,
+                'photo'                =>  'optional',
+                'bstatus'              =>  'active',
+                'brole'                =>  $brole,
+                'department'           =>  $department
             ]);
 
             if ($sql_insert_authorized) {
@@ -176,10 +156,116 @@
         }
     }
 
+    # Modify authorized personnel ...
+
+    if (isset($_POST['modifyAuthorized'])) {
+
+        $admin_cpin = $_POST['cpin'];
+        $authorized_current_username = $_POST['authorized_cusername'];
+        $authorized_name = $_POST['authorized_name'];
+        $authorized_uname = $_POST['authorized_uname'];
+        $authorized_tel = $_POST['authorized_tel'];
+        $authorized_mail = $_POST['authorized_mail'];
+        $brole = $_POST['brole'];
+        $department = $_POST['department'];
+        $date_Sent = date('Y-m-d h:i:s');
+        $authorized_pin = rand(1000,9999);
+        $password= $authorized_uname.'-'.$authorized_pin;
+        $hashed_Password = md5($password);
+
+        # checking admin pin ...
+
+        $adminCheck = 'SELECT * FROM `admin` WHERE `admin_pin` =:cpin';
+        $adminCheck_FetchStatement = $pdo->prepare($adminCheck);
+        $adminCheck_FetchStatement->execute([
+            'cpin' => $admin_cpin
+        ]);
+        $adminCheck_Results = $adminCheck_FetchStatement->fetch();
+
+        # if admin pin is fine ...
+
+        if ($adminCheck_Results) {
+
+            # checking if authorized exists
+
+            $authorized_existFetchQuery = 'SELECT * FROM `authorized` WHERE `authorized_username` =:authorized_cusername';
+            $authorized_existFetchStatement = $pdo->prepare($authorized_existFetchQuery);
+            $authorized_existFetchStatement->execute([
+                'authorized_cusername' => $authorized_current_username
+            ]);
+            $authorized_existResults = $authorized_existFetchStatement->fetch();
+
+            # if exist, proceed with update ...
+
+            if ($authorized_existResults) {
+
+                $auth_ID = $authorized_existResults->auID;
+
+                $sql_Update_authorized = "UPDATE `authorized` SET 
+                            `created_at`=:created_at,
+                            `authorized_name`=:authorized_name,
+                            `authorized_username`=:authorized_username,
+                            `authorized_tel`=:authorized_tel,
+                            `authorized_mail`=:authorized_mail,
+                            `authorized_password`=:authorized_password,
+                            `authorized_pin`=:authorized_pin,
+                            `photo`=:photo,
+                            `status`=:bstatus,
+                            `role`=:brole,
+                            `department`=:department
+                            WHERE `auID`=:auID";
+
+                $authorized_UpdateStatement = $pdo->prepare($sql_Update_authorized);
+                $authorized_UpdateStatement->execute([
+                    'created_at'           =>  $date_Sent,
+                    'authorized_name'      =>  $authorized_name,
+                    'authorized_username'  =>  $authorized_uname,
+                    'authorized_tel'       =>  $authorized_tel,
+                    'authorized_mail'      =>  $authorized_mail,
+                    'authorized_password'  =>  $hashed_Password,
+                    'authorized_pin'       =>  $authorized_pin,
+                    'photo'                =>  'optional',
+                    'bstatus'              =>  'active',
+                    'brole'                =>  $brole,
+                    'department'           =>  $department,
+                    'auID'                 =>  $auth_ID
+                ]);
+
+                # if it's done ...
+
+                if ($sql_Update_authorized) {
+                    $authorized_successMessage = " Updated, Pin: ". $authorized_pin . $successRefreshMessage;
+                }
+
+                # pop up alerts ...
+
+                else {
+                    $authorized_errorMessage = " Could not update" . $errorRefreshMessage;
+                }
+            }
+            
+            # otherwise pop up some alerts ...
+            
+            else {
+                # notify about personnel existance ...
+
+                $authorized_errorMessage = " Does not exist!" . $errorRefreshMessage;
+            }
+        }
+
+        # otherwise pop up some alerts ...
+
+        else {
+            # notify about admin pin ...
+
+            $authorized_errorMessage = " Invalid Pin!" . $errorRefreshMessage;
+        }
+    }
+
     # getting authorized delete response
     if (isset($_GET['dauID'])) {
         $dauID = $_GET['dauID'];
-        $sql_adelete = 'DELETE FROM `authorized` WHERE auID = :auID';
+        $sql_adelete = 'DELETE FROM `authorized` WHERE auID =:auID';
 
         # PDO Prep & Exec..
         $delete_authorized = $pdo->prepare($sql_adelete);
@@ -192,56 +278,6 @@
         }
         else {
             $authorized_deleteErrorMessage = " Could not delete, check authorized id" . $errorRefreshMessage;
-        }
-
-    }
-
-    # Recharge authorized Operation...
-
-    if (isset($_POST['rechargeauthorized'])) {
-
-        $cpin = $_POST['cpin'];
-        $authorized_username = $_POST['authorized_username'];
-        $ramount = $_POST['ramount'];
-
-        # Checking for pharmacyTin ...
-
-        $fetch_UserQuery='SELECT * FROM `authorized` WHERE `authorized_username` = :authorized_name AND `authorized_pin` = :cpin';
-        $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
-        $fetch_UserStatement->execute([
-            'authorized_name' => $authorized_username,
-            'cpin'       => $cpin
-        ]);
-
-        $authorized_Info = $fetch_UserStatement -> fetch();
-
-        $authorizedCount = $fetch_UserStatement->rowCount();
-
-        if ($authorizedCount > 0 ) {
-
-            # Modifying authorized ...
-
-            $balance = $authorized_Info->authorized_balance;
-
-            $balance += $ramount;
-
-            $authorized_UpdateQuery = ' UPDATE `authorized`
-                                SET `authorized_balance` = :authorized_balance
-                                WHERE `authorized_pin` = :authorized_pin
-            ';
-
-            $authorized_UpdateStatement = $pdo->prepare($authorized_UpdateQuery);
-            $authorized_UpdateStatement->execute([
-                'authorized_balance'   =>  $balance,
-                'authorized_pin'       =>  $cpin
-            ]);
-
-            if ($authorized_UpdateQuery) {
-                $update_successMessage = " Recharged Successful" . $successRefreshMessage;
-            }
-        }
-        else {
-            $update_errorMessage = " Unknown Pin" . $errorRefreshMessage;
         }
 
     }

@@ -66,12 +66,13 @@
 
             # Checking for cashier Account Existence...
 
-            $query_2 = 'SELECT * FROM `cashier` WHERE `cashier_username` = :username';
+            $query_2 = 'SELECT * FROM `cashier` WHERE `cashier_username` = :username AND `role` = :brole';
 
             # PDO Prepare & Execution of the query...
             $statement = $pdo->prepare($query_2);
             $statement->execute([
-                'username' => $username
+                'username'  => $username,
+                'brole'     => 'cashier'
             ]);
             $cashierCount = $statement->rowCount();
 
@@ -101,49 +102,173 @@
                 }
             }
 
-            # if cashier is not found, look in pharmacy
+            # if cashier is not found, look in receptionist ...
 
             else {
 
-                # Checking for pharmacy Account Existence...
+                # Checking for receptionist Account Existence...
 
-                $query_3 = 'SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacytin';
-                
-                $pharmacyname = $username; 
+                $query_r = 'SELECT * FROM `cashier` WHERE `cashier_username` = :username AND `role` = :brole';
 
                 # PDO Prepare & Execution of the query...
-                $statement = $pdo->prepare($query_3);
+                $statement = $pdo->prepare($query_r);
                 $statement->execute([
-                    'pharmacytin' => $pharmacyname
+                    'username'  => $username,
+                    'brole'     => 'receptionist'
                 ]);
-                $pharmacyCount = $statement->rowCount();
-            
-                if ($pharmacyCount > 0) {
+                $receptionistCount = $statement->rowCount();
 
-                    $pharmacy = $statement->fetch();
+                # receptionist is found 
 
-                    # check if pharmacy is approved ...
+                if ($receptionistCount > 0) {
 
-                    if ($pharmacy->approved_by == 'N/A') {
-                        $error_message=" Request for pharmacy Approval";
-                    }
+                    $receptionist = $statement->fetch();
 
-                    # otherwise proceed with pharmacy login ...
+                    # check if receptionist account is activated ...
 
-                    else {
+                    if ($receptionist->status == 'active') {
 
-                        if ($username == $pharmacy -> pharmacy_tin && ($password == $pharmacy -> pharmacy_password || $hashedPassword == $pharmacy -> pharmacy_password)) {
-                            $page = 'pharmacy/#dashboard';
-                            $_SESSION['sessionToken'] = $pharmacy;
+                        if ($username == $receptionist->cashier_username && ($password == $receptionist->cashier_password || $hashedPassword == $receptionist->cashier_password)) {
+                            $page = 'receptionist/#dashboard';
+                            $_SESSION['sessionToken'] = $receptionist;
                             header('location:'.$page);
                         }
                         else {
-                            $error_message=" Incorrect TIN or Password";
+                            $error_message=" Incorrect Username or Password";
                         }
                     }
+
+                    # otherwise contact for activation ...
+
+                    else {
+                        $error_message=" Request for Activation";
+                    }
                 }
+
+                # if receptionist is not found, look in pharmacist ...
+
                 else {
-                    $error_message=" User not found";
+
+                    # Checking for pharmacist Account Existence...
+
+                    $query_3 = 'SELECT * FROM `pharmacy` WHERE `pharmacy_tin` = :pharmacytin';
+                    
+                    $pharmacyname = $username; 
+
+                    # PDO Prepare & Execution of the query...
+                    $statement = $pdo->prepare($query_3);
+                    $statement->execute([
+                        'pharmacytin' => $pharmacyname
+                    ]);
+                    $pharmacyCount = $statement->rowCount();
+
+                    # if pharmacist is found ...
+                
+                    if ($pharmacyCount > 0) {
+
+                        $pharmacy = $statement->fetch();
+
+                        # check if pharmacy is approved ...
+
+                        if ($pharmacy->approved_by == 'N/A') {
+                            $error_message=" Request for pharmacy Approval";
+                        }
+
+                        # otherwise proceed with pharmacy login ...
+
+                        else {
+
+                            if ($username == $pharmacy -> pharmacy_tin && ($password == $pharmacy -> pharmacy_password || $hashedPassword == $pharmacy -> pharmacy_password)) {
+                                $page = 'pharmacy/#dashboard';
+                                $_SESSION['sessionToken'] = $pharmacy;
+                                header('location:'.$page);
+                            }
+                            else {
+                                $error_message=" Incorrect TIN or Password";
+                            }
+                        }
+                    }
+
+                    # if pharmacist is not found, look in doctors ...
+
+                    else {
+
+                        # Checking for doctor Account Existence...
+
+                        $query_4 = 'SELECT * FROM `authorized` WHERE `role` = :doctor AND `authorized_username` = :username';
+                        
+                        $doctor_username = $username; 
+
+                        # PDO Prepare & Execution of the query...
+                        $statement = $pdo->prepare($query_4);
+                        $statement->execute([
+                            'doctor'    => 'doctor',
+                            'username'  => $doctor_username
+                        ]);
+                        $authorizedCount = $statement->rowCount();
+
+                        # if doctor is found ...
+                    
+                        if ($authorizedCount > 0) {
+
+                            $authorized = $statement->fetch();
+
+                            # otherwise proceed with authorized login ...
+
+                            if ($username == $authorized -> authorized_username && ($password == $authorized -> authorized_password || $hashedPassword == $authorized -> authorized_password)) {
+                                $page = 'doctor/#dashboard';
+                                $_SESSION['sessionToken'] = $authorized;
+                                header('location:'.$page);
+                            }
+                            else {
+                                $error_message=" Incorrect Username or Password";
+                            }
+                        }
+
+                        # if doctor is not found, look in nurse ...
+
+                        else {
+
+                            # Checking for doctor Account Existence...
+        
+                            $query_5 = 'SELECT * FROM `authorized` WHERE `role` = :nurse AND `authorized_username` = :username';
+                            
+                            $nurse_username = $username; 
+        
+                            # PDO Prepare & Execution of the query...
+                            $statement = $pdo->prepare($query_5);
+                            $statement->execute([
+                                'nurse'     => 'nurse',
+                                'username'  => $nurse_username
+                            ]);
+                            $authorizedCount = $statement->rowCount();
+        
+                            # if doctor is found ...
+                        
+                            if ($authorizedCount > 0) {
+        
+                                $authorized = $statement->fetch();
+        
+                                # otherwise proceed with authorized login ...
+        
+                                if ($username == $authorized -> authorized_username && ($password == $authorized -> authorized_password || $hashedPassword == $authorized -> authorized_password)) {
+                                    $page = 'nurse/#dashboard';
+                                    $_SESSION['sessionToken'] = $authorized;
+                                    header('location:'.$page);
+                                }
+
+                                else {
+                                    $error_message=" Incorrect Username or Password";
+                                }
+                            }
+        
+                            # if nurse is not found, not found ...
+        
+                            else {
+                                $error_message=" User not found";
+                            }
+                        }
+                    }
                 }
             }   
         }

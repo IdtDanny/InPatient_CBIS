@@ -10,18 +10,19 @@
     # Includes...
     require_once '../public/config/connection.php';
 
-    # error and success alerts
-    $cashier_errorMessage = "";
-    $cashier_deleteErrorMessage = "";
-    $update_errorMessage = "";
-    $cashier_successMessage = "";
-    $cashier_deleteSuccessMessage = "";
-    $update_successMessage = "";
-
     # Getting Information of Signed in User
     $admin_username = $_SESSION['sessionToken']->admin_username;
     $admin_ID = $_SESSION['sessionToken']->admin_ID;
     $admin_name = $_SESSION['sessionToken']->admin_name;
+
+    #notification variables ...
+
+    $patient_errorMessage = "";
+    $patient_successMessage = "";
+    $patient_deleteSuccessMessage = "";
+    $patient_deleteErrorMessage = "";
+    $update_errorMessage = "";
+    $update_successMessage = "";
 
     # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
     $sql_cashier = 'SELECT * FROM cashier';
@@ -66,11 +67,17 @@
 
     # Fetching cashiers info ...
 
-    $cashier_FetchQuery = 'SELECT * FROM `cashier` ORDER BY `created_at` DESC';
+    $cashier_FetchQuery = 'SELECT * FROM `cashier` WHERE `role` = :roles ORDER BY `created_at` DESC';
     $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
-    $cashier_FetchStatement->execute();
+    $cashier_FetchStatement->execute([ 'roles' => 'cashier' ]);
     $cashier_Result = $cashier_FetchStatement->fetchAll();
 
+    # Fetching cashiers info ...
+
+    $patient_FetchQuery = 'SELECT * FROM `patient` ORDER BY `created_at` DESC';
+    $patient_FetchStatement = $pdo->prepare($patient_FetchQuery);
+    $patient_FetchStatement->execute();
+    $patient_Result = $patient_FetchStatement->fetchAll();
 
     # Getting Admin Info. for update form...
 
@@ -86,15 +93,15 @@
 
     $successRefreshMessage = "<span class='d-md-inline-block d-none'>, Refresh to see the change </span><a href='cashier.php' class='float-end fw-bold text-success'><i class='bi bi-arrow-clockwise me-3'></i></a>";
 
-    # register cashier form
+    # Registering new cashier
 
     if (isset($_POST['cashierApply'])) {
 
         $cashier_name = $_POST['cashier_name'];
         $cashier_uname = $_POST['cashier_uname'];
-        $cashier_mail = $_POST['cashier_mail'];
         $cashier_tel = $_POST['cashier_tel'];
         $cashier_gender = $_POST['agender'];
+        $cashier_mail = $_POST['cashier_mail'];
         $cashier_district = $_POST['cashier_district'];
         $cashier_sector = $_POST['cashier_sector'];
         $date_Sent = date('Y-m-d h:i:s');
@@ -152,24 +159,25 @@
             } 
             else {
                 if (move_uploaded_file($_FILES["cashier_profile"]["tmp_name"], $target_file)) {
-                    
+
                     # Inserting pharmacy...
 
-                    $sql_insert_cashier = " INSERT INTO `cashier`(`created_at`, `cashier_name`, `cashier_gender`, `cashier_username`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`) VALUES(:adate, :cashier_name, :cashier_gender, :cashier_uname, :cashier_tel, :cashier_mail, :cashier_password, :cashier_pin, :photo, :balance, :bstatus)";
+                    $sql_insert_cashier = " INSERT INTO `cashier`(`created_at`, `cashier_name`, `cashier_username`, `cashier_gender`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`, `role`) VALUES(:adate, :cashier_name, :cashier_uname, :cashier_gender, :cashier_tel, :cashier_mail, :cashier_password, :cashier_pin, :photo, :balance, :bstatus, :roles)";
 
                     $cashier_InsertStatement = $pdo->prepare($sql_insert_cashier);
                     $cashier_InsertStatement->execute([
                         'adate'             =>  $date_Sent,
-                        'cashier_name'        =>  $cashier_name,
-                        'cashier_gender'      =>  $cashier_gender,
-                        'cashier_uname'       =>  $cashier_uname,
-                        'cashier_tel'         =>  $cashier_tel,  
-                        'cashier_mail'        =>  $cashier_mail,
-                        'cashier_password'    =>  $hashed_Password,
-                        'cashier_pin'         =>  $cashier_pin,
+                        'cashier_name'      =>  $cashier_name,
+                        'cashier_uname'     =>  $cashier_uname,
+                        'cashier_gender'    =>  $cashier_gender,
+                        'cashier_tel'       =>  $cashier_tel,
+                        'cashier_mail'      =>  $cashier_mail,
+                        'cashier_password'  =>  $hashed_Password,
+                        'cashier_pin'       =>  $cashier_pin,
                         'photo'             =>  $cashier_profile,
                         'balance'           =>  '0',
-                        'bstatus'           =>  'inactive'
+                        'bstatus'           =>  'active',
+                        'roles'             =>  'cashier'
                     ]);
 
                     if ($sql_insert_cashier) {
@@ -193,7 +201,7 @@
                                 'sector'        =>  $cashier_sector
                         ]);
                         if ($sql_insert_cashier && $sql_insert_location) {
-                                $cashier_successMessage = " Registered Pin: ". $cashier_pin . $successRefreshMessage;
+                                $cashier_successMessage = " cashier Registered, Pin: ". $cashier_pin . $successRefreshMessage;
                         }
                     }
                     else {
@@ -208,17 +216,17 @@
     }
 
     # getting cashier delete response
-
     if (isset($_GET['dcaID'])) {
         $dcaID = $_GET['dcaID'];
-        $sql_adelete = 'DELETE FROM `cashier` WHERE caID = :caID';
-        $sql_lodelete = 'DELETE FROM `cashier_location` WHERE caID = :caID';
+        $sql_adelete = 'DELETE FROM `cashier` WHERE `caID` = :caID';
+        $sql_lodelete = 'DELETE FROM `cashier_location` WHERE `caID` = :caID';
 
         # PDO Prep & Exec..
         $delete_cashier = $pdo->prepare($sql_adelete);
         $delete_cashier->execute([
             'caID'  =>  $dcaID
         ]);
+        $cashier_existResults = $delete_cashier->fetch();
 
         $delete_cashier_location = $pdo->prepare($sql_lodelete);
         $delete_cashier_location->execute([
@@ -231,14 +239,88 @@
         else {
             $cashier_deleteErrorMessage = " Could not delete, check cashier id" . $errorRefreshMessage;
         }
+    }
+
+    # Recharge cashier Operation...
+ 
+    if (isset($_POST['editcashier'])) {
+
+        $c_uname = $_POST['cashier_username'];
+        $cashier_name = $_POST['new_cashier_name'];
+        $cashier_uname = $_POST['new_cashier_uname'];
+        $cashier_tel = $_POST['new_cashier_tel'];
+        $cashier_mail = $_POST['new_cashier_mail'];
+        $cashier_district = $_POST['new_cashier_district'];
+        $cashier_sector = $_POST['new_cashier_sector'];
+
+        # checking if cashier exists
+        $cashier_existFetchQuery = 'SELECT * FROM `cashier` WHERE `cashier_username` = :c_uname';
+        $cashier_existFetchStatement = $pdo->prepare($cashier_existFetchQuery);
+        $cashier_existFetchStatement->execute([
+            'c_uname' => $c_uname
+        ]);
+        $cashier_existResults = $cashier_existFetchStatement->fetch();
+
+        $caID = $cashier_existResults->caID;
+
+        # if exist, proceed with updating
+
+        if ($cashier_existResults) {
+
+            # update current cashier data
+
+            $sql_update_cashier = "UPDATE `cashier` SET `cashier_name`=:cashier_name, `cashier_username`=:cashier_uname, `cashier_tel`=:cashier_tel, `cashier_mail`=:cashier_mail WHERE `caID`=:caID ";
+
+            $cashier_updateStatement = $pdo->prepare($sql_update_cashier);
+            $cashier_updateStatement->execute([
+                'cashier_name'      =>  $cashier_name,
+                'cashier_uname'     =>  $cashier_uname,
+                'cashier_tel'       =>  $cashier_tel,
+                'cashier_mail'      =>  $cashier_mail,
+                'caID'              =>  $caID,
+            ]);
+
+            # print out that update is done
+
+            if ($sql_update_cashier) {
+
+                # Getting Cashier Info. for update form...
+
+                $sql_update_location = "UPDATE `cashier_location` SET `cashier_name`=:cashier_name, `district`=:district, `sector`=:sector WHERE `caID`=:caID ";
+                $location_updateStatement = $pdo->prepare($sql_update_location);
+                $location_updateStatement->execute([
+                    'cashier_name'  =>  $cashier_name,
+                    'district'      =>  $cashier_district,
+                    'sector'        =>  $cashier_sector,
+                    'caID'          =>  $caID
+                ]);
+
+                if ($sql_update_cashier && $sql_update_location) {
+                        $cashier_successMessage = " cashier Updated". $successRefreshMessage;
+                }
+            }
+            
+            # print out otherwise
+            
+            else {
+                $cashier_errorMessage = " Could not update" . $errorRefreshMessage;
+            }
+
+        }
+
+        # otherwise proceed with notifying the user
+
+        else {
+            $cashier_errorMessage = " Reception not exit" . $errorRefreshMessage;
+        }
 
     }
 
-    # getting cashier activation response
+    # getting cashier activation response 
 
-    if (isset($_GET['AcaID'])) {
-        $dcaID = $_GET['AcaID'];
-        $sql_active = 'UPDATE `cashier` SET `status` =:active WHERE caID = :caID';
+    if (isset($_GET['ApID'])) {
+        $dcaID = $_GET['ApID'];
+        $sql_active = 'UPDATE `patient` SET `status` =:active WHERE pID = :caID';
 
         # PDO Prep & Exec..
         $active_cashier = $pdo->prepare($sql_active);
@@ -254,310 +336,6 @@
             $update_errorMessage = " Could not activate, check cashier id" . $errorRefreshMessage;
         }
 
-    }
-
-    # Recharge cashier Operation...
-
-    if (isset($_POST['rechargecashier'])) {
-
-        $cpin = $_POST['cpin'];
-        $cashier_username = $_POST['cashier_username'];
-        $ramount = $_POST['ramount'];
-
-        # checking admin confirmation pin ...
-
-        if ($adminResults->admin_pin != $cpin){
-            $update_errorMessage = " Unknown Pin" . $errorRefreshMessage;
-        }
-
-        # once confirmation pin confirmed ...
-
-        else {
-
-            # Checking for cashier existing ...
-
-            $fetch_UserQuery='SELECT * FROM `cashier` WHERE `cashier_username` = :cashier_name';
-            $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
-            $fetch_UserStatement->execute([
-                'cashier_name' => $cashier_username
-            ]);
-
-            $cashier_Info = $fetch_UserStatement -> fetch();
-
-            $cashierCount = $fetch_UserStatement->rowCount();
-
-            if ($cashierCount > 0 ) {
-
-                # admin balance ...
-
-                $admin_balance = $adminResults->Balance;
-
-                # checking admin balance to top up ...
-
-                if ($admin_balance <= 0 || $admin_balance < $ramount) {
-                    $update_errorMessage = " Not enough balance" . $errorRefreshMessage;
-                }
-                
-                # with enough balance to top up ...
-
-                else {
-
-                    # modifying admin balance ...
-
-                    $admin_balance -= $ramount;
-
-                    $admin_UpdateQuery = ' UPDATE `admin`
-                                        SET `Balance` = :admin_balance
-                                        WHERE `admin_pin` = :admin_pin
-                    ';
-
-                    $admin_UpdateStatement = $pdo->prepare($admin_UpdateQuery);
-                    $admin_UpdateStatement->execute([
-                        'admin_balance'   =>  $admin_balance,
-                        'admin_pin'       =>  $cpin
-                    ]);
-
-                    # Modifying cashier ...
-
-                    $balance = $cashier_Info->cashier_balance;
-
-                    $balance += $ramount;
-
-                    $cashier_UpdateQuery = ' UPDATE `cashier`
-                                        SET `cashier_balance` = :cashier_balance
-                                        WHERE `cashier_username` = :cashier_username
-                    ';
-
-                    $cashier_UpdateStatement = $pdo->prepare($cashier_UpdateQuery);
-                    $cashier_UpdateStatement->execute([
-                        'cashier_balance'   =>  $balance,
-                        'cashier_username'  =>  $cashier_username
-                    ]);
-
-                    if ($cashier_UpdateQuery && $admin_UpdateQuery) {
-
-                        # notifications
-
-                        $sender_id = 'admin';
-                        $receiver_id = $cashier_Info->cashier_pin;
-                        $amount = $ramount;
-                        $date_Sent = date('Y-m-d h:i:s');
-                        $time_Sent = date('h:i:s');
-
-                        $sql_insert_notification = " INSERT INTO `notification_all`(`date_sent`, `time_sent`, `receiver_id`, `sender_id`, `amount`, `action`, `status`) VALUES (:date_sent, :time_sent, :receiver_id, :sender_id, :amount, :naction, :astatus)";
-
-                        $notification_InsertStatement = $pdo->prepare($sql_insert_notification);
-                        $notification_InsertStatement->execute([
-                            'date_sent'     =>  $date_Sent,
-                            'time_sent'     =>  $time_Sent,
-                            'receiver_id'   =>  $receiver_id,
-                            'sender_id'     =>  $sender_id,
-                            'amount'        =>  $amount,
-                            'naction'       =>  'recharge',
-                            'astatus'       =>  'unread'
-                        ]);
-
-                        if ($sql_insert_notification) {
-                            $update_successMessage = " Recharged Successful" . $successRefreshMessage;
-                        }
-                    }
-                    else {
-                        $update_errorMessage = " Failed to recharge" . $errorRefreshMessage;
-                    }
-                }
-            }
-            else {
-                $update_errorMessage = " Unknown cashier" . $errorRefreshMessage;
-            }
-        }
-
-    }
-
-    # withdraw cashier Operation...
-
-    if (isset($_POST['withdrawcashier'])) {
-
-        $cpin = $_POST['cpin'];
-        $ramount = $_POST['ramount'];
-
-        # checking cashier activation key from request made ...
-
-        $requestFetchQuery = 'SELECT * FROM `request` WHERE `activation_key` = :cpin AND `amount` = :ramount';
-        $requestFetchStatement = $pdo->prepare($requestFetchQuery);
-        $requestFetchStatement->execute([
-            'cpin'    => $cpin,
-            'ramount' => $ramount
-        ]);
-        $requestResults = $requestFetchStatement->fetch();
-
-        # once activation key confirmed ...
-
-        if ($requestFetchQuery) {
-
-            # checking if it is not confirmed ...
-
-            if ($requestResults->status == 'confirmed') {
-                $update_errorMessage = " No request made" . $errorRefreshMessage;
-            }
-
-            # otherwise proceed with operation ...
-
-            else {
-
-                # checking if 24 hours haven't passed ...
-
-                $request_date = $requestResults->request_date . ' ' . $requestResults->request_time;
-
-                $now = strtotime(date('Y-m-d h:i:s'));
-                $cdate = strtotime($request_date);
-                $day_diff = $now - $cdate;
-                $hours = floor($day_diff / 3600);
-                
-                if ($hours >= 24) {
-                    $update_errorMessage = " Request expired" . $errorRefreshMessage;
-                }
-
-                # otherwise proceed with operation ...
-
-                else {
-
-                    # getting cashier info from request ...
-
-                    $user_id = $requestResults->user_id;
-                    
-                    # Checking for cashier existing and his id meet with request ...
-
-                    $fetch_UserQuery='SELECT * FROM `cashier` WHERE `cashier_pin` = :cashier_pin';
-                    $fetch_UserStatement = $pdo->prepare($fetch_UserQuery);
-                    $fetch_UserStatement->execute([
-                        'cashier_pin' => $user_id
-                    ]);
-
-                    $cashier_Info = $fetch_UserStatement -> fetch();
-
-                    $cashierCount = $fetch_UserStatement->rowCount();
-
-                    # proceed with withdraw if cashier info meet with request ...
-
-                    if ($cashierCount > 0 ) {
-
-                        # cashier balance ...
-
-                        $cashier_balance = $cashier_Info->cashier_balance;
-
-                        # checking cashier balance to withdraw ...
-
-                        if ($cashier_balance <= 0 || $cashier_balance < $ramount) {
-                            $update_errorMessage = " Not enough balance" . $errorRefreshMessage;
-                        }
-                        
-                        # with enough balance to top up ...
-
-                        else {
-
-                            # modifying admin balance ...
-
-                            $admin_balance = $adminResults->Balance;
-
-                            $admin_pin = $adminResults->admin_pin;
-
-                            $admin_balance += $ramount;
-
-                            $admin_UpdateQuery = ' UPDATE `admin`
-                                                SET `Balance` = :admin_balance
-                                                WHERE `admin_pin` = :admin_pin
-                            ';
-
-                            $admin_UpdateStatement = $pdo->prepare($admin_UpdateQuery);
-                            $admin_UpdateStatement->execute([
-                                'admin_balance'   =>  $admin_balance,
-                                'admin_pin'       =>  $admin_pin
-                            ]);
-
-                            # Modifying cashier ...
-
-                            $balance = $cashier_Info->cashier_balance;
-
-                            $balance -= $ramount;
-
-                            $cashier_UpdateQuery = ' UPDATE `cashier`
-                                                SET `cashier_balance` = :cashier_balance
-                                                WHERE `cashier_pin` = :cashier_pin
-                            ';
-
-                            $cashier_UpdateStatement = $pdo->prepare($cashier_UpdateQuery);
-                            $cashier_UpdateStatement->execute([
-                                'cashier_balance' =>  $balance,
-                                'cashier_pin'     =>  $user_id
-                            ]);
-
-                            if ($cashier_UpdateQuery && $admin_UpdateQuery) {
-
-                                $sender_id = 'admin';
-                                $receiver_id = $cashier_Info->cashier_pin;
-                                $amount = $ramount;
-                                $date_Sent = date('Y-m-d h:i:s');
-                                $time_Sent = date('h:i:s');
-
-                                # confirming the request ...
-
-                                $sql_confirm_request = " UPDATE `request` SET `confirmed_date` = :confirm_date, 
-                                                                            `confirmed_time` =:confirm_time, 
-                                                                            `status` =:bstatus
-                                                                        WHERE `activation_key` = :activation_key";
-
-                                $request_confirmStatement = $pdo->prepare($sql_confirm_request);
-                                $request_confirmStatement->execute([
-                                    'confirm_date'   =>  $date_Sent,
-                                    'confirm_time'   =>  $time_Sent,
-                                    'bstatus'        =>  'confirmed',
-                                    'activation_key' =>  $cpin
-                                ]);
-
-                                # notifications ...
-
-                                $sql_insert_notification = " INSERT INTO `notification_all`(`date_sent`, `time_sent`, `receiver_id`, `sender_id`, `amount`, `action`, `status`) VALUES (:date_sent, :time_sent, :receiver_id, :sender_id, :amount, :naction, :astatus)";
-
-                                $notification_InsertStatement = $pdo->prepare($sql_insert_notification);
-                                $notification_InsertStatement->execute([
-                                    'date_sent'     =>  $date_Sent,
-                                    'time_sent'     =>  $time_Sent,
-                                    'receiver_id'   =>  $receiver_id,
-                                    'sender_id'     =>  $sender_id,
-                                    'amount'        =>  $amount,
-                                    'naction'       =>  'transfer',
-                                    'astatus'       =>  'unread'
-                                ]);
-
-                                if ($sql_insert_notification && $sql_confirm_request) {
-                                    $update_successMessage = " Withdraw Successful" . $successRefreshMessage;
-                                }
-
-                                else {
-                                    $update_errorMessage = " Failed to confirm" . $errorRefreshMessage;
-                                }
-                            }
-
-                            else {
-                                $update_errorMessage = " Failed to withdraw" . $errorRefreshMessage;
-                            }
-                        }
-                    }
-
-                    # otherwise cancel the process ...
-
-                    else {
-                        $update_errorMessage = " Amount not match" . $errorRefreshMessage;
-                    }
-                }
-            }
-        }
-
-        # otherwise wrong activation key 
-
-        else {
-            $update_errorMessage = " No request made" . $errorRefreshMessage;
-        }
     }
 ?>
 

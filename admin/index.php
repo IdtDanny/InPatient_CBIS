@@ -14,6 +14,10 @@
     $photo_successMessage = '';
     $errorMessage = '';
     $successMessage = '';
+    $fees_successMessage = '';
+    $fees_errorMessage = '';
+    $fees_deleteSuccessMessage = '';
+    $fees_deleteErrorMessage = '';
 
     # Getting Information of Signed in User
     $admin_username = $_SESSION['sessionToken']->admin_username;
@@ -67,6 +71,13 @@
     $cashier_FetchStatement = $pdo->prepare($cashier_FetchQuery);
     $cashier_FetchStatement->execute();
     $cashier_Result = $cashier_FetchStatement->fetchAll();
+
+    # Fetching fees info ...
+
+    $fees_FetchQuery = 'SELECT * FROM `fees_list` ORDER BY `created_at` DESC';
+    $fees_FetchStatement = $pdo->prepare($fees_FetchQuery);
+    $fees_FetchStatement->execute();
+    $fees_Result = $fees_FetchStatement->fetchAll();
 
 
     # Getting Admin Info. for update form...
@@ -225,6 +236,186 @@
                 $photo_errorMessage = " Sorry, there was an error uploading your file.".$errorRefreshMessage;
             }
         }
+    }
+
+    # Adding new fee ...
+
+    if (isset($_POST['feesAdd'])) {
+        $fees_name = $_POST['fees_name'];
+        $fees_description = $_POST['fees_description'];
+        $fees_amount = $_POST['fees_amount'];
+        $created_at = date('Y-m-d h:i:s');
+        $modified_by = 'admin';
+
+        # Checking if fee exist ...
+
+        $fees_existFetchQuery = 'SELECT * FROM `fees_list` WHERE `fees_name` =:fees_name';
+        $fees_existFetchStatement = $pdo->prepare($fees_existFetchQuery);
+        $fees_existFetchStatement->execute([
+            'fees_name' => $fees_name
+        ]);
+        $fees_existResults = $fees_existFetchStatement->fetch();
+
+        # if fee exist ...
+
+        if ($fees_existResults) {
+            $fees_errorMessage = ' Already exist!'. $errorRefreshMessage;
+        }
+
+        # otherwise ...
+
+        else {
+
+            # checking if description is empty ...
+
+            if (empty($fees_description)) {
+
+                $fees_description = 'optional';
+
+                # Adding fee Query...
+    
+                $feesInsert_Query = ' INSERT INTO `fees_list`(`created_at`, `fees_name`, `fees_description`, `amount`, `modified_by`) VALUES (:created_at, :fees_name, :fees_description, :amount, :modified_by)';
+    
+                $feesInsert_stmt = $pdo->prepare($feesInsert_Query);
+                $feesInsert_stmt->execute([
+                    'created_at'        =>  $created_at,
+                    'fees_name'         =>  $fees_name,
+                    'fees_description'  =>  $fees_description,
+                    'amount'            =>  $fees_amount,
+                    'modified_by'       =>  $modified_by
+                ]);
+
+                if ($feesInsert_Query) {
+                    $fees_successMessage = " Successfull Added!". $successRefreshMessage;
+                }
+                else {
+                    $fees_errorMessage = ' Could not add fee!'. $errorRefreshMessage;
+                }
+            }
+
+            # otherwise proceed with fees ...
+    
+            else {
+    
+                # Adding fee Query...
+    
+                $feesInsert_Query = ' INSERT INTO `fees_list`(`created_at`, `fees_name`, `fees_description`, `amount`, `modified_by`) VALUES (:created_at, :fees_name, :fees_description, :amount, :modified_by)';
+    
+                $feesInsert_stmt = $pdo->prepare($feesInsert_Query);
+                $feesInsert_stmt->execute([
+                    'created_at'        =>  $created_at,
+                    'fees_name'         =>  $fees_name,
+                    'fees_description'  =>  $fees_description,
+                    'amount'            =>  $fees_amount,
+                    'modified_by'       =>  $modified_by
+                ]);
+
+                if ($feesInsert_Query) {
+                    $fees_successMessage = " Successfull Added!". $successRefreshMessage;
+                }
+                else {
+                    $fees_errorMessage = ' Could not add fee!'. $errorRefreshMessage;
+                }
+            }
+        }
+    }
+
+    # modify current fee ...
+
+    if (isset($_POST['feesModify'])) {
+        $fees_cname = $_POST['fees_cname'];
+        $fees_name = $_POST['fees_name'];
+        $fees_description = $_POST['fees_description'];
+        $fees_amount = $_POST['fees_amount'];
+        $modified_by = 'admin';
+
+        # Checking if fee exist ...
+
+        $fees_existFetchQuery = 'SELECT * FROM `fees_list` WHERE `fees_name` =:fees_cname';
+        $fees_existFetchStatement = $pdo->prepare($fees_existFetchQuery);
+        $fees_existFetchStatement->execute([
+            'fees_cname' => $fees_cname
+        ]);
+        $fees_existResults = $fees_existFetchStatement->fetch();
+
+        # if fee exist then proceed with modification ...
+
+        if ($fees_existResults) {
+
+            # checking if description is empty ...
+
+            if (empty($fees_description)) {
+
+                # updating fee Query...
+    
+                $feesUpdate_Query = ' UPDATE `fees_list` SET `fees_name`=:fees_name, `amount`=:amount WHERE `fees_name`=:fees_cname';
+    
+                $feesUpdate_stmt = $pdo->prepare($feesUpdate_Query);
+                $feesUpdate_stmt->execute([
+                    'fees_name'         =>  $fees_name,
+                    'amount'            =>  $fees_amount,
+                    'fees_cname'        =>  $fees_cname
+                ]);
+
+                if ($feesUpdate_Query) {
+                    $fees_successMessage = " Successfull Updated". $successRefreshMessage;
+                }
+                else {
+                    $fees_errorMessage = ' Could not update'. $errorRefreshMessage;
+                }
+            }
+
+            # otherwise proceed with fees ...
+    
+            else {
+    
+                # updating fee Query...
+    
+                $feesUpdate_Query = ' UPDATE `fees_list` SET `fees_name`=:fees_name, `fees_description`=:fees_description, `amount`=:amount WHERE `fees_name`=:fees_cname';
+    
+                $feesUpdate_stmt = $pdo->prepare($feesUpdate_Query);
+                $feesUpdate_stmt->execute([
+                    'fees_name'         =>  $fees_name,
+                    'fees_description'  =>  $fees_description,
+                    'amount'            =>  $fees_amount,
+                    'fees_cname'        =>  $fees_cname
+                ]);
+
+                if ($feesUpdate_Query) {
+                    $fees_successMessage = " Successfull Updated". $successRefreshMessage;
+                }
+                else {
+                    $fees_errorMessage = ' Could not update'. $errorRefreshMessage;
+                }
+            }
+        }
+
+        # otherwise ...
+
+        else {
+            $fees_errorMessage = ' Does not exist'. $errorRefreshMessage;
+        }
+    }
+
+    # getting fee delete response
+
+    if (isset($_GET['dfeID'])) {
+        $dfeID = $_GET['dfeID'];
+        $sql_adelete = 'DELETE FROM `fees_list` WHERE feID =:feID';
+
+        # PDO Prep & Exec..
+        $delete_fees = $pdo->prepare($sql_adelete);
+        $delete_fees->execute([
+            'feID'  =>  $dfeID
+        ]);
+
+        if ($sql_adelete) {
+            $fees_deleteSuccessMessage = " Deleted Successful" . $successRefreshMessage;
+        }
+        else {
+            $fees_deleteErrorMessage = " Could not delete, check authorized id" . $errorRefreshMessage;
+        }
+
     }
 ?>
 

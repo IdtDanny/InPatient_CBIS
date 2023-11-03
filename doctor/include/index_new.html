@@ -1,0 +1,1344 @@
+<?php
+    # DOCTYPE html file 1
+    include 'head/1_new_header.html';
+
+    # DOCTYPE html file 2 with style document
+    echo ' <title>Doctor | Dashboard</title>';
+    include 'head/2_new_header.html';
+
+    echo '
+    <a href="../doctor/" class="btn text-light me-2 d-md-inline d-none" title="Refresh to see the changes"><i class="bi bi-arrow-counterclockwise"></i></a>
+    ';
+    include 'head/3_new_header.html';
+?>
+
+    <!-- title -->
+    <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+        <h3>Welcome <span class="text-altprimary fst-italic fw-bold"><?php echo $authorizedResults->authorized_name ?></span> </h3>
+    </div>
+
+    <!-- authorized Profile -->
+    <section id="dashboard" class="pb-5 border-bottom">
+        <div class="container-md">
+
+            <div class="row my-0 g-3 justify-content-around align-items-center">
+                <div class="col-9 col-lg-5">
+
+                    <!-- Notifying about profile change | Error -->
+                    <?php if($photo_errorMessage): ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $photo_errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php endif ?>
+
+                    <!-- Success message - successful changed profile -->
+                    <?php if($photo_successMessage): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $photo_successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php endif ?>
+
+                    <!-- browsing profile picture or else user svg used -->
+                    <?php # if($authorizedResults->photo): ?>
+                    <!-- <img src="../public/profile/<?php echo $authorizedResults->photo ?>" alt="eBook" class="rounded-5 img-thumbnail border-2 border-dark"> -->
+                    <?php # else: ?>
+                    <img src="../public/img/user-profile.svg" alt="eBook" class="rounded-5 img-thumbnail p-4">
+                    <?php # endif ?>
+
+                </div>
+
+                <!-- accordion -->
+                <div class="col-lg-6">
+
+                    <!-- Notifying about key generate change | Error -->
+                    <?php if($key_errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $key_errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- Success message - successful changed profile -->
+                    <?php if($key_successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $key_successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <div class="accordion" id="chapters">
+
+                        <!-- authorized profile -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button text-uppercase text-light fw-bold bi-buildings bg-altprimary" type="button" data-bs-toggle="collapse" data-bs-target="#chapter-1" aria-expanded="true" aria-controls="chapter-1">&nbsp;Authorized Profile</button>
+                            </h2>
+                            <div id="chapter-1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#chapters">
+                                <div class="accordion-body small">
+                                    <p class="text-muted text-start small">Review your profile and login credentials <span class="badge bg-gold float-end"><i class="bi bi-person-fill"></i></span></p>
+                                    <p>Name: <span class="fw-medium float-end"><?php echo $authorizedResults->authorized_name ?> / <?php echo $authorizedResults->authorized_pin ?></span></p>
+                                    <p>Username: <span class="fw-light float-end"><?php echo $authorizedResults->authorized_username ?></span></p>
+                                    <!-- <p>PIN: <span class="fw-light float-end"><?php echo $authorizedResults->authorized_pin ?></span></p> -->
+                                    <p>Tel: <span class="fw-light float-end text-decoration-none"><?php echo $authorizedResults->authorized_tel ?></span></p>
+                                    <p>Email: <span class="fw-light float-end text-decoration-none"><?php echo $authorizedResults->authorized_mail ?></span></p>
+                                    <p>Department: <span class="fw-bold float-end"><?php echo $authorizedResults->department ?> </span></p>
+                                    <!-- <p>Designation: <span class="fw-bold float-end"><?php echo number_format($authorizedResults->authorized_balance) ?> </span></p>
+                                    <p>Speciality: <span class="fw-bold float-end"><?php echo number_format($authorizedResults->authorized_balance) ?> </span></p> -->
+                                    <a href="#edit" class="btn btn-gold bi-pencil-square"><small> Edit</small></a>
+                                    <!-- <a href="#withdraw" class="btn btn-success bi-currency-exchange float-end" title="withdraw" data-bs-toggle="modal" data-bs-target="#withdrawModal" data-bs-whatever="@withdraw"><small> Withdraw</small></a> -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Patient Profile Tables -->
+    <section id="inpatient" class="pb-4 border-bottom">
+        <div class="container-md">
+
+            <!-- patient title -->
+            <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+
+                <!-- row for patient profile -->
+                <div class="row">
+
+                    <!-- Displaying user profile -->
+                    <div class="col ms-0 mt-1">
+                        <h2 class="float-start">
+                            <span class="text-altprimary fw-bold text-uppercase">
+                            <?php # $authorizedResults->authorized_name ?> get info on patient <span class="d-lg-inline-block d-none"></span>
+                            </span>
+                        </h2>
+                    </div>
+
+                    <!-- filters and search box -->
+                    <form method="post" class="col-6 float-end d-md-inline col-md-6 d-none">
+                        <div class="input-group">
+
+                            <div class="form-floating">
+                                <input type="text" name="filter_patient_id" class="form-control form-control-sm" placeholder="patient id" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Search by Patient_ID</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <div class="tt" data-bs-placement="bottom" title="Filter by full name">
+                                    <button type="submit" name="patient_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+                <p class="text-muted d-inline text-capitalize">Quick Review on admitted patient</p>
+            </div>
+
+            <!-- filter search field -->
+            <form method="post" class="d-md-none d-inline">
+                <div class="input-group mt-2">
+
+                    <div class="form-floating">
+                        <input type="text" name="filter_patient_id" class="form-control form-control-sm" placeholder="authorized Name" id="floatingInputGroup1" required>
+                        <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Search by Patient_ID</label>
+                    </div>
+
+                    <!-- tooltips -->
+                    <div class="input-group-text">
+                        <div class="tt" data-bs-placement="bottom" title="Filter by full name">
+                            <button type="submit" name="patient_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- row for patient table and list for small media -->
+            <div class="row my-0 g-0 justify-content-around align-items-center">
+                <div class="col-lg-12 col-lg-6">
+
+                    <!-- Error messages -->
+                    <?php if($patient_errorMessage || $patient_deleteErrorMessage || $update_errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle">
+                            <?php 
+                                echo $patient_errorMessage; 
+                                echo $patient_deleteErrorMessage; 
+                                echo $update_errorMessage; 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- success messages -->
+                    <?php if($patient_successMessage || $patient_deleteSuccessMessage || $update_successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all">
+                            <?php 
+                                echo $patient_successMessage; 
+                                echo $patient_deleteSuccessMessage; 
+                                echo $update_successMessage 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- for large media -->
+                    <div class="d-lg-block d-none text-capitalize">
+                        <table class="table table-hover small">
+                            <caption class="text-center fw-light">List of Registered patient by you</caption>
+                            <thead class="table-primary">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col"><i class="bi bi-person-circle"></i></th>
+                                    <th scope="col">Created_at</th>
+                                    <th scope="col">patient ID</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Tel No</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Billed</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <?php # checking if user filtered authorized name
+
+                                if (isset($_POST['patient_filter'])) {
+                                    
+                                    $filter_patient_name = $_POST['filter_patient_id'];
+
+                                    # Fetching filtered authorizeds info ...
+
+                                    $filter_FetchQuery = 'SELECT * FROM `patient` WHERE `patient_id` = :patient_id ORDER BY `created_at` DESC';
+                                    $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
+                                    $filter_FetchStatement->execute([
+                                        'patient_id'   => $filter_patient_name
+                                    ]);
+                                    $filter_Result = $filter_FetchStatement->fetchAll();
+
+                                    if (!$filter_Result) {
+                                        echo '<div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
+                                            <strong class="bi bi-check2-all"> Not found '.$errorRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                        } 
+                                        else { 
+                                            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                            $no = 1; 
+                                            foreach($filter_Result as $patient) {
+                                    ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?php echo $no ?>
+                                    </th>
+                                    <td><i class="bi bi-person-circle"></i></td>
+                                    <td>
+                                        <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $patient->patient_id ?>
+                                    </td>
+                                    <?php 
+                                        if ($patient->status != "active") {
+                                            echo "<td class='text-uppercase text-danger'>" . $patient->patient_name . " " . $patient->patient_mname . " " . $patient->patient_lname . "</td>";
+                                        } else {
+                                            echo "<td class='text-uppercase'>" . $patient->patient_name . " " . $patient->patient_mname . " " . $patient->patient_lname ."</td>";
+                                        }
+                                    ?>
+                                    <td>
+                                        <?php echo $patient->patient_tel ?>
+                                    </td>
+                                    <td class="text-lowercase">
+                                        <?php echo $patient->patient_mail ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <?php echo number_format($patient->patient_balance) ?>
+                                    </td>
+                                    <?php if ($patient->patient_balance == 0) {
+                                                echo "<td class='fw-light text-altlight bg-danger text-center'><small>sleep</small></td>";
+                                            } else {
+                                                echo "<td class='fw-light text-altlight bg-success text-center'><small>active</small></td>"; 
+                                            }
+                                    ?>
+                                </tr>
+                                <?php $no++; } } } else {
+
+                                            $no = 1; 
+                                            foreach($patient_Result as $patient) {
+                                    ?>
+                                <?php $no++; } } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- For small media -->
+                    <div class="list-group d-lg-none">
+
+                        <?php # checking if user filtered authorized name
+
+                        if (isset($_POST['patient_filter'])) {
+                            
+                            $filter_patient_name = $_POST['filter_patient_id'];
+
+                            # Fetching filtered authorizeds info ...
+
+                            $filter_FetchQuery = 'SELECT * FROM `patient` WHERE `patient_id` = :patient_id ORDER BY `created_at` DESC';
+                            $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
+                            $filter_FetchStatement->execute([
+                                'patient_id'   => $filter_patient_name
+                            ]);
+                            $filter_Result = $filter_FetchStatement->fetchAll();
+
+                            if (!$filter_Result) {
+                                echo '<div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
+                                    <strong class="bi bi-check2-all"> Not found '.$errorRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                } 
+                                else { 
+                                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                    $no = 1; 
+                                    foreach($filter_Result as $clt_count => $patient) {
+                        ?>
+                        <?php # To list few of patients. 
+                                #if ($patient_count != 0) {
+                                #    continue;
+                                #}
+                                #else {
+                        ?>
+                        <div class="list-group-item py-3">
+                            <h5 class="mb-1 text-uppercase">
+
+                                <?php if ($patient->patient_balance > 0) {
+                                        echo "<span class='text-success'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $patient->patient_name . "</span>";
+                                ?>
+                                <span class="badge fw-light bg-success float-end"><small>active <?php # echo $patient->status ?></small><i class="d-md-none bi-exclamation-triangle"></i></span>
+                                <?php } else {
+                                        echo "<span class='text-danger'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $patient->patient_name . "</span>";
+                                ?>
+                                <span class="badge fw-light bg-danger float-end"><small>sleep <?php # echo $patient->status ?></small><i class="d-md-none bi-exclamation-triangle"></i></span>
+                                <?php } ?>
+                            </h5>
+
+                            <!-- Fetch patient Location -->
+                            <p class="mb-1 fw-medium">Patient ID:
+                                <span class="fw-light float-end"><?php echo $patient->patient_id; ?></span>
+                            </p>
+
+                            <!-- Fetch phone number -->
+                            <p class="mb-1 fw-medium">Tel:
+                                <span class="fw-light float-end">
+                                    <?php echo $patient->patient_tel ?>
+                                </span>
+                            </p>
+
+                            <!-- Fetch Balance -->
+                            <p class="mb-1 fw-medium">Balance:
+                                <span class="fw-medium float-end">
+                                    <?php echo number_format($patient->patient_balance) ?> Rwf
+                                </span>
+                            </p>
+
+                            <!-- update and delete modal triggers -->
+                            <small class="fw-light fst-italic">
+                                Registered on <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                <span class="btn-group-sm float-end">
+                                    <button class="btn btn-altdash bi-pencil-square" title="Modify" data-bs-toggle="modal" data-bs-target="#modifyModal" data-bs-whatever="@modify"><span class="d-md-inline-block d-none">&nbsp;Update</span></button>
+                                    <!-- <a href="patient.php?dbID=<?php echo $patient->cID ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                     -->
+                                </span>
+                            </small>
+                        </div>
+                        <?php # printing otherwise if not filtered by name ?>
+                        <?php } } } else { foreach($patient_Result as $key => $patient) { ?>
+
+                        <?php } } ?>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Consultation form -->
+    <section id="consult" class=" bg-light pt-5 pb-5 border-bottom">
+        <div class="container-lg">
+            <div class="text-center">
+                <h2 class="fw-medium text-gold">CONSULTATION FORM</h2>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-lg-8">
+
+                    <?php if($errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <form method="post">
+                        <div class="modal-body">
+
+                            <!-- post Patient Id -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_id" class="form-control" placeholder="Patient ID" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Patient_ID</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill patient ID"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post date -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
+                                <div class="form-floating">
+                                    <input type="date" name="consult_date" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Filling date</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input type="time" name="consult_time" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Time</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill out the date"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post complains -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="consult_complains" class="form-control" placeholder="Fill Complains" id="floatingInputGroup1" required></textarea>
+                                    <label for="floatingInputGroup1">Write Patient Complains</label>
+                                </div>
+                            </div>
+
+                            <!-- post findings -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="consult_findings" class="form-control" placeholder="Fill findings" id="floatingInputGroup1" required></textarea>
+                                    <label for="floatingInputGroup1">Write Findings</label>
+                                </div>
+                            </div>
+
+                            <!-- post treatments -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="consult_treatment" class="form-control" placeholder="Fill treatments" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Write treatments if any</label>
+                                </div>
+                            </div>
+
+                            <!-- post medecines -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="consult_medecine" class="form-control" placeholder="Fill medecines" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Write Medecines if any</label>
+                                </div>
+                            </div>
+
+                            <!-- post allergy -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="consult_allergy" class="form-control" placeholder="Fill allergies" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Write allergies if any</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
+                            <button type="submit" name="submit_consult" class="btn btn-altprimary float-end bi-send-check ms-3"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diagnosis form -->
+    <section id="diagnose" class="pt-5 pb-5 border-bottom">
+        <div class="container-lg">
+            <div class="text-center">
+                <h2 class="fw-medium text-gold">DIAGNOSIS FORM</h2>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-lg-8">
+
+                    <?php if($errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <form method="post">
+                        <div class="modal-body">
+
+                            <!-- post Patient Id -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_id" class="form-control" placeholder="Patient ID" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Patient_ID</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill patient ID"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post date -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="date" name="diagnose_date" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Filling date</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input type="time" name="diagnose_time" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Time</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill out the date"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post diagnose_name -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="diagnose_name" class="form-control" placeholder="Fill Diagnosis name" id="floatingInputGroup1" required></textarea>
+                                    <label for="floatingInputGroup1">Diagnosis Name</label>
+                                </div>
+                            </div>
+
+                            <!-- post diagnose_description -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="diagnose_description" class="form-control" placeholder="Fill Diagnose Description" id="floatingInputGroup1" required></textarea>
+                                    <label for="floatingInputGroup1">Diagnosis Description</label>
+                                </div>
+                            </div>
+
+                            <!-- post diagnose_complication -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="diagnose_complication" class="form-control" placeholder="Fill Diagnosis Complications" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Diganosis Complications if any</label>
+                                </div>
+                            </div>
+
+                            <!-- post diagnose_allergy if any -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="diagnose_allergy" class="form-control" placeholder="Fill allergies" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Write allergies if any</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
+                            <button type="submit" name="submit_diagnose" class="btn btn-altprimary float-end bi-send-check ms-3"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Surgery form -->
+    <section id="surgery" class="bg-light pt-5 pb-5 border-bottom">
+        <div class="container-lg">
+            <div class="text-center">
+                <h2 class="fw-medium text-gold">SURGERY FORM</h2>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-lg-8">
+
+                    <?php if($errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <form method="post">
+                        <div class="modal-body">
+
+                            <!-- post Patient Id -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_id" class="form-control" placeholder="Patient ID" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Patient_ID</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill patient ID"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post date -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="date" name="surgery_date" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Filling date</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input type="time" name="surgery_time" class="form-control" placeholder="Date Filled" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Time</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Fill out the date"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post surgery_description -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="surgery_description" class="form-control" placeholder="Fill Surgery Description" id="floatingInputGroup1" required></textarea>
+                                    <label for="floatingInputGroup1">Surgery Description</label>
+                                </div>
+                            </div>
+
+                            <!-- post Complications -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="surgery_complication" class="form-control" placeholder="Fill Surgery Complications" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Surgery Complications if any</label>
+                                </div>
+                            </div>
+
+                            <!-- post allergies if any -->
+                            <div class="mb-4 input-group">
+                                <div class="form-floating">
+                                    <textarea style="height: 15vh;" name="surgery_allergy" class="form-control" placeholder="Fill allergies" id="floatingInputGroup1"></textarea>
+                                    <label for="floatingInputGroup1">Write allergies if any</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
+                            <button type="submit" name="submit_surgery" class="btn btn-altprimary float-end bi-send-check ms-3"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- records Tables -->
+    <section id="record" class="pb-4 border-bottom">
+        <div class="container-md">
+
+            <!-- title -->
+            <div class="justify-content-between align-items-center pt-3 pb-2 border-bottom">
+
+                <!-- row for record -->
+                <div class="row">
+
+                    <!-- Displaying user profile -->
+                    <div class="col ms-0 mt-1">
+                        <h2 class="float-start">
+                            <span class="text-altprimary fw-bold text-uppercase">
+                            <?php # $authorizedResults->authorized_name ?> bill records <span class="d-lg-inline-block d-none"></span>
+                            </span>
+                        </h2>
+                    </div>
+
+                    <!-- filters and search box -->
+                    <form method="post" class="col-6 float-end d-md-inline col-md-6 d-none">
+                        <div class="input-group">
+
+                            <div class="form-floating">
+                                <input type="text" name="filter_patient_id" class="form-control form-control-sm" placeholder="patient id" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Search by Patient_ID</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <div class="tt" data-bs-placement="bottom" title="Filter by full name">
+                                    <button type="submit" name="record_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+                <p class="text-muted d-inline text-capitalize">Quick Review on Records</p>
+            </div>
+
+            <!-- filter search field -->
+            <form method="post" class="d-md-none d-inline">
+                <div class="input-group mt-2">
+
+                    <div class="form-floating">
+                        <input type="text" name="filter_patient_id" class="form-control form-control-sm" placeholder="authorized Name" id="floatingInputGroup1" required>
+                        <label for="floatingInputGroup1"><i class="bi bi-filter-left"></i> Search by Patient_ID</label>
+                    </div>
+
+                    <!-- tooltips -->
+                    <div class="input-group-text">
+                        <div class="tt" data-bs-placement="bottom" title="Filter by full name">
+                            <button type="submit" name="record_filter" class="btn btn-sm"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- row for patient table and list for small media -->
+            <div class="row my-0 g-0 justify-content-around align-items-center">
+                <div class="col-lg-12 col-lg-6">
+
+                    <!-- Error messages -->
+                    <?php if($patient_errorMessage || $patient_deleteErrorMessage || $update_errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle">
+                            <?php 
+                                echo $patient_errorMessage; 
+                                echo $patient_deleteErrorMessage; 
+                                echo $update_errorMessage; 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- success messages -->
+                    <?php if($patient_successMessage || $patient_deleteSuccessMessage || $update_successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all">
+                            <?php 
+                                echo $patient_successMessage; 
+                                echo $patient_deleteSuccessMessage; 
+                                echo $update_successMessage 
+                            ?>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <!-- for large media -->
+                    <div class="d-lg-block d-none text-capitalize">
+                        <table class="table table-hover small">
+                            <caption class="text-center fw-light">List of Registered patient by you</caption>
+                            <thead class="table-primary">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col"><i class="bi bi-person-circle"></i></th>
+                                    <th scope="col">Recorded_on</th>
+                                    <th scope="col">patient ID</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Record of</th>
+                                    <th scope="col">Billed</th>
+                                    <th scope="col"></th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <?php # checking if user filtered authorized name
+
+                                if (isset($_POST['record_filter'])) {
+                                    
+                                    $filter_patient_name = $_POST['filter_patient_id'];
+
+                                    # Fetching filtered authorizeds info ...
+
+                                    $filter_FetchQuery = 'SELECT * FROM `records` WHERE `patient_id` = :patient_id ORDER BY `rdate` AND `rtime` DESC';
+                                    $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
+                                    $filter_FetchStatement->execute([
+                                        'patient_id'   => $filter_patient_name
+                                    ]);
+                                    $filter_Result = $filter_FetchStatement->fetchAll();
+
+                                    if (!$filter_Result) {
+                                        echo '<div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
+                                            <strong class="bi bi-check2-all"> Not found '.$errorRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                        } 
+                                        else { 
+                                            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                            $no = 1; 
+                                            foreach($filter_Result as $record) {
+                                    ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?php echo $no ?>
+                                    </th>
+                                    <td><i class="bi bi-person-circle"></i></td>
+                                    <td>
+                                        <?php echo date('M d, Y', strtotime($record->rdate)) . " at "; ?>
+                                        <?php echo date('h:i', strtotime($record->rtime)) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $record->patient_id ?>
+                                    </td>
+                                    <?php 
+                                                if ($record->status != "approved") {
+                                                    echo "<td class='text-uppercase text-danger'>" . $record->patient_name . "</td>";
+                                                } else {
+                                                    echo "<td class='text-uppercase'>" . $record->patient_name . "</td>";
+                                                }
+                                            ?>
+                                    <td>
+                                        <?php echo $record->action ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <?php echo number_format($record->amount) . " Rwf"; ?>
+                                    </td>
+                                    <?php if ($record->status == "pending") {
+                                                        echo "<td class='fw-light text-altlight bg-danger text-center'><small>". $record->status ."
+                                        </small>
+                                        </td>"; } else { echo "
+                                        <td class='fw-light text-altlight bg-success text-center'><small>". $record->status ."</small></td>"; } ?>
+                                </tr>
+                                <?php $no++; } } } else {
+
+                                            $no = 1; 
+                                            foreach($records_Result as $record) {
+                                    ?>
+
+                                <tr>
+                                    <th scope="row">
+                                        <?php echo $no ?>
+                                    </th>
+                                    <td><i class="bi bi-person-circle"></i></td>
+                                    <td>
+                                        <?php echo date('M d, Y', strtotime($record->rdate)) . " at "; ?>
+                                        <?php echo date('h:i', strtotime($record->rtime)) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $record->patient_id ?>
+                                    </td>
+                                    <?php 
+                                            if ($record->status != "approved") {
+                                                echo "<td class='text-uppercase text-danger'>" . $record->patient_name . "</td>";
+                                            } else {
+                                                echo "<td class='text-uppercase'>" . $record->patient_name . "</td>";
+                                            }
+                                        ?>
+                                    <td>
+                                        <?php echo $record->action ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <?php echo number_format($record->amount) . " Rwf"; ?>
+                                    </td>
+                                    <?php 
+                                            if ($record->status != "approved") {
+                                                echo "<td class='text-center'><a href='?drID=$record->no' class='btn btn-sm bi-trash3-fill text-danger'></a>
+                                    </td>"; } else { echo "
+                                    <td class='text-uppercase text-center text-danger'>N/A</td>"; } ?>
+                                    <?php if ($record->status == "pending") {
+                                                    echo "<td class='fw-light text-altlight bg-danger text-center'><small>". $record->status ."
+                                    </small>
+                                    </td>"; } else { echo "
+                                    <td class='fw-light text-altlight bg-success text-center'><small>". $record->status ."</small></td>"; } ?>
+                                </tr>
+
+                                <?php $no++; } } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- For small media -->
+                    <div class="list-group d-lg-none">
+
+                        <?php # checking if user filtered authorized name
+
+                        if (isset($_POST['record_filter'])) {
+                            
+                            $filter_patient_name = $_POST['filter_patient_id'];
+
+                            # Fetching filtered authorizeds info ...
+
+                            $filter_FetchQuery = 'SELECT * FROM `records` WHERE `patient_id` = :patient_id ORDER BY `rdate` AND `rtime` DESC';
+                            $filter_FetchStatement = $pdo->prepare($filter_FetchQuery);
+                            $filter_FetchStatement->execute([
+                                'patient_id'   => $filter_patient_name
+                            ]);
+                            $filter_Result = $filter_FetchStatement->fetchAll();
+
+                            if (!$filter_Result) {
+                                echo '<div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
+                                    <strong class="bi bi-check2-all"> Not found '.$errorRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                } 
+                                else { 
+                                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong class="bi bi-check2-all"> Match found '.$successRefreshMessage.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                                    $no = 1; 
+                                    foreach($filter_Result as $clt_count => $record) {
+                        ?>
+                        <?php # To list few of patients. 
+                                #if ($patient_count != 0) {
+                                #    continue;
+                                #}
+                                #else {
+                        ?>
+
+                        <div class="list-group-item py-3 small">
+                            <h5 class="mb-1 text-uppercase">
+
+                                <?php if ($record->status != 'pending') {
+                                            echo "<span class='text-success'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $record->patient_name . "</span>";
+                                    ?>
+                                <span class="badge fw-light bg-success float-end"><small><?php echo $record->status . " "; ?></small><i class="d-md-none"></i></span>
+                                <?php } else {
+                                            echo "<span class='text-danger'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $record->patient_name . "</span>";
+                                    ?>
+                                <span class="badge fw-light bg-danger float-end"><small><?php echo $record->status . " " ?></small><i class="d-md-none bi-exclamation-triangle"></i></span>
+                                <?php } ?>
+                            </h5>
+
+                            <!-- Fetch patient Location -->
+                            <p class="mb-1 fw-medium">Patient ID:
+                                <span class="fw-light float-end"><?php echo $record->patient_id; ?></span>
+                            </p>
+
+                            <!-- Fetch Balance -->
+                            <p class="mb-1 fw-medium">Billed:
+                                <span class="fw-medium float-end">
+                                        <?php echo number_format($record->amount) ?> Rwf
+                                    </span>
+                            </p>
+
+                            <!-- update and delete modal triggers -->
+                            <small class="fw-light fst-italic">
+                                Registered on <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                <span class="btn-group-sm float-end">
+                                    <a href="patient.php?dno=<?php echo $record->no ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                </span>
+                            </small>
+                        </div>
+
+                        <?php # printing otherwise if not filtered by name ?>
+                        <?php } } } else { foreach($records_Result as $key => $record) { ?>
+
+                        <div class="list-group-item py-3 small">
+                            <h5 class="mb-1 text-uppercase">
+
+                                <?php if ($record->status != 'pending') {
+                                            echo "<span class='text-success'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $record->patient_name . "</span>";
+                                    ?>
+                                <span class="badge fw-light bg-success float-end"><small><?php echo $record->status . " "; ?></small><i class="d-md-none"></i></span>
+                                <?php } else {
+                                            echo "<span class='text-danger'><i class='bi bi-person-circle text-altprimary-emphasis'></i>&nbsp;". $record->patient_name . "</span>";
+                                    ?>
+                                <span class="badge fw-light bg-danger float-end"><small><?php echo $record->status . " " ?></small><i class="d-md-none bi-exclamation-triangle"></i></span>
+                                <?php } ?>
+                            </h5>
+
+                            <!-- Fetch patient Location -->
+                            <p class="mb-1 fw-medium">Patient ID:
+                                <span class="fw-light float-end"><?php echo $record->patient_id; ?></span>
+                            </p>
+
+                            <!-- Fetch Balance -->
+                            <p class="mb-1 fw-medium">Billed:
+                                <span class="fw-medium float-end">
+                                        <?php echo number_format($record->amount) ?> Rwf
+                                    </span>
+                            </p>
+
+                            <!-- update and delete modal triggers -->
+                            <small class="fw-light fst-italic">
+                                Registered on <?php echo date('M d, Y', strtotime($patient->created_at)) ?>
+                                <span class="btn-group-sm float-end">
+                                    <a href="patient.php?dno=<?php echo $record->no ?>" class="btn btn-danger bi-trash3" title="Delete"><span class="d-md-inline-block d-none">&nbsp;Delete</span></a>                                    
+                                </span>
+                            </small>
+                        </div>
+                        <?php } } ?>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Profile edit form -->
+    <section id="edit" class="bg-light pt-5 pb-5">
+        <div class="container-lg">
+            <div class="text-center">
+                <h2 class="fw-medium text-gold">Modify your Profile</h2>
+                <p class="lead">Review and modify whatever you wish!</p>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-lg-6">
+
+                    <?php if($errorMessage) { ?>
+                    <div class="alert alert-warning alert-dismissible fade show alert-danger" role="alert">
+                        <strong class="bi bi-exclamation-triangle"><?php echo $errorMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($successMessage) { ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong class="bi bi-check2-all"><?php echo $successMessage; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php } ?>
+
+                    <form method="post">
+                        <!-- post new name -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="text" name="authorized-name" id="email" class="form-control" value="<?php echo $authorizedResults->authorized_name ?>" id="floatingInputGroup1">
+                                <label for="floatingInputGroup1">New Name</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your name."><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post mail -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="email" name="authorized-mail" id="email" class="form-control" value="<?php echo $authorizedResults->authorized_mail ?>" id="floatingInputGroup1">
+                                <label for="floatingInputGroup1">New Email</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your email address."><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post new username -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="text" name="authorized-username" id="name" class="form-control" value="<?php  echo $authorizedResults->authorized_username ?>" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">New Username</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Re-new your username!"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- post current password -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+
+                            <div class="form-floating">
+                                <input type="password" name="old-password" id="opassword" class="form-control" placeholder="old-password" value="<?php echo $authorizedResults->authorized_password ?>" id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Current Password</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Your current password?"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- set new password -->
+                        <div class="mb-4 input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+
+
+                            <div class="form-floating">
+                                <input type="password" name="new-password" id="opassword" class="form-control" placeholder="New" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Set Password</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input type="password" name="confirm-password" id="npassword" class="form-control" placeholder="Confirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    id="floatingInputGroup1" required>
+                                <label for="floatingInputGroup1">Confirm Password</label>
+                            </div>
+
+                            <!-- tooltips -->
+                            <div class="input-group-text">
+                                <span class="tt" data-bs-placement="bottom" title="Make sure they match!"><i class="bi bi-info"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 text-center">
+                            <button type="submit" name="editinfo" class="btn btn-gold float-end bi-send-check"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php include 'include/footer/footer_new_1.html'; ?>
+
+    <!-- Modal Lists -->
+    <div>
+        <!-- add modal -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-altprimary">
+                        <h1 class="modal-title fs-5 text-uppercase text-altlight bi-person-add fw-bold" id="exampleModalLabel"> Add patient</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <p class="text-muted text-center bi-exclamation-triangle"> Place card to register </p>
+
+                            <!-- post patient id -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_id" class="form-control" placeholder="Username" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Patient ID - Place Card</label>
+                                </div>
+
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="what should be your username?"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post name -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_name" class="form-control" placeholder="patient Name" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Full Name</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Register patient name"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post_email -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                <div class="form-floating">
+                                    <input type="email" name="patient_mail" id="email" class="form-control" value="optional@tps.com" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Email Address</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Add your email address."><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post_tel -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                                <div class="form-floating">
+                                    <input type="tel" name="patient_tel" id="email" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Tel Number</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Add your email address."><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <p class="lead text-altprimary fw-bold bi-globe text-uppercase text-center"> Location</p>
+
+                            <!-- location -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+
+                                <div class="form-floating">
+                                    <input type="text" name="patient_district" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">District</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_sector" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Sector</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Add current location"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
+                            <button type="submit" name="registerpatient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- edit modal -->
+        <div class="modal fade" id="modifyModal" tabindex="-1" aria-labelledby="modifyModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-altprimary">
+                        <h1 class="modal-title fs-5 text-uppercase text-altlight bi-pencil-square fw-bold" id="exampleModalLabel"> Modify patient</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <p class="text-muted text-center bi-exclamation-triangle"> Rewrite patient ID to modify data.</p>
+
+                            <!-- post patient id -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-123"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_id" class="form-control" placeholder="Username" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">Patient ID - or Place Card</label>
+                                </div>
+
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Place your card to get id"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post name -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_name" class="form-control" placeholder="patient Name" id="floatingInputGroup1" required>
+                                    <label for="floatingInputGroup1">New Name</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Register patient name"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post_email -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                <div class="form-floating">
+                                    <input type="email" name="patient_mail" id="email" class="form-control" value="optional@tps.com" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Email Address</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Renew your email address."><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- post_tel -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                                <div class="form-floating">
+                                    <input type="tel" name="patient_tel" id="email" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Tel Number</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Renew your phone number."><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                            <p class="lead text-altprimary fw-bold bi-globe text-uppercase text-center"> Location</p>
+
+                            <!-- location -->
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+
+                                <div class="form-floating">
+                                    <input type="text" name="patient_district" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">District</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="text" name="patient_sector" class="form-control" value="Optional" id="floatingInputGroup1">
+                                    <label for="floatingInputGroup1">Sector</label>
+                                </div>
+
+                                <!-- tooltips -->
+                                <div class="input-group-text">
+                                    <span class="tt" data-bs-placement="bottom" title="Renew current location"><i class="bi bi-info"></i></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary bi-x-lg" data-bs-dismiss="modal"> Cancel</button>
+                            <button type="submit" name="modifypatient" class="btn btn-altprimary float-end bi-send-check"> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php include 'include/footer/footer_new_2.html'; ?>
