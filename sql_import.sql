@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 02, 2023 at 12:16 AM
+-- Host: 127.0.0.1
+-- Generation Time: Dec 04, 2023 at 07:15 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -43,7 +43,37 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_ID`, `admin_name`, `admin_username`, `admin_email`, `admin_password`, `admin_profile`, `Balance`, `admin_pin`) VALUES
-(1, 'UTETIWABO DIANE', 'diane', 'utetidiane@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 'WhatsApp Image 2023-09-21 at 06.36.10.jpeg', 614600, 60422);
+(1, 'UTETIWABO Diane', 'diane', 'utetidiane@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 'profile.jpeg', 0, 60422);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `authorized`
+--
+
+CREATE TABLE `authorized` (
+  `created_at` datetime NOT NULL,
+  `auID` int(10) NOT NULL,
+  `authorized_name` varchar(255) NOT NULL,
+  `authorized_gender` varchar(255) NOT NULL,
+  `authorized_username` varchar(255) NOT NULL,
+  `authorized_tel` varchar(12) NOT NULL,
+  `authorized_mail` varchar(255) NOT NULL,
+  `authorized_password` varchar(255) NOT NULL,
+  `authorized_pin` int(255) NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `role` varchar(25) NOT NULL,
+  `department` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `authorized`
+--
+
+INSERT INTO `authorized` (`created_at`, `auID`, `authorized_name`, `authorized_gender`, `authorized_username`, `authorized_tel`, `authorized_mail`, `authorized_password`, `authorized_pin`, `photo`, `status`, `role`, `department`) VALUES
+('2023-11-01 04:12:12', 5, 'MWITENDE Sarah', 'male', 'Sarah', '250782305041', 'idtbusy@gmail.com', '37c39a3159861fb4eef2851c6697a289', 7874, 'optional', 'active', 'doctor', 'Surgery'),
+('2023-11-01 03:25:52', 6, ' HATEGEKIMANA Paul', 'male', 'Paul', '250780490702', 'idtbusy@gmail.com', '130e4d59ec0334a41c52ce74a550f9b4', 4071, 'optional', 'active', 'doctor', 'Cardiology');
 
 -- --------------------------------------------------------
 
@@ -53,30 +83,29 @@ INSERT INTO `admin` (`admin_ID`, `admin_name`, `admin_username`, `admin_email`, 
 
 CREATE TABLE `cashier` (
   `created_at` datetime NOT NULL,
-  `caID` int(10) NOT NULL,
+  `caID` int(25) NOT NULL,
   `cashier_name` varchar(255) NOT NULL,
-  `cashier_gender` varchar(255) NOT NULL,
   `cashier_username` varchar(255) NOT NULL,
+  `cashier_gender` varchar(255) NOT NULL,
   `cashier_tel` varchar(12) NOT NULL,
   `cashier_mail` varchar(255) NOT NULL,
   `cashier_password` varchar(255) NOT NULL,
   `cashier_pin` int(255) NOT NULL,
   `photo` varchar(255) NOT NULL,
   `cashier_balance` int(220) NOT NULL,
-  `status` varchar(255) NOT NULL
+  `status` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `cashier`
 --
 
-INSERT INTO `cashier` (`created_at`, `caID`, `cashier_name`, `cashier_gender`, `cashier_username`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`) VALUES
-('2023-06-06 02:22:03', 36, 'RUMUMBA Patrice', 'male', 'Patrice', '257886754123', 'patrice@gmail.com', '597673be8ea7215c682c809347ba60ec', 5502, 'download.jpg', 23000, 'active'),
-('2023-09-01 17:02:12', 46, 'NYIRAMINANI Maria', 'female', 'Maria', '257886754123', 'maria@gmail.com', '202cb962ac59075b964b07152d234b70', 5617, 're.PNG', 51300, 'active'),
-('2023-09-04 09:06:27', 49, 'NSHUTI Yves', 'male', 'Yves', '257886754123', 'nshuti@gmail.com', '202cb962ac59075b964b07152d234b70', 2703, 'NSHUTI.PNG', 10000, 'active'),
-('2023-09-02 03:10:09', 50, 'KAGABO Yvette', 'female', 'kagabo', '257886754123', 'kagabo@gmail.com', '202cb962ac59075b964b07152d234b70', 2307, 'mik.PNG', 290000, 'active'),
-('2023-09-08 06:50:58', 53, 'IDUKUNDATWESE DANNY', 'male', 'Idt', '257886754123', 'idtdanny@gmail.com', '11c8b3d8abc3809f566f9e259e1d55e7', 5931, 'WhatsApp Image 2023-08-07 at 21.27.01.jpeg', 225600, 'active'),
-('2023-09-19 09:05:32', 75, 'MUJAWABERA Josee', 'female', 'josee', '250780012634', 'ireneudiane@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 6133, 'user_photo_2.png', 99000, 'active');
+INSERT INTO `cashier` (`created_at`, `caID`, `cashier_name`, `cashier_username`, `cashier_gender`, `cashier_tel`, `cashier_mail`, `cashier_password`, `cashier_pin`, `photo`, `cashier_balance`, `status`, `role`) VALUES
+('2023-09-19 09:05:32', 75, 'MUJAWABERA Josee', 'josee', 'female', '250780012634', 'ireneudiane@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 6133, 'profile.jpeg', 99000, 'active', 'cashier'),
+('2023-11-01 08:11:27', 82, 'IDUKUNDATWESE Danny', 'Danny', 'male', '250780490702', 'idtbusy@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 4214, 'IMG_6505.JPG', 0, 'active', 'cashier'),
+('2023-11-01 08:14:23', 83, 'INEZA Aliane', 'Dadyne', 'female', '250780312644', 'inezadadyne@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 1665, 'WhatsApp Image 2023-09-21 at 06.36.10.jpeg', 0, 'active', 'receptionist'),
+('2023-11-02 06:30:37', 84, 'MUHAWENIMANA Amza', 'Amza', 'male', '250780547047', 'idtbusy@gmail.com', '01ea7cbc18da46de12caca12ba21efef', 4685, 'rubis.png', 0, 'active', 'receptionist');
 
 -- --------------------------------------------------------
 
@@ -97,7 +126,89 @@ CREATE TABLE `cashier_location` (
 --
 
 INSERT INTO `cashier_location` (`no`, `caID`, `cashier_name`, `district`, `sector`) VALUES
-(19, 75, 'MUJAWABERA Josee', 'Nyamagabe', 'Ubutwari');
+(19, 75, 'MUJAWABERA Josee', 'Nyamagabe', 'Ubutwari'),
+(26, 82, 'IDUKUNDATWESE Danny', 'Gasabo', 'Kacyiru'),
+(27, 83, 'INEZA Aliane', 'Gasabo', 'Kacyiru'),
+(28, 84, 'MUHAWENIMANA Amza', 'Gasabo', 'Kacyiru');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `consult_form`
+--
+
+CREATE TABLE `consult_form` (
+  `coID` int(255) NOT NULL,
+  `created_on` date NOT NULL,
+  `created_at` time NOT NULL,
+  `patient_id` varchar(25) NOT NULL,
+  `complains` text NOT NULL,
+  `findings` text NOT NULL,
+  `treatment` text DEFAULT NULL,
+  `medecine` text DEFAULT NULL,
+  `allergy` text DEFAULT NULL,
+  `filled_by` varchar(25) NOT NULL,
+  `status` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `consult_form`
+--
+
+INSERT INTO `consult_form` (`coID`, `created_on`, `created_at`, `patient_id`, `complains`, `findings`, `treatment`, `medecine`, `allergy`, `filled_by`, `status`) VALUES
+(1, '2023-11-01', '18:51:00', '0000695191', 'Chest Pain', 'Possible block in Artery', 'Angiogram, Surgery', 'none', 'none', 'Sarah', 'paid');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `diagnose_form`
+--
+
+CREATE TABLE `diagnose_form` (
+  `dgID` int(255) NOT NULL,
+  `created_on` date NOT NULL,
+  `created_at` time NOT NULL,
+  `patient_id` varchar(25) NOT NULL,
+  `diagnose_name` text NOT NULL,
+  `description` text NOT NULL,
+  `complications` text DEFAULT NULL,
+  `allergy` text DEFAULT NULL,
+  `filled_by` varchar(25) NOT NULL,
+  `status` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `diagnose_form`
+--
+
+INSERT INTO `diagnose_form` (`dgID`, `created_on`, `created_at`, `patient_id`, `diagnose_name`, `description`, `complications`, `allergy`, `filled_by`, `status`) VALUES
+(1, '2023-11-01', '19:54:00', '0000695191', 'Angiogram', 'Blocked artery', 'none', 'none', 'Sarah', 'paid');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fees_list`
+--
+
+CREATE TABLE `fees_list` (
+  `created_at` datetime NOT NULL,
+  `feID` int(25) NOT NULL,
+  `fees_name` varchar(25) NOT NULL,
+  `fees_description` text NOT NULL,
+  `amount` varchar(25) NOT NULL,
+  `modified_by` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `fees_list`
+--
+
+INSERT INTO `fees_list` (`created_at`, `feID`, `fees_name`, `fees_description`, `amount`, `modified_by`) VALUES
+('2023-11-02 09:36:35', 1, 'Consultation', 'optional', '10000', 'admin'),
+('2023-11-02 09:46:21', 2, 'diagnosis', 'optional', '10000', 'admin'),
+('2023-11-02 09:47:08', 3, 'surgery', 'optional', '50000', 'admin'),
+('2023-11-02 10:45:15', 5, 'treatment', 'optional', '12000', 'admin'),
+('2023-11-02 10:45:33', 6, 'medecine', 'optional', '5000', 'admin');
 
 -- --------------------------------------------------------
 
@@ -121,32 +232,6 @@ CREATE TABLE `notification_all` (
 --
 
 INSERT INTO `notification_all` (`nID`, `date_sent`, `time_sent`, `receiver_id`, `sender_id`, `amount`, `action`, `status`) VALUES
-(1, '2023-09-16', '00:00:00', '0000575321', '5931', '200', 'topup', 'read'),
-(2, '2023-09-16', '00:00:00', '0000575321', '5931', '1000', 'topup', 'read'),
-(44, '2023-09-16', '04:37:42', '0000575322', '5931', '1000', 'topup', 'unread'),
-(45, '2023-09-16', '04:39:58', '0000575322', '5931', '1000', 'topup', 'unread'),
-(46, '2023-09-16', '04:40:45', '0000575322', '5931', '2000', 'withdraw', 'unread'),
-(47, '2023-09-17', '12:15:49', '111189338', '0000575321', '1000', 'payment', 'read'),
-(48, '2023-09-17', '12:19:40', '111189338', '0000695191', '10000', 'payment', 'read'),
-(49, '2023-09-17', '12:22:06', '111189338', '0000695192', '900', 'payment', 'unread'),
-(50, '2023-09-17', '07:31:03', '5931', 'admin', '1000', 'recharge', 'read'),
-(51, '2023-09-17', '07:32:48', '5931', 'admin', '1000', 'recharge', 'unread'),
-(52, '2023-09-17', '10:46:03', '5931', 'admin', '10000', 'transfer', 'unread'),
-(53, '2023-09-17', '10:47:35', '5931', 'admin', '10000', 'transfer', 'unread'),
-(54, '2023-09-17', '10:54:55', '5931', 'admin', '50000', 'recharge', 'unread'),
-(55, '2023-09-17', '11:08:43', '5931', 'admin', '10000', 'transfer', 'unread'),
-(56, '2023-09-17', '11:38:14', '2703', 'admin', '10000', 'recharge', 'unread'),
-(57, '2023-09-18', '01:39:34', '111189338', 'admin', '500', 'transfer', 'unread'),
-(58, '2023-09-20', '06:55:07', '6133', 'admin', '1000', 'recharge', 'unread'),
-(59, '2023-09-20', '07:21:52', '6133', 'admin', '1000', 'transfer', 'unread'),
-(60, '2023-09-20', '07:31:05', '102345698', '0000695191', '3900', 'payment', 'unread'),
-(61, '2023-09-20', '07:32:38', '102345698', '0000575321', '2000', 'payment', 'unread'),
-(62, '2023-09-20', '07:32:42', '102345698', '0000575321', '2000', 'payment', 'unread'),
-(63, '2023-09-20', '07:37:43', '102345698', 'admin', '7900', 'transfer', 'unread'),
-(64, '2023-09-20', '07:40:26', '6133', 'admin', '100000', 'recharge', 'unread'),
-(65, '2023-09-20', '07:44:14', '0000695191', '6133', '50000', 'topup', 'unread'),
-(66, '2023-09-20', '07:44:17', '0000695191', '6133', '50000', 'topup', 'unread'),
-(67, '2023-09-20', '08:05:15', '0000695191', '6133', '2000', 'topup', 'unread'),
 (68, '2023-09-20', '08:09:35', '0000695191', '6133', '1000', 'topup', 'unread');
 
 -- --------------------------------------------------------
@@ -159,7 +244,11 @@ CREATE TABLE `patient` (
   `created_at` datetime DEFAULT NULL,
   `pID` int(255) NOT NULL,
   `patient_id` varchar(255) DEFAULT NULL,
+  `patient_profile` text NOT NULL,
   `patient_name` varchar(255) DEFAULT NULL,
+  `patient_mname` varchar(25) NOT NULL,
+  `patient_lname` varchar(25) NOT NULL,
+  `patient_gender` varchar(25) NOT NULL,
   `patient_tel` varchar(12) NOT NULL,
   `patient_mail` varchar(25) NOT NULL,
   `patient_balance` int(255) NOT NULL,
@@ -173,11 +262,9 @@ CREATE TABLE `patient` (
 -- Dumping data for table `patient`
 --
 
-INSERT INTO `patient` (`created_at`, `pID`, `patient_id`, `patient_name`, `patient_tel`, `patient_mail`, `patient_balance`, `referral_cashier`, `status`, `approve`, `patient_pin`) VALUES
-('2023-01-28 01:12:23', 20, '0000695191', 'MUKESHIMANA', '250788778999', 'idtbusy@gmail.com', 103000, '5931', 'active', 'Approved', 7965),
-('2023-04-28 01:12:23', 21, '0000695192', 'MUGISHA', '25078855788', 'mugisha@gmail.com', 11000, '5931', 'active', 'Approved', 4325),
-('2023-09-14 12:48:32', 22, '0000575321', 'MUGISHA EMMANUEL', 'Optional', 'idtbusy@gmail.com', 9000, '5931', 'active', 'Approved', 87843),
-('2023-09-16 12:59:55', 23, '0000575322', 'INEZA Aliane', '250780012634', 'ireneudiane@gmail.com', 3000, '5931', 'active', 'Approved', 21701);
+INSERT INTO `patient` (`created_at`, `pID`, `patient_id`, `patient_profile`, `patient_name`, `patient_mname`, `patient_lname`, `patient_gender`, `patient_tel`, `patient_mail`, `patient_balance`, `referral_cashier`, `status`, `approve`, `patient_pin`) VALUES
+('2023-11-02 07:40:00', 32, '0000695191', 'optional', 'SHEMA ', 'MUTABARUKA', 'Fidele', 'male', '250780547047', 'optional@gmail.com', 500, 'Dadyne', 'active', 'Admitted', 3597),
+('2023-11-02 07:42:32', 33, '0000575321', 'optional', 'MUBERARUGO', 'Marie', 'Jeanne', 'female', '250780547047', 'optional@gmail.com', 0, 'Dadyne', 'active', 'Admitted', 7541);
 
 -- --------------------------------------------------------
 
@@ -190,16 +277,19 @@ CREATE TABLE `patient_location` (
   `pID` int(255) NOT NULL,
   `patient_name` varchar(255) NOT NULL,
   `district` varchar(255) NOT NULL,
-  `sector` varchar(255) NOT NULL
+  `sector` varchar(255) NOT NULL,
+  `cell` varchar(25) NOT NULL,
+  `village` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `patient_location`
 --
 
-INSERT INTO `patient_location` (`no`, `pID`, `patient_name`, `district`, `sector`) VALUES
-(1, 22, 'MUGISHA EMMANUEL', 'Optional', 'Optional'),
-(2, 23, 'INEZA Aliane', 'Gasabo', 'Kacyiru');
+INSERT INTO `patient_location` (`no`, `pID`, `patient_name`, `district`, `sector`, `cell`, `village`) VALUES
+(1, 22, 'MUGISHA EMMANUEL', 'Optional', 'Optional', '', ''),
+(11, 32, 'SHEMA ', 'Gasabo', 'Kacyiru', 'Kamutwa ', 'Kanserege'),
+(12, 33, 'MUBERARUGO', 'Kicukiro', 'Gatenga', 'Gatenga', 'Gatenga');
 
 -- --------------------------------------------------------
 
@@ -227,11 +317,8 @@ CREATE TABLE `pharmacy` (
 --
 
 INSERT INTO `pharmacy` (`Date`, `phID`, `pharmacy_name`, `pharmacy_tin`, `pharmacy_mail`, `pharmacy_password`, `pharmacy_pin`, `pharmacy_type`, `balance`, `status`, `photo`, `approved_by`) VALUES
-('2022-12-27 01:08:06', 11, 'IDA TECHNOLOGY', 120582059, 'ida@gmail.com', 'e7e158399a1fe6378cf2dcc1996b1848', 1748, 'others', 4100, 'Active', 'IMG_6505.JPG', 'N/A'),
-('2023-01-28 09:34:12', 12, 'ENGEN RDA', 100800300, 'engen@gmail.com', 'e2a01a3c474b5068e68073afe5669468', 1496, 'gas', 800, 'Active', 'ENGEN.PNG', 'admin'),
-('2022-12-22 01:32:16', 14, 'Quincallelie', 100999777, 'quin@gmail.com', '5524e1290a1549764984c32c23b06938', 8491, 'others', 300000, 'Active', 'NSHUTI.PNG', 'N/A'),
-('2023-09-16 06:34:58', 55, 'SIMBA SuperMarket Ltd', 111189338, 'idtbusy@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 9703, 'others', 10900, 'Inactive', 'SimbaLogo1.jpeg', 'admin'),
-('2023-09-20 07:25:40', 56, 'Rubis Energy Rwanda', 102345698, 'rubis@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 5125, 'gas', 0, 'Inactive', 'rubis.png', 'admin');
+('2023-09-16 06:34:58', 55, 'BIZIMANA Eugene', 111189338, 'idtbusy@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 9703, 'others', 10900, 'Inactive', 'SimbaLogo1.jpeg', 'admin'),
+('2023-09-20 07:25:40', 56, 'NDIHOKUBWAYO Emmanuel', 102345698, 'rubis@gmail.com', '1dc8ed480f98d79c8938a45efd7d759a', 5125, 'gas', 0, 'Inactive', 'rubis.png', 'admin');
 
 -- --------------------------------------------------------
 
@@ -270,22 +357,16 @@ CREATE TABLE `records` (
   `patient_name` varchar(255) DEFAULT NULL,
   `amount` int(255) DEFAULT NULL,
   `action` varchar(255) NOT NULL,
-  `status` text DEFAULT NULL
+  `status` text DEFAULT NULL,
+  `refer_id` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `records`
 --
 
-INSERT INTO `records` (`no`, `rdate`, `rtime`, `rID`, `patient_id`, `patient_name`, `amount`, `action`, `status`) VALUES
-(2, '2023-09-17', '12:15:49', 111189338, '0000575321', 'MUGISHA EMMANUEL', 1000, 'pcaID', 'approved'),
-(3, '2023-09-17', '12:19:40', 111189338, '0000695191', 'MUKESHIMANA', 10000, 'pcaID', 'approved'),
-(4, '2023-09-17', '12:22:06', 111189338, '0000695192', 'MUGISHA', 900, 'pcaID', 'approved'),
-(5, '2023-09-20', '07:31:05', 102345698, '0000695191', 'MUKESHIMANA', 3900, 'pcaID', 'approved'),
-(6, '2023-09-20', '07:32:38', 102345698, '0000575321', 'MUGISHA', 2000, 'pcaID', 'approved'),
-(7, '2023-09-20', '07:32:42', 102345698, '0000575321', 'MUGISHA', 2000, 'pcaID', 'approved'),
-(8, '2023-09-20', '08:05:15', 6133, '0000695191', 'MUKESHIMANA', NULL, 'topup', 'approved'),
-(9, '2023-09-20', '08:09:35', 6133, '0000695191', 'MUKESHIMANA', NULL, 'topup', 'approved');
+INSERT INTO `records` (`no`, `rdate`, `rtime`, `rID`, `patient_id`, `patient_name`, `amount`, `action`, `status`, `refer_id`) VALUES
+(10, '2023-11-02', '12:21:00', 5, '0000695191', 'SHEMA ', 10000, 'Consultation', 'approved', '1');
 
 -- --------------------------------------------------------
 
@@ -316,6 +397,31 @@ INSERT INTO `request` (`reID`, `request_date`, `request_time`, `confirmed_date`,
 (3, '2023-09-20', '07:01:21', '2023-09-20', '07:21:52', 'withdraw', '6133', '1000', 'bKkGZedNwh', 'confirmed'),
 (4, '2023-09-20', '07:35:46', '2023-09-20', '07:37:43', 'withdraw', '102345698', '7900', 'r6cDu1FVwz', 'confirmed');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `surgery_form`
+--
+
+CREATE TABLE `surgery_form` (
+  `suID` int(255) NOT NULL,
+  `created_on` date NOT NULL,
+  `created_at` time NOT NULL,
+  `patient_id` varchar(25) NOT NULL,
+  `description` text NOT NULL,
+  `complications` text DEFAULT NULL,
+  `allergy` text DEFAULT NULL,
+  `filled_by` varchar(25) NOT NULL,
+  `status` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `surgery_form`
+--
+
+INSERT INTO `surgery_form` (`suID`, `created_on`, `created_at`, `patient_id`, `description`, `complications`, `allergy`, `filled_by`, `status`) VALUES
+(1, '2023-11-01', '20:55:00', '0000695191', 'Artery Block Remove', 'Vein cut in the left', 'Reactive to sedatives', 'Sarah', 'paid');
+
 --
 -- Indexes for dumped tables
 --
@@ -327,6 +433,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`admin_ID`);
 
 --
+-- Indexes for table `authorized`
+--
+ALTER TABLE `authorized`
+  ADD PRIMARY KEY (`auID`);
+
+--
 -- Indexes for table `cashier`
 --
 ALTER TABLE `cashier`
@@ -336,9 +448,25 @@ ALTER TABLE `cashier`
 -- Indexes for table `cashier_location`
 --
 ALTER TABLE `cashier_location`
-  ADD PRIMARY KEY (`no`),
-  ADD KEY `caID` (`caID`),
-  ADD KEY `caID_2` (`caID`);
+  ADD PRIMARY KEY (`no`);
+
+--
+-- Indexes for table `consult_form`
+--
+ALTER TABLE `consult_form`
+  ADD PRIMARY KEY (`coID`);
+
+--
+-- Indexes for table `diagnose_form`
+--
+ALTER TABLE `diagnose_form`
+  ADD PRIMARY KEY (`dgID`);
+
+--
+-- Indexes for table `fees_list`
+--
+ALTER TABLE `fees_list`
+  ADD PRIMARY KEY (`feID`);
 
 --
 -- Indexes for table `notification_all`
@@ -386,6 +514,12 @@ ALTER TABLE `request`
   ADD PRIMARY KEY (`reID`);
 
 --
+-- Indexes for table `surgery_form`
+--
+ALTER TABLE `surgery_form`
+  ADD PRIMARY KEY (`suID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -396,16 +530,40 @@ ALTER TABLE `admin`
   MODIFY `admin_ID` int(225) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `authorized`
+--
+ALTER TABLE `authorized`
+  MODIFY `auID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `cashier`
 --
 ALTER TABLE `cashier`
-  MODIFY `caID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `caID` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `cashier_location`
 --
 ALTER TABLE `cashier_location`
-  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `consult_form`
+--
+ALTER TABLE `consult_form`
+  MODIFY `coID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `diagnose_form`
+--
+ALTER TABLE `diagnose_form`
+  MODIFY `dgID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `fees_list`
+--
+ALTER TABLE `fees_list`
+  MODIFY `feID` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `notification_all`
@@ -417,13 +575,13 @@ ALTER TABLE `notification_all`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `pID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `pID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `patient_location`
 --
 ALTER TABLE `patient_location`
-  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
@@ -441,7 +599,7 @@ ALTER TABLE `pharmacy_location`
 -- AUTO_INCREMENT for table `records`
 --
 ALTER TABLE `records`
-  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `request`
@@ -450,20 +608,14 @@ ALTER TABLE `request`
   MODIFY `reID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `surgery_form`
+--
+ALTER TABLE `surgery_form`
+  MODIFY `suID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `cashier_location`
---
-ALTER TABLE `cashier_location`
-  ADD CONSTRAINT `cashier_location_ibfk_1` FOREIGN KEY (`caID`) REFERENCES `cashier` (`caID`);
-
---
--- Constraints for table `patient_location`
---
-ALTER TABLE `patient_location`
-  ADD CONSTRAINT `patient_location_ibfk_1` FOREIGN KEY (`pID`) REFERENCES `patient` (`pID`);
 
 --
 -- Constraints for table `pharmacy_location`
