@@ -2,6 +2,7 @@
     session_start();
 
     # Checkin if The user logged in...
+    # Checkin if The user logged and out...
 
     if (!isset($_SESSION['sessionToken'])) {
         header("location:../index.php");
