@@ -31,6 +31,10 @@
     $update_errorMessage   = "";
     $bill_errorMessage = "";
     $bill_updateMessage = "";
+    $user_detail = "";
+    $busy_successMessage = "";
+    $busy_errorMessage = "";
+    $patientResults = "";
 
     # Calculating Each Number of Users, Cards, cashier, cashiers and so on...
     $sql_cashier = 'SELECT * FROM cashier';

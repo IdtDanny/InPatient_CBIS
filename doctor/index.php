@@ -15,6 +15,7 @@
     $auID = $_SESSION['sessionToken']->auID;
     $authorized_name = $_SESSION['sessionToken']->authorized_name;
     $authorized_pin = $_SESSION['sessionToken']->authorized_pin;
+    $_GET['drID'] = 0;
 
     # error and success alerts
     $photo_errorMessage = "";

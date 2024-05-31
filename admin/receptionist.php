@@ -23,6 +23,10 @@
     $patient_deleteErrorMessage = "";
     $update_errorMessage = "";
     $update_successMessage = "";
+    $cashier_errorMessage = "";
+    $cashier_deleteErrorMessage = "";
+    $cashier_successMessage = "";
+    $cashier_deleteSuccessMessage = "";
 
     # Calculating Each Number of Users, Cards, pharmacy, cashiers and so on...
     $sql_cashier = 'SELECT * FROM cashier';

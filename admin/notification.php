@@ -24,6 +24,8 @@
     $notify_updateErrorMessage = "";
     $notify_deleteSuccessMessage = "";
     $notify_deleteErrorMessage = "";
+    $update_errorMessage = "";
+    $update_successMessage = "";
 
     $statement = $pdo->prepare($sql_cashier);
     $statement->execute();

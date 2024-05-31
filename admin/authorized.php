@@ -23,6 +23,10 @@
     $patient_deleteErrorMessage = "";
     $update_errorMessage = "";
     $update_successMessage = "";
+    $authorized_errorMessage = "";
+    $authorized_deleteErrorMessage = "";
+    $authorized_successMessage = "";
+    $authorized_deleteSuccessMessage = "";
 
     # Calculating Each Number of Users, Cards, pharmacy, authorizeds and so on...
     $sql_authorized = 'SELECT * FROM authorized';
